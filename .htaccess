@@ -1,0 +1,3 @@
+RewriteEngine On
+RewriteRule ^dangxuat$ logout.php [L]
+RewriteRule ^dangnhap$ login.php [L]

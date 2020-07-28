@@ -55,11 +55,24 @@
     // );
     // Bảng TKB
     // CREATE TABLE eseduvn_tkb (
-    //     `id` INT NOT NULL AUTO_INCREMENT,
-    //     `lop` CHAR(7) NOT NULL,
-    //     `noidung` VARCHAR(65536) NOT NULL,
-    //     PRIMARY KEY (`id`),
-    //     UNIQUE (`lop`),
+    //     id INT NOT NULL AUTO_INCREMENT,
+    //     lop CHAR(7) NOT NULL,
+    //     noidung VARCHAR(65536) NOT NULL,
+    //     PRIMARY KEY (id),
+    //     UNIQUE (lop),
     //     thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     //     );
+    // CREATE TABLE eseduvn_quyen ( 
+    //     id INT NOT NULL AUTO_INCREMENT,
+    //     tendangnhap VARCHAR(50) NOT NULL,
+    //     hovaten VARCHAR(50) NOT NULL,
+    //     chucvu CHAR(16) UNSIGNED NOT NULL,
+    //     bomon CHAR(16) UNSIGNED NOT NULL,
+    //     chunhiem CHAR(7) NOT NULL,
+    //     diemdanh TINYINT UNSIGNED NOT NULL,
+    //     tkb TINYINT UNSIGNED NOT NULL,
+    //     sodaubai TINYINT UNSIGNED NOT NULL,
+    //     la_admin TINYINT UNSIGNED NOT NULL,
+    //     PRIMARY KEY (id),
+    //     UNIQUE (tendangnhap));
 ?>

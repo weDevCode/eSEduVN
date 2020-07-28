@@ -1,0 +1,2 @@
+RewriteEngine On
+RewriteRule ^thanhvien$ thanhvien.php [L]
