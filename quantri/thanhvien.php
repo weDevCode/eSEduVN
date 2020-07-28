@@ -5,7 +5,7 @@
     ============================*/
     require_once('../include/loginCheck.php');
     require_once('../include/db.php');
-    $pageName = 'Quản trị';
+    $pageName = 'Quản lý thành viên';
     require_once('../include/init_include.php');
     require_once('../include/admin_include.php');
 ?>
@@ -62,13 +62,14 @@
 
                 for ($i=0; $i < count($cackhoilop); $i++) { 
                     $khoi = $cackhoilop[$i]['khoi'];
-                    $content .= "<option disabled>---- Khối $khoi ----</option>";
+                    $content .= "<option disabled>---- Khối $khoi ----</option>"; // đề mục
                     $dslop = $db->getMulData(DB_TABLE_PREFIX.'dslop', array('lop'), 'khoi', $khoi);
                     for ($j=0; $j < count($dslop); $j++) { 
                         $lop = $dslop[$j]['lop'];
+                        // Kiểm tra lớp có gvcn nào chưa
                         $kiemtra = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'COUNT(*)', 'chunhiem', $lop);
-                        $gvcn = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'tendangnhap', 'chunhiem', $lop);
                         if ($kiemtra > 0) {
+                            $gvcn = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'hovaten', 'chunhiem', $lop);
                             $content .= "<option disabled>Lớp $lop (GVCN: $gvcn)</option>";
                         } else {
                             $content .= "<option value='$lop'>Lớp $lop</option>";
@@ -412,7 +413,13 @@
                         $hovaten = $nguoidungCanChinhSua[0]['hovaten'];
                         $email = $db->getSingleData(DB_TABLE_PREFIX.'nguoidung', 'email', 'tendangnhap', $tendangnhap);
                         $chucvu = $nguoidungCanChinhSua[0]['chucvu'];
+                        if ($chucvu === '0') {
+                            $chucvu = "";
+                        }
                         $bomon = $nguoidungCanChinhSua[0]['bomon'];
+                        if ($bomon === '0') {
+                            $bomon = "";
+                        }
                         $diemdanh = $nguoidungCanChinhSua[0]['diemdanh'];
                         $tkb = $nguoidungCanChinhSua[0]['tkb'];
                         $sodaubai = $nguoidungCanChinhSua[0]['sodaubai'];
@@ -495,10 +502,10 @@
 
 
                         $content .= "<div class='input-group mb-3'>
-                                    <input name='chucvu' type='text' class='form-control' placeholder='Chức vụ (Nếu không có thì bỏ trống)' aria-label='Chức vụ (Nếu không có thì bỏ trống)' aria-describedby='inp-chucvu'>
+                                    <input value='$chucvu' name='chucvu' type='text' class='form-control' placeholder='Chức vụ (Nếu không có thì bỏ trống)' aria-label='Chức vụ (Nếu không có thì bỏ trống)' aria-describedby='inp-chucvu'>
                                 </div>
                                 <div class='input-group mb-3'>
-                                    <input name='bomon' type='text' class='form-control' placeholder='Bộ môn (Nếu không có thì bỏ trống)' aria-label='Bộ môn (Nếu không thì bỏ trống)' aria-describedby='inp-bomon'>
+                                    <input value='$bomon' name='bomon' type='text' class='form-control' placeholder='Bộ môn (Nếu không có thì bỏ trống)' aria-label='Bộ môn (Nếu không thì bỏ trống)' aria-describedby='inp-bomon'>
                                 </div>
                                 <div class='container-fluid'>
                                     <div class='row'>
@@ -636,7 +643,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h2 class="text-center">Thành viên</h2>
+                <h2 class="text-center"><?php echo $pageName ?></h2>
             </div>
         </div>
         <div class="row">
@@ -647,17 +654,7 @@
                 <a href="?phuongthuc=chinhsua"><button class="btn btn-info btn-block">Chỉnh sửa thành viên</button></a>
                 <br>
                 <a href="?phuongthuc=xoa"><button class="btn btn-danger btn-block">Xoá thành viên</button></a>
-                <h3 class="text-center">Thanh điều hướng</h3>
-                <a href="<?php echo $url ?>"><button class="btn btn-primary btn-block">Trang chủ</button></a>
-                <br>
-                <a href="<?php echo $url ?>/sodaubai"><button class="btn btn-primary btn-block">Trang sổ đầu bài</button></a>
-                <br>
-                <a href="<?php echo $url ?>/diemdanh"><button class="btn btn-primary btn-block">Trang điểm danh</button></a>
-                <br>
-                <a href="<?php echo $url ?>/thoikhoabieu"><button class="btn btn-primary btn-block">Trang thời khoá biểu</button></a>
-                <h3 class="text-center">Khác</h3>
-                <button class="btn btn-secondary btn-block">Hướng dẫn sử dụng eSEduVN</button>
-                <button class="btn btn-secondary btn-block">Về eSEduVN</button>
+                <?php require_once('../include/thanhdieuhuong_sadmin.php') ?>
             </div>
             <div class="col-sm-12 col-md-8 col-lg-8">
                 <?php echo $content ?>

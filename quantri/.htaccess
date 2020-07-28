@@ -1,2 +1,3 @@
 RewriteEngine On
 RewriteRule ^thanhvien$ thanhvien.php [L]
+RewriteRule ^caidatchung$ caidatchung.php [L]

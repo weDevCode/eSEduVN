@@ -18,7 +18,7 @@
             $content = "<h3 class='text-center'>Thời khoá biểu lớp $lop</h3>";
             $content .= $db->getSingleData(DB_TABLE_PREFIX.'tkb', 'noidung', 'id', $id);
         } else {
-            $content = "<p>Lỗi, không tìm thấy thời khoá biểu nào có id($id) được chỉnh đinh</p>";
+            $content = "<p>Lỗi, không tìm thấy thời khoá biểu nào có id($id) được chỉ định</p>";
         }
     } else {
         $content = "<p>Đây là trang dùng để xem thời khoá biểu của toàn bộ các lớp</p>";
