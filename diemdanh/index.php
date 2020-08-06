@@ -5,13 +5,19 @@
     ============================*/
     define('isSet', 1);
     require_once('../include/db.php');
-    $pageName = 'Quản trị';
+    $pageName = 'Điểm danh';
     require_once('../include/init_include.php');
 ?>
 
 <?php 
     require_once('../include/header.php');
     require_once('../include/menu_non_sadmin.php');
+    require_once('../include/ktngayluutru.php');
+    require_once("../include/ktgiovaotiet.php");
+    require_once("../include/ktThoigianhientai.php");
+    $content = '';
+    $js = '';
+    
 ?>
 
 <div class="container-fluid" id="main">
@@ -45,15 +51,8 @@
                             ), 'khoi', $_khoi);
                             for ($j=0; $j < count($cac_lop); $j++) { 
                                 $_lop = $cac_lop[$j]['lop'];
-                                $id = $db->getSingleData(DB_TABLE_PREFIX.'tkb', 'id', 'lop', $_lop);
-                                if ($id == 0) {
-                                    $html .= 
-                                    <<<HTML
-                                        <span class="list-group-item text-dark">Lớp $_lop</span>
-                                    HTML;
-                                } else {
-                                    $html .= "<a href='?id=$id' class='list-group-item text-dark' style='font-weight: bold'>Lớp $_lop</a>";
-                                }
+                                $id = $db->getSingleData(DB_TABLE_PREFIX.'dslop', 'id', 'lop', $_lop);
+                                $html .= "<a href='?id=$id' class='list-group-item text-dark' style='font-weight: bold'>Lớp $_lop</a>";
                             }
                             $html .= 
                             <<<HTML
@@ -77,5 +76,8 @@
 
 <?php 
     require_once('../include/footer-module.php');
+    echo "<script>";
+    echo $js;
+    echo "</script>";
     require_once('../include/footer.php');
 ?>

@@ -75,4 +75,55 @@
     //     la_admin TINYINT UNSIGNED NOT NULL,
     //     PRIMARY KEY (id),
     //     UNIQUE (tendangnhap));
+    // CREATE TABLE eseduvn_quydinh (
+    //     id INT NOT NULL AUTO_INCREMENT,
+    // 	   khoi CHAR(7) NOT NULL,
+    //     buoi CHAR(5) NOT NULL,
+    //     PRIMARY KEY (id),
+    //     UNIQUE (khoi)
+    //     );
+    // CREATE TABLE eseduvn_giovaotiet ( 
+    //     id INT NOT NULL AUTO_INCREMENT,
+    //     ten CHAR(20) NOT NULL,
+    //     thoiluong TINYINT(60) NOT NULL,
+    //     PRIMARY KEY (id),
+    //     UNIQUE (ten)
+    // );
+    // CREATE TABLE eseduvn_luutrungay (
+    //     id INT NOT NULL AUTO_INCREMENT,
+    //     ngay CHAR(10) NOT NULL,
+    //     PRIMARY KEY (id),
+    //     UNIQUE (ngay)
+    // );
+
+    // Insert
+
+    // $db->insertMulDataRow(DB_TABLE_PREFIX.'giovaotiet', array(
+    //     'ten',
+    //     'thoiluong'
+    // ), array(
+    //     "sang-$i-gio",
+    //     $sang["$i-gio"]
+    // ));
+    // $db->insertMulDataRow(DB_TABLE_PREFIX.'giovaotiet', array(
+    //     'ten',
+    //     'thoiluong'
+    // ), array(
+    //     "sang-$i-phut",
+    //     $sang["$i-phut"]
+    // ));
+    // $db->insertMulDataRow(DB_TABLE_PREFIX.'giovaotiet', array(
+    //     'ten',
+    //     'thoiluong'
+    // ), array(
+    //     "chieu-$i-gio",
+    //     $chieu["$i-gio"]
+    // ));
+    // $db->insertMulDataRow(DB_TABLE_PREFIX.'giovaotiet', array(
+    //     'ten',
+    //     'thoiluong'
+    // ), array(
+    //     "chieu-$i-phut",
+    //     $chieu["$i-phut"]
+    // ));
 ?>

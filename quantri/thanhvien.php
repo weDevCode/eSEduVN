@@ -483,14 +483,16 @@
                             $khoi = $cackhoilop[$i]['khoi'];
                             $content .= "<option disabled>---- Khối $khoi ----</option>";
                             $dslop = $db->getMulData(DB_TABLE_PREFIX.'dslop', array('lop'), 'khoi', $khoi);
-                            for ($j=0; $j < count($dslop); $j++) { 
-                                $lop = $dslop[$j]['lop'];
-                                $kiemtra = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'COUNT(*)', 'chunhiem', $lop);
-                                $gvcn = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'hovaten', 'chunhiem', $lop);
-                                if ($kiemtra > 0) {
-                                    $content .= "<option disabled>Lớp $lop (GVCN: $gvcn)</option>";
-                                } else {
-                                    $content .= "<option value='$lop'>Lớp $lop</option>";
+                            if ($dslop!=0) {
+                                for ($j=0; $j < count($dslop); $j++) { 
+                                    $lop = $dslop[$j]['lop'];
+                                    $kiemtra = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'COUNT(*)', 'chunhiem', $lop);
+                                    $gvcn = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'hovaten', 'chunhiem', $lop);
+                                    if ($kiemtra > 0) {
+                                        $content .= "<option disabled>Lớp $lop (GVCN: $gvcn)</option>";
+                                    } else {
+                                        $content .= "<option value='$lop'>Lớp $lop</option>";
+                                    }
                                 }
                             }
                         }    

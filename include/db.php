@@ -87,6 +87,7 @@
                 echo "Vui lòng nhập tên bảng cần chèn dữ liệu!";
                 return false;
             } else {
+                $data = mysqli_real_escape_string($conn, $data);
                 $query = 
                 "INSERT INTO $tableName ($col)
                 VALUES ('$data')";
@@ -123,16 +124,16 @@
                 for ($i=0; $i < count($col); $i++) { 
                     if (count($col)==1) { // Nếu tổng là 1
                         $query1 .= "$col[$i]";
-                        $query2 .= "'$data[$i]'";
+                        $query2 .= "'".mysqli_real_escape_string($conn, $data[$i])."'";
                         break;
                     }
                     if ($i==count($col)-1) { // Nếu lặp đến cuối cùng
                         $query1 .= "$col[$i]";
-                        $query2 .= "'$data[$i]'";
+                        $query2 .= "'".mysqli_real_escape_string($conn, $data[$i])."'";
                         break;
                     }
                     $query1 .= "$col[$i], ";
-                    $query2 .= "'$data[$i]', ";
+                    $query2 .= "'".mysqli_real_escape_string($conn, $data[$i])."', ";
                 }
                 $query .= "(".$query1.") VALUES (".$query2.");";
                 if (!$conn->query($query)) {
@@ -170,6 +171,7 @@
                 echo "Vui lòng nhập tên bảng cần cập nhật!";
                 return false;
             } else {
+                $data = mysqli_real_escape_string($conn, $data);
                 $query = 
                 "UPDATE $tableName SET $col='$data' WHERE $columnToUpdate='$dataToUpdate'";
                 if (!$conn->query($query)) {
@@ -207,7 +209,7 @@
                 for ($i=0; $i < count($col); $i++) { 
                     $query = 
                     "UPDATE $tableName
-                    SET ".$col[$i]."="."'$data[$i]'"."
+                    SET ".$col[$i]."="."'".mysqli_real_escape_string($conn, $data[$i])."'"."
                     WHERE $columnToUpdate='$dataToUpdate';";
                     if (!$conn->query($query)) {
                         echo "Thực thi câu lệnh <pre>$query</pre> thất bại";
@@ -238,6 +240,7 @@
                 echo "Vui lòng nhập tên bảng cần cập nhật!";
                 return false;
             } else {
+                $dataToDelete = mysqli_real_escape_string($conn, $dataToDelete);
                 $query = 
                 "DELETE FROM $tableName
                 WHERE $columnToDelete='$dataToDelete'";
@@ -271,7 +274,7 @@
                 for ($i=0; $i < count($columnToDelete); $i++) { 
                     $query = 
                     "DELETE FROM $tableName
-                    WHERE ".$columnToDelete[$i]."="."'$dataToDelete[$i]'";
+                    WHERE ".$columnToDelete[$i]."="."'".mysqli_real_escape_string($conn, $dataToDelete[$i])."'";
                     if (!$conn->query($query)) {
                         echo "Thực thi câu lệnh <pre>$query</pre> thất bại";
                         return false;
@@ -303,6 +306,7 @@
                 echo "Vui lòng nhập tên bảng cần lấy dữ liệu!";
                 return false;
             } elseif ($colToCheck!=''&&$dataToCheck!='') {
+                $dataToCheck = mysqli_real_escape_string($conn, $dataToCheck);
                 $query = 
                 "SELECT $columnToSelect FROM $tableName WHERE $colToCheck='$dataToCheck'";
                 $result = $conn->query($query);
@@ -369,7 +373,7 @@
                     } 
                     $query .= $columnToSelect[$i].", ";
                 }
-                $query .= " WHERE $colToCheck='$dataToCheck'";
+                $query .= " WHERE $colToCheck='".mysqli_real_escape_string($conn, $dataToCheck)."'";
                 $result = $conn->query($query);
                 if (mysqli_num_rows($result) > 0) {
                     while($row = mysqli_fetch_assoc($result)) {

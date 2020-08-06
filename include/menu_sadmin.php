@@ -20,7 +20,10 @@
             <a class="nav-link" href="thanhvien">Quản lý thành viên</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="#">Cài đặt chung</a>
+            <a class="nav-link" href="quanlylopvskhoi">Quản lý lớp & khối</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="caidatchung">Cài đặt chung</a>
         </li>
         </ul>
         <a href="../dangxuat"><button class="btn btn-danger">Đăng xuất</button></a>

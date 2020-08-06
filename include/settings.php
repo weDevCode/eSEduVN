@@ -11,6 +11,5 @@
     define('DB_TABLE_PREFIX', 'eseduvn_');
     
     // Cấu hình trang
-    define('SITE_NAME', 'eSEduVN');
     define('AUTHOR', 'eSEduVN');
 ?>
