@@ -20,3 +20,14 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 </head>
 <body>
+    <noscript>
+        <div style="position: fixed; top: 0px; left: 0px; z-index: 3000; height: 100vh; width: 100%; background-color: #FFFFFF">
+            <h1 style="margin-left: 10px; color: red">Trình duyệt không hỗ trợ Javascript hoặc Javascript đã bị tắt. Bạn vui lòng dùng trình duyệt
+        khác hoặc bật Javascript lên để tiếp tục!!</h1>
+        </div>
+        <style>
+            #main {
+                display: none;
+            }
+        </style>
+    </noscript>

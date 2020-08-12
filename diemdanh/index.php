@@ -18,6 +18,15 @@
     $content = '';
     $js = '';
     
+    if (isset($_GET['id'])) {
+        $id = $_GET['id'];
+        $kiemtra = $db->getSingleData(DB_TABLE_PREFIX.'dslop', 'COUNT(*)', 'id', $id);
+        if ($kiemtra==0) {
+            $content = "<b>Lỗi do người dùng định nghĩa id không tồn tại</b>";
+        } else {
+            
+        }
+    }
 ?>
 
 <div class="container-fluid" id="main">

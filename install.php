@@ -95,6 +95,23 @@
     //     PRIMARY KEY (id),
     //     UNIQUE (ngay)
     // );
+    // CREATE TABLE `eseduvn_dsdiemdanhcaclop` (
+    //     `id` INT NOT NULL AUTO_INCREMENT,
+    //     `lop` CHAR(7) NOT NULL,
+    //     `tietso` TINYINT UNSIGNED NOT NULL,
+    //     `noidung` longtext NOT NULL,
+    //     `ngay` CHAR(10) NOT NULL,
+    //     `nguoidung` VARCHAR(50) NOT NULL,
+    //     PRIMARY KEY (`id`)
+    // );
+    // CREATE TABLE `eseduvn_sohsvang` (
+    //     `id` INT NOT NULL,
+    //     `lop` CHAR(7) NOT NULL,
+    //     `sohsvang` SMALLINT UNSIGNED NOT NULL,
+    //     `tietso` TINYINT UNSIGNED NOT NULL,
+    //     `ngay` CHAR(10) NOT NULL,
+    //     PRIMARY KEY (`id`)
+    //     );
 
     // Insert
 

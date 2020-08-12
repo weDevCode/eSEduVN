@@ -29,6 +29,7 @@
 ?>
 
 <?php 
+    require_once('include/init_include.php');
     require_once('include/header.php');
 ?>
 

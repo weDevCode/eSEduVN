@@ -21,7 +21,7 @@
         public function __construct() {
             $this->conn = @mysqli_connect(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_PORT);
             if (!$this->conn) {
-                die("<h1>Không thể kết nối tới Cơ Sở Dữ Liệu, hãy kiểm tra lại thông tin!</h1>");
+                die("<h1>Không thể kết nối tới Cơ Sở Dữ Liệu, hãy kiểm tra lại thông tin! (#01)</h1>");
             }
         }
         /**

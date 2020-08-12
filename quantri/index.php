@@ -16,7 +16,19 @@
         $db->updateADataRow(DB_TABLE_PREFIX.'caidat', 'giatri', "$ghichu", 'tencaidat', "ghichu");
     }
     $sothanhvien = $db->getSingleData(DB_TABLE_PREFIX.'nguoidung', 'COUNT(*)');
-    require_once('../include/admin_include.php');
+    require_once('../include/include.php');
+    require_once('../include/ktngayluutru.php');
+    $table = DB_TABLE_PREFIX.'sohsvang';
+    $ngayhientai = currentDate();
+    $kqua = $db->query("SELECT sohsvang FROM $table WHERE ngay='$ngayhientai' AND tietso='5'");
+    if (mysqli_num_rows($kqua)>0) {
+        echo $kqua = mysqli_fetch_assoc($kqua);
+        echo '<pre>';
+        var_dump($kqua);
+        echo '</pre>';
+    } else {
+        $sohsvang = 0;
+    }
 ?>
 
 <?php 
@@ -34,8 +46,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-4 col-md-4 col-12 card">
-                    <h3 class="card-title"><i class="fi-ensuxl-warning-solid"></i> <span class="align-middle">Số</span></h3>
-                    Có Số học sinh vắng trong ngày hôm nay
+                    <h3 class="card-title"><i class="fi-ensuxl-warning-solid"></i> <span class="align-middle"><?php echo $sohsvang ?></span></h3>
+                    Có <?php echo $sohsvang ?> học sinh vắng trong tiết 5 toàn trường
                 </div>
                 <div class="col-lg-4 col-md-4 col-12 card">
                     <h3 class="card-title"><i class="fi-cnsuxl-user-tie-circle"></i> <span class="align-middle"><?php echo $sothanhvien ?></span></h3>

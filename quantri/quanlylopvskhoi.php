@@ -7,7 +7,7 @@
     require_once('../include/db.php');
     $pageName = 'Quản lý lớp';
     require_once('../include/init_include.php');
-    require_once('../include/admin_include.php');
+    require_once('../include/include.php');
 ?>
 
 

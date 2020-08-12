@@ -19,4 +19,8 @@
             header("Location: ".$giaothuc.$redt, true, 303);
         }
     }
+
+    // Kiểm tra quyền người dùng
+
+    
 ?>
