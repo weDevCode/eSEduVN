@@ -18,7 +18,7 @@
 
         $ktngay = $db->getSingleData(DB_TABLE_PREFIX.'luutrungay', 'COUNT(*)', 'ngay', currentDate());
 
-        if ($ktngay==0&&date("N")!=7) {
+        if ($ktngay==0) {
 
             $db->insertADataRow(DB_TABLE_PREFIX.'luutrungay', 'ngay', currentDate());
             
