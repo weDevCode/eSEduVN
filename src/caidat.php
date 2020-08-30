@@ -243,7 +243,7 @@
 
     $thongBaoLoi = '';
 
-    $content = <<<HTML
+$content = <<<HTML
         <p>Cám ơn bạn đã tải eSEduVN, trước khi có thể sử dụng thì bạn cần phải chạy file caidat.php trước</p>
         <p>Các thông tin bạn sẽ cần:</p>
         <ul>
@@ -259,7 +259,7 @@
         </p>
         <p>Bạn nên đọc tài liệu về eSEduVN trước khi sử dụng phần mềm này.</p>
         <a href="?buoc=1" class="btn btn-success btn-block">Bắt đầu cài đặt</a>
-    HTML;
+HTML;
 
     if (isset($_GET['buoc'])) {
         switch ($_GET['buoc']) {
