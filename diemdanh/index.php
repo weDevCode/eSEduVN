@@ -4,17 +4,25 @@
         Made with love by Tien Minh Vy
     ============================*/
     define('isSet', 1);
+
     require_once('../include/db.php');
+
     $pageName = 'Điểm danh';
+
     require_once('../include/init_include.php');
 ?>
 
 <?php 
     require_once('../include/header.php');
+
     require_once('../include/menu_non_sadmin.php');
+
     require_once('../include/ktngayluutru.php');
+
     require_once("../include/ktgiovaotiet.php");
+    
     require_once("../include/ktThoigianhientai.php");
+
     $content = "Đây là trang dùng để xem danh sách điểm danh học sinh vắng của toàn bộ các lớp. Hãy chọn 1 lớp
     để tiếp tục!";
     $content2 = '';

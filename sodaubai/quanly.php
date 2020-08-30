@@ -7,15 +7,15 @@
 
     require_once('../include/db.php');
 
-    $pageName = 'Điểm danh';
+    $pageName = 'Sổ đầu bài';
+
+    require_once('../include/include.php');
 
     require_once('../include/init_include.php');
 
-    require_once("../include/include.php");
+    require_once('../include/ktquyennguoidung.php');
 
-    require_once("../include/ktquyennguoidung.php");
-
-    ktQuyen('diemdanh');
+    ktQuyen('sodaubai');
 ?>
 
 <?php 
@@ -29,105 +29,127 @@
 
     require_once("../include/ktThoigianhientai.php");
 
-    $content = "Đây là trang dùng để chỉnh sửa dữ liệu điểm danh học sinh vắng các lớp, hãy chọn 1 lớp để tiếp tục";
-    $js = '';
+    require_once("../include/include.php");
+
     $ngayhientai = currentDate();
 
+    $content = "Đây là trang dùng để chỉnh sửa dữ liệu sổ đầu bài các lớp, hãy chọn 1 lớp để tiếp tục";
+    
+    $js = '';
+    
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
+    
         $kiemtra = $db->getSingleData(DB_TABLE_PREFIX.'dslop', 'COUNT(*)', 'id', $id);
+    
         $content = "Hãy chọn 1 trong các lớp ở thanh danh sách lớp để tiếp tục";
+    
         if ($kiemtra==0) {
+    
             $content = "<b>Lỗi do người dùng định nghĩa id không tồn tại</b>";
+    
         } else {
+    
             switch ($sangHayChieu) {
+    
                 case 'am':
+    
                     $buoicuaNgDung = 'sang';
+    
                     break;
-                
-                default:
-                    $buoicuaNgDung = 'chieu';
-                    break;
-            }
-            $khoi = $db->getSingleData(DB_TABLE_PREFIX.'dslop', 'khoi', 'id', $id);
-            $buoi = $db->getSingleData(DB_TABLE_PREFIX.'quydinh', 'buoi', 'khoi', $khoi);
-            $thoiluongtiet = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'thoiluongtiet');
-
-            function diemDanh($lop, $tietso, $sohsvang)
-            {
-                global $db, $table, $tennguoidung, $ngayhientai;
-                $ktra = $db->query("SELECT COUNT(*) FROM `$table` WHERE lop='$lop' AND tietso='$tietso' AND ngay='$ngayhientai';");
-                $result = mysqli_fetch_assoc($ktra);
-                if ($result["COUNT(*)"]>0) {
                     
-                    $manghs = array();
-                    for ($i=1; $i <= $sohsvang; $i++) { 
-                        if ($_POST["hs-$i"]!='') {
-                            $hs = $_POST["hs-$i"];
-                            $manghs[$i] = mysqli_real_escape_string($db->conn, $hs);
-                        }
-                    }
-                    $noidung = serialize($manghs);
-                    $db->query("UPDATE $table
-                    SET noidung='$noidung', nguoidung='$tennguoidung'
-                    WHERE lop='$lop' AND tietso='$tietso' AND ngay='$ngayhientai'");
-                } else {
-                    $manghs = array();
-                    for ($i=1; $i <= $sohsvang; $i++) { 
-                        if ($_POST["hs-$i"]!='') {
-                            $hs = $_POST["hs-$i"];
-                            $manghs[$i] = mysqli_real_escape_string($db->conn, $hs);
-                        }
-                    }
-                    $noidung = serialize($manghs);
-                    $db->query("INSERT INTO $table (lop, tietso, noidung, ngay, nguoidung)
-                    VALUES ('$lop', '$tietso', '$noidung', '$ngayhientai', '$tennguoidung');");
-                }
+                default:
+    
+                    $buoicuaNgDung = 'chieu';
+        
+                break;
+            
             }
-            function soHSVang($lop, $tietso, $sohsvang)
+            
+            $khoi = $db->getSingleData(DB_TABLE_PREFIX.'dslop', 'khoi', 'id', $id);
+            
+            $buoi = $db->getSingleData(DB_TABLE_PREFIX.'quydinh', 'buoi', 'khoi', $khoi);
+            
+            $thoiluongtiet = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'thoiluongtiet');
+            
+            function duLieuSDB($lop, $tietso, $noidung, $danhgia)
             {
-                global $db, $ngayhientai;
-                $table = DB_TABLE_PREFIX.'sohsvang';
-                $kqua = $db->query("SELECT COUNT(*) FROM $table WHERE lop='$lop' AND tietso='$tietso' AND ngay='$ngayhientai'");
-                if (mysqli_num_rows($kqua)>0) {
-                    $kqua = mysqli_fetch_assoc($kqua);
-                    if ($kqua['COUNT(*)']>0) {
-                        $db->query("UPDATE $table
-                        SET sohsvang='$sohsvang'
-                        WHERE lop='$lop' AND tietso='$tietso' AND ngay='$ngayhientai'");
-                    } else {
-                        $db->query("INSERT INTO $table (lop, sohsvang, tietso, ngay)
-                        VALUES ('$lop', '$sohsvang', '$tietso', '$ngayhientai');");
-                    }
+            
+                global $db, $table, $tennguoidung, $ngayhientai;
+            
+                $noidung = mysqli_real_escape_string($db->conn, $noidung);
+            
+                $danhgia = mysqli_real_escape_string($db->conn, $danhgia);
+            
+                $ktra = $db->query("SELECT COUNT(*) FROM `$table` WHERE lop='$lop' AND tietso='$tietso';");
+            
+                $result = mysqli_fetch_assoc($ktra);
+            
+                if ($result["COUNT(*)"]>0) {
+            
+                    $db->query("UPDATE $table
+                    SET noidung='$noidung', danhgia='$danhgia', nguoidung='$tennguoidung'
+                    WHERE lop='$lop' AND tietso='$tietso' AND ngay='$ngayhientai'");
+                
+                } else {
+                
+                    $db->query("INSERT INTO $table (lop, tietso, noidung, danhgia, ngay, nguoidung)
+                    VALUES ('$lop', '$tietso', '$noidung', '$danhgia', '$ngayhientai', '$tennguoidung');");
+                
                 }
             }
             function xuLyBuoiHoc($buoihoc)
             {
                 global $id, $db, $content, $js, $ketThucTiet, $gioHienTai, $phutHienTai;
+                
                 $content = "";
+                
                 $ktra = false;
+                
                 for ($i=1; $i <= count($ketThucTiet)/2; $i++) { 
+                
                     if ($ketThucTiet["$i-gio"]==$gioHienTai) {
+                
                         $ktra = true;
+                
                         $keTiep = $i+1;
+                
                         if ($ketThucTiet["$i-phut"]-$phutHienTai>0) {
+                
                             $conlai = $ketThucTiet["$i-phut"]-$phutHienTai;
+                
                             $content = "<b>Thời lượng còn lại:</b> <span id='conlai'>".$conlai."</span> phút"."<br>";
+                
                         } else {
+                
                             $ktra = false;
+                
                             continue;
+                
                         }
+                
                         break;
+                    
                     } elseif ($buoihoc["$i-gio"]==$gioHienTai) { // nếu kt ở trên tiết kế tiếp ko đúng
+                    
                         $ktra = true; 
+                    
                         $keTiep = $i; // kế tiếp là tiết $i
+                    
                         if ($phutHienTai - $buoihoc["$i-phut"]<45&&$phutHienTai - $buoihoc["$i-phut"]>=0) {
+                    
                             $conlai = ($buoihoc["$i-phut"]-$phutHienTai)+45;
+                    
                             $content = "<b>Thời lượng còn lại:</b> <span id='conlai'>".$conlai."</span> phút"."<br>";
+                    
                         } else {
+                    
                             $ktra = false;
+                    
                             continue;
+                    
                         }
+                    
                         break;
                     }
                 }
@@ -136,87 +158,54 @@
 
                 if ($ktra) {
                     global $table, $ngayhientai;
-                    $table = DB_TABLE_PREFIX."dsdiemdanhcaclop";
+                    
+                    $table = DB_TABLE_PREFIX."sodaubai";
+                    
                     $lop = $db->getSingleData(DB_TABLE_PREFIX.'dslop', 'lop', 'id', $id);
+                    
                     $tietso = $i;
-                    if (isset($_POST['sohs'])) {
-                        $sohsvang = $_POST['sohs'];
-                        soHSVang($lop, $tietso, $sohsvang);
-                        diemDanh($lop, $tietso, $sohsvang);
+                    
+                    if (isset($_POST['noidung'])) {
+                    
+                        $noidung = $_POST['noidung'];
+                    
+                        $danhgia = $_POST['danhgia'];
+                    
+                        duLieuSDB($lop, $tietso, $noidung, $danhgia);
+
                         $js = "Swal.fire({
                             title: 'Thành công!',
                             text: 'Cập nhật dữ liệu thành công',
                             icon: 'success',
                             confirmButtonText: 'OK'
-                          });";
-                    }
-
-                    $kqua = $db->query("SELECT noidung FROM $table WHERE lop='$lop' AND tietso='$tietso' AND ngay='$ngayhientai'");
-
-                    if (mysqli_num_rows($kqua)>0) {
-                        $kqua = mysqli_fetch_assoc($kqua);
-                        $noidung = unserialize($kqua['noidung']);
-                        $js1 = '';
-                        for ($i=1; $i <= count($noidung); $i++) {
-                            $js1 .= "<tr>
-                            <th scope='row'>$i</th>
-                            <td><input name='hs-$i' value='".$noidung[$i]."' placeholder='Họ và tên (Có hoặc không dấu)' style='width: 100%'></td>
-                            </tr>";
-                        }
-                        $js .= 'noidung1 = `<form method="POST"><table class="table">
-                        <thead>
-                            <tr>
-                            <th scope="col">STT</th>
-                            <th scope="col">Họ tên (có hoặc không dấu)</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
-                        let noidung2 = `'.$js1.'`;
-                        noidung3 = `</tbody>
-                        </table>
-                        <input type="hidden" value="'.count($noidung).'" name="sohs" required>
-                        <button class="btn btn-success btn-block">Cập nhật</button></form>`;
-                        noidung.innerHTML = noidung1+noidung2+noidung3;';
+                        });
+                        ";
                     }
 
                     $content .= 
                     <<<HTML
-                        <label for='sohsvang'>Số học sinh vắng</label>
-                        <input id='sohsvang' name='sohsvang' type="number"><button id="luusohs"class="btn btn-success">Cập nhật</button>
-                        <div id="noidung"></div>
+                        <form method="POST" id="form">
+                            <textarea id='editor' rows=20 name='noidung'></textarea>
+                            <label>Đánh giá tiết học</label><input type="text" required name='danhgia'>
+                            <button class="btn btn-success btn-block">Lưu</button>
+                        </form>
                         <b>Bạn đang cập nhật dữ liệu cho lớp $lop</b>
                     HTML;
 
-                    $js .= 'document.getElementById("luusohs").onclick = function(){
-                        noidung = document.getElementById("noidung");
-                        sohsvang = document.getElementById("sohsvang").value;
-                        noidung1 = `<form method="POST"><table class="table">
-                        <thead>
-                            <tr>
-                            <th scope="col">STT</th>
-                            <th scope="col">Họ tên (có hoặc không dấu)</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
-                        let noidung2 = "";
-                        for (i = 0; i < sohsvang; i++) {
-                            j = i+1;
-                            noidung2 += `<tr>
-                            <th scope="row">${j}</th>
-                            <td><input name="hs-${j}" placeholder="Họ và tên (Có hoặc không dấu)" style="width: 100%"></td>
-                            </tr>`;
-                        }
-                        noidung3 = `</tbody>
-                        </table>
-                        <input type="hidden" value="${sohsvang}" name="sohs" required>
-                        <button class="btn btn-success btn-block">Cập nhật</button></form>`;
-                        sohsvang = parseInt(sohsvang);
-                        if (typeof sohsvang == "number") {
-                            noidung.innerHTML = noidung1+noidung2+noidung3;
-                        } else {
-                            noidung.innerHTML = "Số học sinh phải là kiểu số!";
-                        }
-                    }';
+                    $kqua = $db->query("SELECT noidung, danhgia FROM $table WHERE lop='$lop' AND tietso='$tietso' AND ngay='$ngayhientai'");
+
+                    if (mysqli_num_rows($kqua)>0) {
+                        $kqua = mysqli_fetch_assoc($kqua);
+                    
+                        $noidung = $kqua['noidung'];
+                    
+                        $danhgia = $kqua['danhgia'];
+                    
+                        $js .= "document.getElementById('form').innerHTML=`<textarea id='editor' rows=20 name='noidung'>$noidung</textarea>
+                        <label>Đánh giá tiết học</label><input type='text' required name='danhgia' value='$danhgia'>
+                        <button class='btn btn-success btn-block'>Lưu</button>`";
+                    }
+
                     $js .= "
                     gioKetThuc = ".$ketThucTiet["$tietso-gio"].";
                     phutKetThuc = ".$ketThucTiet["$tietso-phut"].";
@@ -232,7 +221,6 @@
                         } else {
                             conlai = phutKetThuc - phut;
                         }
-                        
                         document.getElementById('conlai').innerHTML = conlai;
                     }, 1000);";
                 } else {
@@ -253,10 +241,6 @@
                             }, 1000);";
                     }
                 }
-
-
-
-
             }
 
 
@@ -364,6 +348,17 @@
         </div>
     </div>
 
+    <script src="<?php echo $url ?>/include/tinymce/js/tinymce/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+        selector: '#editor',  
+        plugin: 'a_tinymce_plugin',
+        a_plugin_option: true,
+        a_configuration_option: 400,
+        menubar: false,
+        branding: false
+      });
+    </script>
 <?php 
     require_once('../include/footer-module.php');
     require_once('../include/footer.php');

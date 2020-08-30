@@ -12,4 +12,6 @@
     
     // Cấu hình trang
     define('AUTHOR', 'eSEduVN');
+
+    define('isInstalled', true);
 ?>

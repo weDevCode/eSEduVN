@@ -1,9 +1,20 @@
 <?php 
+    define('isSet', 1);
+    require_once('include/db.php');
     // Kiểm tra tên miền 
-    // $_SERVER['SERVER_NAME'];
+    // echo $_SERVER['SERVER_NAME'];
     // Kiểm tra giao thức
-    // $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === 0 ? 'https://' : 'http://';
+    // echo $protocol = stripos($_SERVER['SERVER_PROTOCOL'],'https') === 0 ? 'https://' : 'http://';
     // Tạo bảng user
+    $db->query("CREATE TABLE eseduvn_nguoidung ( 
+        id INT NOT NULL AUTO_INCREMENT,
+        tendangnhap VARCHAR(50) NOT NULL,
+        email VARCHAR(50) NOT NULL,
+        matkhaubam VARCHAR(255) NOT NULL,
+        PRIMARY KEY (id), 
+        UNIQUE (tendangnhap),
+        thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );");
     // CREATE TABLE eseduvn_nguoidung ( 
     //     id INT NOT NULL AUTO_INCREMENT,
     //     tendangnhap VARCHAR(50) NOT NULL,
@@ -13,6 +24,15 @@
     //     UNIQUE (tendangnhap),
     //     thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     // );
+    $db->query("CREATE TABLE eseduvn_nguoidung ( 
+        id INT NOT NULL AUTO_INCREMENT,
+        tendangnhap VARCHAR(50) NOT NULL,
+        email VARCHAR(50) NOT NULL,
+        matkhaubam VARCHAR(255) NOT NULL,
+        PRIMARY KEY (id), 
+        UNIQUE (tendangnhap),
+        thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );");
     // Bảng dslop
     // CREATE TABLE eseduvn_dslop (
     //     id INT NOT NULL AUTO_INCREMENT, 
@@ -21,7 +41,13 @@
     //     PRIMARY KEY (id), 
     //     UNIQUE (lop)
     // );
-    // 
+    $db->query("CREATE TABLE eseduvn_dslop (
+        id INT NOT NULL AUTO_INCREMENT, 
+        lop CHAR(7) NOT NULL, 
+        khoi CHAR(7) NOT NULL, 
+        PRIMARY KEY (id), 
+        UNIQUE (lop)
+    );");
     // Bảng dskhoi
     // CREATE TABLE eseduvn_dskhoi (
     //     id INT NOT NULL AUTO_INCREMENT,
@@ -29,7 +55,12 @@
     //     PRIMARY KEY (id),
     //     UNIQUE (khoi)
     //     ) ;
-    // 
+    $db->query("CREATE TABLE eseduvn_dskhoi (
+        id INT NOT NULL AUTO_INCREMENT,
+        khoi CHAR(7) NOT NULL,
+        PRIMARY KEY (id),
+        UNIQUE (khoi)
+        );");
     // Bảng phiên đăng nhập
     // CREATE TABLE eseduvn_phien (
     //     id INT NOT NULL AUTO_INCREMENT, 
@@ -38,6 +69,13 @@
     //     PRIMARY KEY (id),
     //     thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     // );
+    $db->query("CREATE TABLE eseduvn_phien (
+        id INT NOT NULL AUTO_INCREMENT, 
+        tendangnhap VARCHAR(50) NOT NULL,
+        khoaphien CHAR(255) NOT NULL, 
+        PRIMARY KEY (id),
+        thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );");
     // Bảng cài đặt
     // CREATE TABLE eseduvn_caidat ( 
     //     id INT NOT NULL AUTO_INCREMENT,
@@ -45,6 +83,13 @@
     //     giatri VARCHAR(65536) NOT NULL,
     //     PRIMARY KEY (id),
     // );
+    $db->query("CREATE TABLE eseduvn_phien (
+        id INT NOT NULL AUTO_INCREMENT, 
+        tendangnhap VARCHAR(50) NOT NULL,
+        khoaphien CHAR(255) NOT NULL, 
+        PRIMARY KEY (id),
+        thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );");
     // Bảng phân quyền
     // CREATE TABLE eseduvn_caidat ( 
     //     id INT NOT NULL AUTO_INCREMENT,
@@ -53,6 +98,13 @@
     //     PRIMARY KEY (id),
     //     thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     // );
+    $db->query("CREATE TABLE eseduvn_caidat ( 
+        id INT NOT NULL AUTO_INCREMENT,
+        tendangnhap CHAR(20) NOT NULL,
+        quyenhan VARCHAR(65536) NOT NULL,
+        PRIMARY KEY (id),
+        thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    );");
     // Bảng TKB
     // CREATE TABLE eseduvn_tkb (
     //     id INT NOT NULL AUTO_INCREMENT,
@@ -62,6 +114,14 @@
     //     UNIQUE (lop),
     //     thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
     //     );
+    $db->query("CREATE TABLE eseduvn_tkb (
+        id INT NOT NULL AUTO_INCREMENT,
+        lop CHAR(7) NOT NULL,
+        noidung VARCHAR(65536) NOT NULL,
+        PRIMARY KEY (id),
+        UNIQUE (lop),
+        thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        );");
     // CREATE TABLE eseduvn_quyen ( 
     //     id INT NOT NULL AUTO_INCREMENT,
     //     tendangnhap VARCHAR(50) NOT NULL,
@@ -76,6 +136,20 @@
     //     PRIMARY KEY (id),
     //     UNIQUE (tendangnhap)
     //     );
+    $db->query("CREATE TABLE eseduvn_quyen ( 
+        id INT NOT NULL AUTO_INCREMENT,
+        tendangnhap VARCHAR(50) NOT NULL,
+        hovaten VARCHAR(50) NOT NULL,
+        chucvu CHAR(16) NOT NULL,
+        bomon CHAR(16) NOT NULL,
+        chunhiem CHAR(7) NOT NULL,
+        diemdanh TINYINT UNSIGNED NOT NULL,
+        tkb TINYINT UNSIGNED NOT NULL,
+        sodaubai TINYINT UNSIGNED NOT NULL,
+        la_admin TINYINT UNSIGNED NOT NULL,
+        PRIMARY KEY (id),
+        UNIQUE (tendangnhap)
+        );");
     // CREATE TABLE eseduvn_quydinh (
     //     id INT NOT NULL AUTO_INCREMENT,
     // 	   khoi CHAR(7) NOT NULL,
@@ -83,6 +157,20 @@
     //     PRIMARY KEY (id),
     //     UNIQUE (khoi)
     //     );
+    $db->query("CREATE TABLE eseduvn_quyen ( 
+        id INT NOT NULL AUTO_INCREMENT,
+        tendangnhap VARCHAR(50) NOT NULL,
+        hovaten VARCHAR(50) NOT NULL,
+        chucvu CHAR(16) NOT NULL,
+        bomon CHAR(16) NOT NULL,
+        chunhiem CHAR(7) NOT NULL,
+        diemdanh TINYINT UNSIGNED NOT NULL,
+        tkb TINYINT UNSIGNED NOT NULL,
+        sodaubai TINYINT UNSIGNED NOT NULL,
+        la_admin TINYINT UNSIGNED NOT NULL,
+        PRIMARY KEY (id),
+        UNIQUE (tendangnhap)
+        );");
     // CREATE TABLE eseduvn_giovaotiet ( 
     //     id INT NOT NULL AUTO_INCREMENT,
     //     ten CHAR(20) NOT NULL,
@@ -90,29 +178,80 @@
     //     PRIMARY KEY (id),
     //     UNIQUE (ten)
     // );
+    $db->query("CREATE TABLE eseduvn_giovaotiet ( 
+        id INT NOT NULL AUTO_INCREMENT,
+        ten CHAR(20) NOT NULL,
+        thoiluong TINYINT(60) NOT NULL,
+        PRIMARY KEY (id),
+        UNIQUE (ten)
+    );");
     // CREATE TABLE eseduvn_luutrungay (
     //     id INT NOT NULL AUTO_INCREMENT,
     //     ngay CHAR(10) NOT NULL,
     //     PRIMARY KEY (id),
     //     UNIQUE (ngay)
     // );
-    // CREATE TABLE `eseduvn_dsdiemdanhcaclop` (
-    //     `id` INT NOT NULL AUTO_INCREMENT,
-    //     `lop` CHAR(7) NOT NULL,
-    //     `tietso` TINYINT UNSIGNED NOT NULL,
-    //     `noidung` longtext NOT NULL,
-    //     `ngay` CHAR(10) NOT NULL,
-    //     `nguoidung` VARCHAR(50) NOT NULL,
-    //     PRIMARY KEY (`id`)
+    $db->query("CREATE TABLE eseduvn_luutrungay (
+        id INT NOT NULL AUTO_INCREMENT,
+        ngay CHAR(10) NOT NULL,
+        PRIMARY KEY (id),
+        UNIQUE (ngay)
+    );");
+    // CREATE TABLE eseduvn_dsdiemdanhcaclop (
+    //     id INT NOT NULL AUTO_INCREMENT,
+    //     lop CHAR(7) NOT NULL,
+    //     tietso TINYINT UNSIGNED NOT NULL,
+    //     noidung longtext NOT NULL,
+    //     ngay CHAR(10) NOT NULL,
+    //     nguoidung VARCHAR(50) NOT NULL,
+    //     PRIMARY KEY (id)
     // );
-    // CREATE TABLE `eseduvn_sohsvang` (
-    //     `id` INT NOT NULL AUTO_INCREMENT,
-    //     `lop` CHAR(7) NOT NULL,
-    //     `sohsvang` SMALLINT UNSIGNED NOT NULL,
-    //     `tietso` TINYINT UNSIGNED NOT NULL,
-    //     `ngay` CHAR(10) NOT NULL,
-    //     PRIMARY KEY (`id`)
+    $db->query("CREATE TABLE eseduvn_dsdiemdanhcaclop (
+        id INT NOT NULL AUTO_INCREMENT,
+        lop CHAR(7) NOT NULL,
+        tietso TINYINT UNSIGNED NOT NULL,
+        noidung longtext NOT NULL,
+        ngay CHAR(10) NOT NULL,
+        nguoidung VARCHAR(50) NOT NULL,
+        PRIMARY KEY (id)
+    );");
+    // CREATE TABLE eseduvn_sohsvang (
+    //     id INT NOT NULL AUTO_INCREMENT,
+    //     lop CHAR(7) NOT NULL,
+    //     sohsvang SMALLINT UNSIGNED NOT NULL,
+    //     tietso TINYINT UNSIGNED NOT NULL,
+    //     ngay CHAR(10) NOT NULL,
+    //     PRIMARY KEY (id)
     //     );
+    $db->query("CREATE TABLE eseduvn_sohsvang (
+        id INT NOT NULL AUTO_INCREMENT,
+        lop CHAR(7) NOT NULL,
+        sohsvang SMALLINT UNSIGNED NOT NULL,
+        tietso TINYINT UNSIGNED NOT NULL,
+        ngay CHAR(10) NOT NULL,
+        PRIMARY KEY (id)
+        );");
+    // CREATE TABLE eseduvn_sodaubai (
+    //     id INT NOT NULL AUTO_INCREMENT,
+    //     lop CHAR(7) NOT NULL,
+    //     tietso TINYINT(3) UNSIGNED NOT NULL,
+    //     noidung LONGTEXT NOT NULL,
+    //     danhgia CHAR(10) NOT NULL,
+    //     ngay CHAR(10) NOT NULL,
+    //     nguoidung VARCHAR(50) NOT NULL,
+    //     PRIMARY KEY (id)
+    // );
+
+    $db->query("CREATE TABLE eseduvn_sodaubai (
+        id INT NOT NULL AUTO_INCREMENT,
+        lop CHAR(7) NOT NULL,
+        tietso TINYINT(3) UNSIGNED NOT NULL,
+        noidung LONGTEXT NOT NULL,
+        danhgia CHAR(10) NOT NULL,
+        ngay CHAR(10) NOT NULL,
+        nguoidung VARCHAR(50) NOT NULL,
+        PRIMARY KEY (id)
+    );");
 
     // Insert
 
@@ -145,3 +284,4 @@
     //     $chieu["$i-phut"]
     // ));
 ?>
+

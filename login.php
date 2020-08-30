@@ -1,23 +1,42 @@
 <?php 
     define('isSet', 1);
+    
     require_once('include/db.php');
+
     session_start();
+
     // Kiểm tra xem đã đăng nhập chưa - bắt đầu
+
         $tendangnhap = '';
+        
         $matkhau = '';
+
         $giaothuc = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', "giaothuc");
+        
         $redt = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', "diachi").'/quantri';
+
         if (isset($_SESSION['khoaphien'])) {
+
             $khoaphien = $_SESSION['khoaphien'];
+
             $check = $db->getSingleData(DB_TABLE_PREFIX.'phien', 'COUNT(*)', 'khoaphien', "$khoaphien");
+
             if ($check == 1) {
+
                 header("Location: ".$giaothuc.$redt, true, 303);
+
             }
+
         } elseif (isset($_COOKIE['khoaphien'])) {
+
             $khoaphien = $_COOKIE['khoaphien'];
+
             $check = $db->getSingleData(DB_TABLE_PREFIX.'phien', 'COUNT(*)', 'khoaphien', "$khoaphien");
+
             if ($check == 1) {
+
                 header("Location: ".$giaothuc.$redt, true, 303);
+
             }
         }
     // Kết thúc
@@ -30,6 +49,7 @@
 
 <?php 
     require_once('include/init_include.php');
+
     require_once('include/header.php');
 ?>
 
@@ -37,17 +57,29 @@
     // Xử lý dữ liệu
     $js = '';
     if (isset($_POST['tendangnhap']) && isset($_POST['matkhau'])) {
+
         $tendangnhap = $_POST['tendangnhap'];
+
         $matkhau = $_POST['matkhau'];
+
         $tendangnhap = mysqli_real_escape_string($db->conn, $tendangnhap);
+
         $matkhau = mysqli_real_escape_string($db->conn, $matkhau);
+
         $matkhaubam = $db->getSingleData(DB_TABLE_PREFIX.'nguoidung', 'matkhaubam', 'tendangnhap', "$tendangnhap");
+        
         if (password_verify($matkhau, $matkhaubam)) {
+
             if (isset($_POST['ghinhotoi'])) {
+
                 $ghinhotoi = 'on';
+                
             } else {
+
                 $ghinhotoi = '';
+
             }
+
             $khoaphien = uniqid('khoaphien_', true);
 
             if ($ghinhotoi=='on') {

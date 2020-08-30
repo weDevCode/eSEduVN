@@ -4,7 +4,6 @@
     $giaothuc = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', "giaothuc");
     $redt = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', "diachi").'/dangnhap';
     session_start();
-    session_unset();
     session_destroy();
     setcookie('khoaphien', "", time() - (86400 * 365), "/");
     echo $giaothuc.$redt;

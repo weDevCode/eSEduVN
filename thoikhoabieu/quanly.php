@@ -4,14 +4,24 @@
         Made with love by Tien Minh Vy
     ============================*/
     require_once('../include/loginCheck.php');
+    
     require_once('../include/db.php');
+
     $pageName = 'Quản lý thời khoá biểu';
+
     require_once('../include/init_include.php');
+
+    require_once('../include/include.php');
+
+    require_once('../include/ktquyennguoidung.php');
+
+    ktQuyen('tkb');
+
 ?>
 
 <?php 
     $js = '';
-    require_once('../include/admin_include.php');
+    require_once('../include/include.php');
     $soluongTKB = $db->getSingleData(DB_TABLE_PREFIX.'tkb', 'COUNT(*)');
     if ($soluongTKB == 0) {
         $content = "<p>Xin chào, <b style='color: red'>$tennguoidung</b></p><b>Bạn chưa tạo thời khoá biểu nào. Hãy nhấn nút bên dưới để tạo thời khoá biểu mới<br>
@@ -19,7 +29,7 @@
         Nếu có rồi thì dùng để chỉnh sửa TKB hiện có</b><br>
         <a href='$url/thoikhoabieu/quanly?phuongthuc=tao'><button class='btn btn-success btn-block'>Tạo thời khoá biểu mới</button></a>";
     } else {
-        $content = "<p>Xin chào, <b style='color: red'>$tennguoidung</b></p>Đây là trang quản lý thời khoá biểu, hiện số lượng thời khoá biểu đã thiết lập là $soluongTKB<br>
+        $content = "<p>Xin chào, <b style='color: red'>$tennguoidung</b></p>Đây là trang quản lý thời khoá biểu, hiện số lượng thời khoá biểu đã thiết lập là <b>$soluongTKB</b><br>
         Bạn có thể tạo thêm thời khoá biểu cho từng lớp bằng cách nhấn vào nút bên dưới
         <a href='$url/thoikhoabieu/quanly?phuongthuc=tao'><button class='btn btn-success btn-block'>Tạo thời khoá biểu mới</button></a>";
     }
@@ -176,49 +186,8 @@
 
 <?php 
     require_once('../include/header.php');
+    require_once('../include/menu_non_sadmin.php');
 ?>
-
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#"><?php echo SITE_NAME ?></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="">Trang chủ</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Thời khoá biểu
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Xem</a>
-                    <a class="dropdown-item" href="#">Quản lý</a>
-                </div>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Sổ Đầu Bài
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Xem</a>
-                    <a class="dropdown-item" href="#">Quản lý</a>
-                </div>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Điểm danh
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">Xem</a>
-                    <a class="dropdown-item" href="#">Quản lý</a>
-                </div>
-            </li>
-            </ul>
-            <a href="../quantri"><button class="btn btn-info">Quản trị</button></a>
-        </div>
-    </nav>
 
     <div class="container-fluid" id="main">
         <div class="row">
