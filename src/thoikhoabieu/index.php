@@ -30,7 +30,7 @@
     require_once('../include/header.php');
     require_once('../include/menu_non_sadmin.php');
 ?>
-
+<main>
     <div class="container-fluid" id="main">
         <div class="row">
             <div class="col">
@@ -92,7 +92,7 @@
             </div>
         </div>
     </div>
-    
+</main>
 <?php 
     require_once('../include/footer-module.php');
 ?>  

@@ -294,8 +294,8 @@
         }
     }
 ?>
-
-<div class="container-fluid" id="main">
+<main>
+    <div class="container-fluid" id="main">
         <div class="row">
             <div class="col">
                 <h2 class="text-center"><?php echo $pageName ?></h2>
@@ -352,6 +352,7 @@
             </div>
         </div>
     </div>
+</main>
 
     <script src="<?php echo $url ?>/include/tinymce/js/tinymce/tinymce.min.js"></script>
     <script>
