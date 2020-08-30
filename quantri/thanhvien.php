@@ -14,12 +14,12 @@
     $pageName = 'Quản lý thành viên';
     
     require_once('../include/include.php');
+
+    require_once('../include/ktraAdmin.php');
 ?>
 
 
 <?php 
-    require_once('../include/header.php');
-    require_once('../include/menu_sadmin.php');
     $content = "<p>Đây là trang dùng để quản lý thành viên trên hệ thống <b><?php echo SITE_NAME ?></b></p>
                 <p>Để thêm, chỉnh sửa hay xoá một thành viên, bạn hãy nhấn vào 1 trong các nút ở bên trái (trên máy tính)
                     hoặc bên trên (trên điện thoại).</p>";
@@ -646,8 +646,13 @@
                 break;
         }
     }
+
+    require_once('../include/header.php');
+    
+    require_once('../include/menu_sadmin.php');
 ?>
 
+<main>
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -669,6 +674,7 @@
             </div>
         </div>
     </div>
+</main>
 
 <?php 
     require_once('../include/footer-module.php');

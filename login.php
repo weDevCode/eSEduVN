@@ -144,12 +144,16 @@
         }
     }
 ?>
-    <h1 id="js-notify" style="display: none">Trình duyệt của bạn không hỗ trợ Javascript hoặc đã tắt Javascript. Vui lòng bật Javascript hoặc dùng trình duyệt khác để tiếp tục</h1>
+<style>
+    .container {
+        height: 100vh;
+    }
+</style>
     <div class="container">
         <div class="row">
             <div class="col-lg-4 col-sm-12 col-md-3"></div>
-            <div class="col-lg-4 col-sm-12 col-md-6">
-                <div class="card">
+            <div class="col-lg-4 col-sm-12 col-md-6 d-flex align-items-center" style="min-height: 100vh;">
+                <div class="card" style="width: 100%">
                     <div class="card-body">
                         <h5 class="card-title">Đăng nhập</h5>
                         <h6 class="card-subtitle mb-2 text-muted">Hãy đăng nhập để bắt đầu</h6>

@@ -10,6 +10,8 @@
     require_once('../include/loginCheck.php');
     
     require_once('../include/db.php');
+
+    require_once('../include/ktraAdmin.php');
     
     $pageName = 'Xoá số lượng ngày';
     

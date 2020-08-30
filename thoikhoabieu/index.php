@@ -22,7 +22,7 @@
             $content = "<p>Lỗi, không tìm thấy thời khoá biểu nào có id($id) được chỉ định</p>";
         }
     } else {
-        $content = "<p>Đây là trang dùng để xem thời khoá biểu của toàn bộ các lớp</p>";
+        $content = "<p>Đây là trang dùng để xem thời khoá biểu của toàn bộ các lớp, hãy chọn 1 lớp để tiếp tục</p>";
     }
 ?>
 

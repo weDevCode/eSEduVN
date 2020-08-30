@@ -9,7 +9,11 @@
 
     require_once('../include/loginCheck.php');
 
+    require_once('../include/include.php');
+
     require_once('../include/db.php');
+
+    require_once('../include/ktraAdmin.php');
     
     $pageName = 'Cài đặt chung';
 ?>
@@ -295,21 +299,23 @@
     }
 ?>
 
-<div class="container">
-    <div class="row">
-        <div class="col"><h3 class="text-center"><?php echo $pageName ?></h3></div>
-    </div>
-    <div class="row">
-        <div class="col-lg-4 col-sm-4 col-12">
-            <a href="caidatchung" class="btn btn-success btn-block">Cài đặt chung</a><br>
-            <a href="?loai=giovaotiet" class="btn btn-success btn-block">Giờ vào tiết</a><br>
-            <?php require_once('../include/thanhdieuhuong_sadmin.php'); ?>
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col"><h3 class="text-center"><?php echo $pageName ?></h3></div>
         </div>
-        <div class="col-lg-8 col-sm-8 col-12">
-            <?php echo $content ?>
+        <div class="row">
+            <div class="col-lg-4 col-sm-4 col-12">
+                <a href="caidatchung" class="btn btn-success btn-block">Cài đặt chung</a><br>
+                <a href="?loai=giovaotiet" class="btn btn-success btn-block">Giờ vào tiết</a><br>
+                <?php require_once('../include/thanhdieuhuong_sadmin.php'); ?>
+            </div>
+            <div class="col-lg-8 col-sm-8 col-12">
+                <?php echo $content ?>
+            </div>
         </div>
     </div>
-</div>
+</main>
 
 <?php 
     require_once('../include/footer-module.php');

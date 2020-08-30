@@ -1,3 +1,8 @@
+<?php 
+    if(!defined('isSet')){
+        die('<h1>Truy cập trực tiếp bị cấm!</h1>');
+    }
+?>    
 <div class="container-fluid bg-dark text-white" id="footer">
     <div class="container">
         <div class="row">
@@ -8,10 +13,10 @@
             <div class="col-12 col-lg-3 col-md-3">
                 <h3>Bản quyền</h3>
                 <p>Thời hạn: <b>vĩnh viễn</b></p>
-                <p>Vì đây là mã nguồn mở nên thời hạn bản quyền là vĩnh viễn</p>
+                <p>Hiện tại, eSEduVN đang được cung cấp dưới dạng phần mềm miễn phí (Freeware)</p>
             </div>
             <div class="col-12 col-lg-3 col-md-3">
-                <h3>Phát triển</h3>
+                <h3>Phát triển bởi</h3>
                 <p>Tiền Minh Vy</p>
             </div>
             <div class="col-12 col-lg-3 col-md-3">

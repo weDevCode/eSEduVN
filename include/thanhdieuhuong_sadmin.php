@@ -7,5 +7,4 @@
 <br>
 <a href="<?php echo $url ?>/thoikhoabieu" class="btn btn-primary btn-block">Trang thời khoá biểu</a>
 <h3 class="text-center">Khác</h3>
-<button class="btn btn-secondary btn-block">Hướng dẫn sử dụng eSEduVN</button>
-<button class="btn btn-secondary btn-block">Về eSEduVN</button>
+<a href="https://eseduvn.tienminhvy.name.vn/" class="btn btn-secondary btn-block">Hướng dẫn sử dụng eSEduVN</a>

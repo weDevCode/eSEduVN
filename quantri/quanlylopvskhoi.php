@@ -14,6 +14,8 @@
     $pageName = 'Quản lý lớp';
     
     require_once('../include/include.php');
+
+    require_once('../include/ktraAdmin.php');
 ?>
 
 
@@ -696,23 +698,25 @@
     }
 ?>
 
-<div class="container">
-    <div class="row">
-        <div class="col-12">
-            <h2 class="text-center"><?php echo $pageName ?></h2>
-        </div>
-        <div class="col-lg-4 col-md-4 col-12">
-            <h3 class="text-center">Menu</h3>
-            <a href="?ds=lop" class="btn btn-info btn-block">Quản lý danh sách lớp</a><br>
-            <a href="?ds=khoi" class="btn btn-info btn-block">Quản lý danh sách khối</a><br>
-            <a href="?ds=buoihoc" class="btn btn-info btn-block">Quản lý danh sách buổi học</a>
-            <?php require_once('../include/thanhdieuhuong_sadmin.php') ?>
-        </div>
-        <div class="col-lg-8 col-md-4 col-12">
-            <?php echo $content ?>
+<main>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="text-center"><?php echo $pageName ?></h2>
+            </div>
+            <div class="col-lg-4 col-md-4 col-12">
+                <h3 class="text-center">Menu</h3>
+                <a href="?ds=lop" class="btn btn-info btn-block">Quản lý danh sách lớp</a><br>
+                <a href="?ds=khoi" class="btn btn-info btn-block">Quản lý danh sách khối</a><br>
+                <a href="?ds=buoihoc" class="btn btn-info btn-block">Quản lý danh sách buổi học</a>
+                <?php require_once('../include/thanhdieuhuong_sadmin.php') ?>
+            </div>
+            <div class="col-lg-8 col-md-4 col-12">
+                <?php echo $content ?>
+            </div>
         </div>
     </div>
-</div>
+</main>
 
 <?php 
     require_once('../include/footer-module.php');

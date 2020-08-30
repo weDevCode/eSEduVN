@@ -19,7 +19,7 @@
     $content = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'ghichu');
 ?>
 
-<main style="min-height: 65vh; padding: 25px 0">
+<main>
     <div class="container">
         <div class="row">
             <div class="col">

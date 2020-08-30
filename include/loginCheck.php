@@ -37,7 +37,5 @@
     
     }
 
-    // Kiểm tra quyền người dùng
-
     
 ?>

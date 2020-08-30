@@ -6,7 +6,7 @@
     require_once('db.php');
 
     if (!defined('isInstalled')){
-        die('<h1>Bạn cần chạy file install.php của eSEduVN trước khi sử dụng! (#00)</h1>');
+        die('<h1>Bạn cần chạy file caidat.php của eSEduVN trước khi sử dụng! (#00)</h1>');
     }
 
     $giaothuc = $db->getSingleData(DB_TABLE_PREFIX."caidat", "giatri", "tencaidat", "giaothuc");

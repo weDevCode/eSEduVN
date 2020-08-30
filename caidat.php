@@ -228,6 +228,12 @@
 <?php 
     define('isSet', 1);
     define('SITE_NAME', 'eSEduVN');
+
+    require_once('include/settings.php');
+
+    if(defined('isInstalled')){
+        die('<h1>Bạn đã cài đặt thành công eSEduVN rồi, bạn nên xoá file này trên máy chủ để tránh các vấn đề bảo mật!</h1>');
+    }
     
     $pageName = 'Cài đặt';
 
