@@ -86,8 +86,20 @@
                                 text: 'Đã cập nhật thành công!',
                                 icon: 'success',
                                 confirmButtonText: 'Ok'
-                              })";
-                            $db->updateADataRow(DB_TABLE_PREFIX.'caidat', 'giatri', $thoiluong, 'tencaidat', 'thoiluongtiet');
+                            })";
+                            
+                            if ($db->getSingleData(DB_TABLE_PREFIX.'caidat', 'COUNT(*)', 'tencaidat', 'thoiluongtiet')==0) {
+                                $db->insertMulDataRow(DB_TABLE_PREFIX.'caidat', array(
+                                    'tencaidat',
+                                    'giatri'
+                                ), array(
+                                    'thoiluongtiet',
+                                    $thoiluong
+                                ));
+                            } else {
+                                $db->updateADataRow(DB_TABLE_PREFIX.'caidat', 'giatri', $thoiluong, 'tencaidat', 'thoiluongtiet');
+                            }
+
                             for ($i=1; $i < 6; $i++) { 
                                 if ($_POST["sang-$i-gio"]=='' || $_POST["sang-$i-phut"]=='' || $_POST["chieu-$i-gio"]=='' || $_POST["chieu-$i-phut"]=='') {
                                     $_POST["sang-$i-gio"] = 1;
@@ -123,10 +135,46 @@
                                             confirmButtonText: 'Ok'
                                         })";
                                     } else {
-                                        $db->updateADataRow(DB_TABLE_PREFIX.'giovaotiet', 'thoiluong', $sang["$i-gio"], 'ten', "sang-$i-gio");
-                                        $db->updateADataRow(DB_TABLE_PREFIX.'giovaotiet', 'thoiluong', $sang["$i-phut"], 'ten', "sang-$i-phut");
-                                        $db->updateADataRow(DB_TABLE_PREFIX.'giovaotiet', 'thoiluong', $chieu["$i-gio"], 'ten', "chieu-$i-gio");
-                                        $db->updateADataRow(DB_TABLE_PREFIX.'giovaotiet', 'thoiluong', $chieu["$i-phut"], 'ten', "chieu-$i-phut");
+                                        if ($db->getSingleData(DB_TABLE_PREFIX.'giovaotiet', 'COUNT(*)')<20) {
+                                            
+                                            $db->insertMulDataRow(DB_TABLE_PREFIX.'giovaotiet', array(
+                                                'ten',
+                                                'thoiluong'
+                                            ), array(
+                                                "sang-$i-gio",
+                                                $sang["$i-gio"]
+                                            ));
+
+                                            $db->insertMulDataRow(DB_TABLE_PREFIX.'giovaotiet', array(
+                                                'ten',
+                                                'thoiluong'
+                                            ), array(
+                                                "sang-$i-phut",
+                                                $sang["$i-phut"]
+                                            ));
+
+                                            $db->insertMulDataRow(DB_TABLE_PREFIX.'giovaotiet', array(
+                                                'ten',
+                                                'thoiluong'
+                                            ), array(
+                                                "chieu-$i-gio",
+                                                $chieu["$i-gio"]
+                                            ));
+
+                                            $db->insertMulDataRow(DB_TABLE_PREFIX.'giovaotiet', array(
+                                                'ten',
+                                                'thoiluong'
+                                            ), array(
+                                                "chieu-$i-phut",
+                                                $chieu["$i-phut"]
+                                            ));
+
+                                        } else {
+                                            $db->updateADataRow(DB_TABLE_PREFIX.'giovaotiet', 'thoiluong', $sang["$i-gio"], 'ten', "sang-$i-gio");
+                                            $db->updateADataRow(DB_TABLE_PREFIX.'giovaotiet', 'thoiluong', $sang["$i-phut"], 'ten', "sang-$i-phut");
+                                            $db->updateADataRow(DB_TABLE_PREFIX.'giovaotiet', 'thoiluong', $chieu["$i-gio"], 'ten', "chieu-$i-gio");
+                                            $db->updateADataRow(DB_TABLE_PREFIX.'giovaotiet', 'thoiluong', $chieu["$i-phut"], 'ten', "chieu-$i-phut");
+                                        }
                                     }
                                 }
                             }

@@ -22,10 +22,10 @@
     $ngayhientai = currentDate();
     $kqua = $db->query("SELECT sohsvang FROM $table WHERE ngay='$ngayhientai' AND tietso='5'");
     if (mysqli_num_rows($kqua)>0) {
-        echo $kqua = mysqli_fetch_assoc($kqua);
-        echo '<pre>';
-        var_dump($kqua);
-        echo '</pre>';
+        $sohsvang = 0;
+        while ($row = mysqli_fetch_assoc($kqua)) {
+            $sohsvang += $row['sohsvang'];
+        }
     } else {
         $sohsvang = 0;
     }

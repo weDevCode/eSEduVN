@@ -17,7 +17,7 @@
     require_once("../include/ktThoigianhientai.php");
     require_once("../include/include.php");
     $ngayhientai;
-    $content = '';
+    $content = "Đây là trang dùng để chỉnh sửa dữ liệu điểm danh học sinh vắng các lớp, hãy chọn 1 lớp để tiếp tục";
     $js = '';
     
     if (isset($_GET['id'])) {
@@ -90,6 +90,166 @@
                     }
                 }
             }
+            function xuLyBuoiHoc($buoihoc)
+            {
+                global $id, $db, $content, $js, $ketThucTiet, $gioHienTai, $phutHienTai;
+                $content = "";
+                $ktra = false;
+                for ($i=1; $i <= count($ketThucTiet)/2; $i++) { 
+                    if ($ketThucTiet["$i-gio"]==$gioHienTai) {
+                        $ktra = true;
+                        $keTiep = $i+1;
+                        if ($ketThucTiet["$i-phut"]-$phutHienTai>0) {
+                            $conlai = $ketThucTiet["$i-phut"]-$phutHienTai;
+                            $content = "<b>Thời lượng còn lại:</b> <span id='conlai'>".$conlai."</span> phút"."<br>";
+                        } else {
+                            $ktra = false;
+                            continue;
+                        }
+                        break;
+                    } elseif ($buoihoc["$i-gio"]==$gioHienTai) { // nếu kt ở trên tiết kế tiếp ko đúng
+                        $ktra = true; 
+                        $keTiep = $i; // kế tiếp là tiết $i
+                        if ($phutHienTai - $buoihoc["$i-phut"]<45&&$phutHienTai - $buoihoc["$i-phut"]>=0) {
+                            $conlai = ($buoihoc["$i-phut"]-$phutHienTai)+45;
+                            $content = "<b>Thời lượng còn lại:</b> <span id='conlai'>".$conlai."</span> phút"."<br>";
+                        } else {
+                            $ktra = false;
+                            continue;
+                        }
+                        break;
+                    }
+                }
+
+
+
+                if ($ktra) {
+                    global $table;
+                    $table = DB_TABLE_PREFIX."dsdiemdanhcaclop";
+                    $lop = $db->getSingleData(DB_TABLE_PREFIX.'dslop', 'lop', 'id', $id);
+                    $tietso = $i;
+                    if (isset($_POST['sohs'])) {
+                        $sohsvang = $_POST['sohs'];
+                        soHSVang($lop, $tietso, $sohsvang);
+                        diemDanh($lop, $tietso, $sohsvang);
+                        $js = "Swal.fire({
+                            title: 'Thành công!',
+                            text: 'Cập nhật dữ liệu thành công',
+                            icon: 'success',
+                            confirmButtonText: 'OK'
+                          });";
+                    }
+
+                    $kqua = $db->query("SELECT noidung FROM $table WHERE lop='$lop' AND tietso='$tietso'");
+
+                    if (mysqli_num_rows($kqua)>0) {
+                        $kqua = mysqli_fetch_assoc($kqua);
+                        $noidung = unserialize($kqua['noidung']);
+                        $js1 = '';
+                        for ($i=1; $i <= count($noidung); $i++) {
+                            $js1 .= "<tr>
+                            <th scope='row'>$i</th>
+                            <td><input name='hs-$i' value='".$noidung[$i]."' placeholder='Họ và tên (Có hoặc không dấu)' style='width: 100%'></td>
+                            </tr>";
+                        }
+                        $js .= 'noidung1 = `<form method="POST"><table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col">STT</th>
+                            <th scope="col">Họ tên (có hoặc không dấu)</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+                        let noidung2 = `'.$js1.'`;
+                        noidung3 = `</tbody>
+                        </table>
+                        <input type="hidden" value="'.count($noidung).'" name="sohs" required>
+                        <button class="btn btn-success btn-block">Cập nhật</button></form>`;
+                        noidung.innerHTML = noidung1+noidung2+noidung3;';
+                    }
+
+                    $content .= 
+                    <<<HTML
+                        <label for='sohsvang'>Số học sinh vắng</label>
+                        <input id='sohsvang' name='sohsvang' type="number"><button id="luusohs"class="btn btn-success">Cập nhật</button>
+                        <div id="noidung"></div>
+                        <b>Bạn đang cập nhật dữ liệu cho lớp $lop</b>
+                    HTML;
+
+                    $js .= 'document.getElementById("luusohs").onclick = function(){
+                        noidung = document.getElementById("noidung");
+                        sohsvang = document.getElementById("sohsvang").value;
+                        noidung1 = `<form method="POST"><table class="table">
+                        <thead>
+                            <tr>
+                            <th scope="col">STT</th>
+                            <th scope="col">Họ tên (có hoặc không dấu)</th>
+                            </tr>
+                        </thead>
+                        <tbody>`;
+                        let noidung2 = "";
+                        for (i = 0; i < sohsvang; i++) {
+                            j = i+1;
+                            noidung2 += `<tr>
+                            <th scope="row">${j}</th>
+                            <td><input name="hs-${j}" placeholder="Họ và tên (Có hoặc không dấu)" style="width: 100%"></td>
+                            </tr>`;
+                        }
+                        noidung3 = `</tbody>
+                        </table>
+                        <input type="hidden" value="${sohsvang}" name="sohs" required>
+                        <button class="btn btn-success btn-block">Cập nhật</button></form>`;
+                        sohsvang = parseInt(sohsvang);
+                        if (typeof sohsvang == "number") {
+                            noidung.innerHTML = noidung1+noidung2+noidung3;
+                        } else {
+                            noidung.innerHTML = "Số học sinh phải là kiểu số!";
+                        }
+                    }';
+                    $js .= "
+                    gioKetThuc = ".$ketThucTiet["$tietso-gio"].";
+                    phutKetThuc = ".$ketThucTiet["$tietso-phut"].";
+                    setInterval(function(){ 
+                        let date = new Date();
+                        gio = date.getHours()%12;
+                        phut = date.getMinutes();
+                        if (gio==gioKetThuc&&phut==phutKetThuc) {
+                            location.reload();
+                        }
+                        if (gioKetThuc==gio+1) {
+                            conlai = phutKetThuc + 60 - phut;
+                        } else {
+                            conlai = phutKetThuc - phut;
+                        }
+                        
+                        document.getElementById('conlai').innerHTML = conlai;
+                    }, 1000);";
+                } else {
+                    if ($keTiep>5) {
+                        $content = "Hết giờ quy định, hãy quay lại vào ngày mai!";
+                    } else {
+                        $content = "Hết giờ quy định, tiết $keTiep sẽ bắt đầu vào ".$buoihoc["$keTiep-gio"]." giờ ".$buoihoc["$keTiep-phut"]." phút.";
+                        $js .= "
+                            gioBatDau = ".$buoihoc["$keTiep-gio"].";
+                            phutBatDau = ".$buoihoc["$keTiep-phut"].";
+                            setInterval(function(){ 
+                                let date = new Date();
+                                gio = date.getHours()%12;
+                                phut = date.getMinutes();
+                                if (gio==gioBatDau&&phut==phutBatDau) {
+                                    location.reload();
+                                }
+                            }, 1000);";
+                    }
+                }
+
+
+
+
+            }
+
+
+
             if ($buoi==$buoicuaNgDung) {
                 switch ($buoi) {
                     case 'sang':
@@ -98,146 +258,8 @@
                             $ketThucTiet["$i-phut"] = (($sang["$i-phut"]+$thoiluongtiet)>60) ? ($sang["$i-phut"]+$thoiluongtiet)-60 : $sang["$i-phut"]+$thoiluongtiet;
                         }
 
-                        $content = "";
-                        $ktra = false;
-                        for ($i=1; $i <= count($ketThucTiet)/2; $i++) { 
-                            if ($ketThucTiet["$i-gio"]==$gioHienTai) {
-                                $ktra = true;
-                                $keTiep = $i+1;
-                                if ($ketThucTiet["$i-phut"]-$phutHienTai>0) {
-                                    $conlai = $ketThucTiet["$i-phut"]-$phutHienTai;
-                                    $content = "<b>Thời lượng còn lại:</b> <span id='conlai'>".$conlai."</span> phút"."<br>";
-                                } else {
-                                    $ktra = false;
-                                    continue;
-                                }
-                                break;
-                            } elseif ($sang["$i-gio"]==$gioHienTai) { // nếu kt ở trên tiết kế tiếp ko đúng
-                                $ktra = true; 
-                                $keTiep = $i; // kế tiếp là tiết $i
-                                if ($phutHienTai - $sang["$i-phut"]<45&&$phutHienTai - $sang["$i-phut"]>=0) {
-                                    $conlai = ($sang["$i-phut"]-$phutHienTai)+45;
-                                    $content = "<b>Thời lượng còn lại:</b> <span id='conlai'>".$conlai."</span> phút"."<br>";
-                                } else {
-                                    $ktra = false;
-                                    continue;
-                                }
-                                break;
-                            }
-                        }
-                        if ($ktra) {
-                            $table = DB_TABLE_PREFIX."dsdiemdanhcaclop";
-                            $lop = $db->getSingleData(DB_TABLE_PREFIX.'dslop', 'lop', 'id', $id);
-                            $tietso = $i;
-                            if (isset($_POST['sohs'])) {
-                                $sohsvang = $_POST['sohs'];
-                                soHSVang($lop, $tietso, $sohsvang);
-                                diemDanh($lop, $tietso, $sohsvang);
-                            }
+                        xuLyBuoiHoc($sang);
 
-                            $kqua = $db->query("SELECT noidung FROM $table WHERE lop='$lop' AND tietso='$tietso'");
-
-                            if (mysqli_num_rows($kqua)>0) {
-                                $kqua = mysqli_fetch_assoc($kqua);
-                                $noidung = unserialize($kqua['noidung']);
-                                $js1 = '';
-                                $j = 0;
-                                for ($i=1; $i <= count($noidung); $i++) {
-                                    $js1 .= "<tr>
-                                    <th scope='row'>$i</th>
-                                    <td><input name='hs-$i' value='".$noidung[$i]."' placeholder='Họ và tên (Có hoặc không dấu)' style='width: 100%'></td>
-                                    </tr>";
-                                }
-                                $js .= 'noidung1 = `<form method="POST"><table class="table">
-                                <thead>
-                                    <tr>
-                                    <th scope="col">STT</th>
-                                    <th scope="col">Họ tên (có hoặc không dấu)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>`;
-                                let noidung2 = `'.$js1.'`;
-                                noidung3 = `</tbody>
-                                </table>
-                                <input type="hidden" value="'.count($noidung).'" name="sohs" required>
-                                <button class="btn btn-success btn-block">Cập nhật</button></form>`;
-                                noidung.innerHTML = noidung1+noidung2+noidung3;';
-                            }
-
-                            $content .= 
-                            <<<HTML
-                                <label for='sohsvang'>Số học sinh vắng</label>
-                                <input id='sohsvang' name='sohsvang' type="number"><button id="luusohs"class="btn btn-success">Cập nhật</button>
-                                <div id="noidung"></div>
-                                <b>Bạn đang cập nhật dữ liệu cho lớp $lop</b>
-                            HTML;
-
-                            $js .= 'document.getElementById("luusohs").onclick = function(){
-                                noidung = document.getElementById("noidung");
-                                sohsvang = document.getElementById("sohsvang").value;
-                                noidung1 = `<form method="POST"><table class="table">
-                                <thead>
-                                    <tr>
-                                    <th scope="col">STT</th>
-                                    <th scope="col">Họ tên (có hoặc không dấu)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>`;
-                                let noidung2 = "";
-                                for (i = 0; i < sohsvang; i++) {
-                                    j = i+1;
-                                    noidung2 += `<tr>
-                                    <th scope="row">${j}</th>
-                                    <td><input name="hs-${j}" placeholder="Họ và tên (Có hoặc không dấu)" style="width: 100%"></td>
-                                    </tr>`;
-                                }
-                                noidung3 = `</tbody>
-                                </table>
-                                <input type="hidden" value="${sohsvang}" name="sohs" required>
-                                <button class="btn btn-success btn-block">Cập nhật</button></form>`;
-                                sohsvang = parseInt(sohsvang);
-                                if (typeof sohsvang == "number") {
-                                    noidung.innerHTML = noidung1+noidung2+noidung3;
-                                } else {
-                                    noidung.innerHTML = "Số học sinh phải là kiểu số!";
-                                }
-                            }';
-                            $js .= "
-                            gioKetThuc = ".$ketThucTiet["$i-gio"].";
-                            phutKetThuc = ".$ketThucTiet["$i-phut"].";
-                            setInterval(function(){ 
-                                let date = new Date();
-                                gio = date.getHours()%12;
-                                phut = date.getMinutes();
-                                if (gio==gioKetThuc&&phut==phutKetThuc) {
-                                    location.reload();
-                                }
-                                if (gioKetThuc==gio+1) {
-                                    conlai = phutKetThuc + 60 - phut;
-                                } else {
-                                    conlai = phutKetThuc - phut;
-                                }
-                                
-                                document.getElementById('conlai').innerHTML = conlai;
-                            }, 1000);";
-                        } else {
-                            if ($keTiep>5) {
-                                $content = "Hết giờ quy định, hãy quay lại vào ngày mai!";
-                            } else {
-                                $content = "Hết giờ quy định, tiết $keTiep sẽ bắt đầu vào ".$sang["$keTiep-gio"]." giờ ".$sang["$keTiep-phut"]." phút.";
-                                $js .= "
-                                    gioBatDau = ".$sang["$keTiep-gio"].";
-                                    phutBatDau = ".$sang["$keTiep-phut"].";
-                                    setInterval(function(){ 
-                                        let date = new Date();
-                                        gio = date.getHours()%12;
-                                        phut = date.getMinutes();
-                                        if (gio==gioBatDau&&phut==phutBatDau) {
-                                            location.reload();
-                                        }
-                                    }, 1000);";
-                            }
-                        }
                         break;
                     
                     case 'chieu':
@@ -249,151 +271,7 @@
                             }
                         }
 
-                        $content = "";
-                        $ktra = false;
-                        for ($i=1; $i <= count($ketThucTiet)/2; $i++) { 
-                            if ($ketThucTiet["$i-gio"]==$gioHienTai) {
-                                $ktra = true;
-                                $keTiep = $i+1;
-                                if ($ketThucTiet["$i-phut"]-$phutHienTai>0) {
-                                    $conlai = $ketThucTiet["$i-phut"]-$phutHienTai;
-                                    $content = "<b>Thời lượng còn lại:</b> <span id='conlai'>".$conlai."</span> phút"."<br>";
-                                } else {
-                                    $ktra = false;
-                                    continue;
-                                }
-                                break;
-                            } elseif ($chieu["$i-gio"]==$gioHienTai) { // nếu kt ở trên tiết kế tiếp ko đúng
-                                $ktra = true; 
-                                $keTiep = $i; // kế tiếp là tiết $i
-                                if ($phutHienTai - $chieu["$i-phut"]<45&&$phutHienTai - $chieu["$i-phut"]>=0) {
-                                    $conlai = ($chieu["$i-phut"]-$phutHienTai)+45;
-                                    $content = "<b>Thời lượng còn lại:</b> <span id='conlai'>".$conlai."</span> phút"."<br>";
-                                } else {
-                                    $ktra = false;
-                                    continue;
-                                }
-                                break;
-                            }
-                            
-                        }
-                        if ($ktra) {
-
-                            $table = DB_TABLE_PREFIX."dsdiemdanhcaclop";
-                            $lop = $db->getSingleData(DB_TABLE_PREFIX.'dslop', 'lop', 'id', $id);
-                            $tietso = $i;
-                            if (isset($_POST['sohs'])) {
-                                $sohsvang = $_POST['sohs'];
-                                diemDanh($lop, $tietso, $sohsvang);
-                                soHSVang($lop, $tietso, $sohsvang);
-                            }
-
-                            $kqua = $db->query("SELECT noidung FROM $table WHERE lop='$lop' AND tietso='$tietso'");
-
-                            if (mysqli_num_rows($kqua)>0) {
-                                $kqua = mysqli_fetch_assoc($kqua);
-                                $noidung = unserialize($kqua['noidung']);
-                                $js1 = '';
-                                $j = 0;
-                                for ($i=1; $i <= count($noidung); $i++) {
-                                    $js1 .= "<tr>
-                                    <th scope='row'>$i</th>
-                                    <td><input name='hs-$i' value='".$noidung[$i]."' placeholder='Họ và tên (Có hoặc không dấu)' style='width: 100%'></td>
-                                    </tr>";
-                                }
-                                $js .= 'noidung1 = `<form method="POST"><table class="table">
-                                <thead>
-                                    <tr>
-                                    <th scope="col">STT</th>
-                                    <th scope="col">Họ tên (có hoặc không dấu)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>`;
-                                let noidung2 = `'.$js1.'`;
-                                noidung3 = `</tbody>
-                                </table>
-                                <input type="hidden" value="'.count($noidung).'" name="sohs" required>
-                                <button class="btn btn-success btn-block">Cập nhật</button></form>`;
-                                noidung.innerHTML = noidung1+noidung2+noidung3;';
-                            }
-                            
-                            $content .= 
-                            <<<HTML
-                                <label for='sohsvang'>Số học sinh vắng</label>
-                                <input id='sohsvang' name='sohsvang' type="number"><button id="luusohs"class="btn btn-success">Cập nhật</button>
-                                <div id="noidung"></div>
-                                <b>Bạn đang cập nhật dữ liệu cho lớp $lop</b>
-                            HTML;
-
-
-                            $js .= '
-                            document.getElementById("luusohs").onclick = function(){
-                                noidung = document.getElementById("noidung");
-                                sohsvang = document.getElementById("sohsvang").value;
-                                noidung1 = `<form method="POST"><table class="table">
-                                <thead>
-                                    <tr>
-                                    <th scope="col">STT</th>
-                                    <th scope="col">Họ tên (có hoặc không dấu)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>`;
-                                let noidung2 = "";
-                                for (i = 0; i < sohsvang; i++) {
-                                    j = i+1;
-                                    noidung2 += `<tr>
-                                    <th scope="row">${j}</th>
-                                    <td><input name="hs-${j}" placeholder="Họ và tên (Có hoặc không dấu)" style="width: 100%"></td>
-                                    </tr>`;
-                                }
-                                noidung3 = `</tbody>
-                                </table>
-                                <input type="hidden" value="${sohsvang}" name="sohs" required>
-                                <button class="btn btn-success btn-block">Cập nhật</button></form>`;
-                                sohsvang = parseInt(sohsvang);
-                                if (typeof sohsvang == "number") {
-                                    noidung.innerHTML = noidung1+noidung2+noidung3;
-                                } else {
-                                    noidung.innerHTML = "Số học sinh phải là kiểu số!";
-                                }
-                            }';
-
-
-                            $js .= "
-                            gioKetThuc = ".$ketThucTiet["$i-gio"].";
-                            phutKetThuc = ".$ketThucTiet["$i-phut"].";
-                            setInterval(function(){ 
-                                let date = new Date();
-                                gio = date.getHours()%12;
-                                phut = date.getMinutes();
-                                if (gio==gioKetThuc&&phut==phutKetThuc) {
-                                    location.reload();
-                                }
-                                if (gioKetThuc==gio+1) {
-                                    conlai = phutKetThuc + 60 - phut;
-                                } else {
-                                    conlai = phutKetThuc - phut;
-                                }
-                                document.getElementById('conlai').innerHTML = conlai;
-                            }, 1000);";
-                        } else {
-                            if ($keTiep>5) {
-                                $content = "Hết giờ quy định, hãy quay lại vào ngày mai!";
-                            } else {
-                                $content = "Hết giờ quy định, tiết $keTiep sẽ bắt đầu vào ".$chieu["$keTiep-gio"]." giờ ".$chieu["$keTiep-phut"]." phút.";
-                            }
-                            $js .= "
-                            gioBatDau = ".$chieu["$keTiep-gio"].";
-                            phutBatDau = ".$chieu["$keTiep-phut"].";
-                            setInterval(function(){ 
-                                let date = new Date();
-                                gio = date.getHours()%12;
-                                phut = date.getMinutes();
-                                if (gio==gioBatDau&&phut==phutBatDau) {
-                                    location.reload();
-                                }
-                            }, 1000);";
-                        }
+                        xuLyBuoiHoc($chieu);
 
                         break;
 
@@ -433,6 +311,10 @@
                         $khoi = $db->getMulData(DB_TABLE_PREFIX.'dskhoi', array(
                             'khoi'
                         ));
+                        $dsquydinhbuoi = $db->getSingleData(DB_TABLE_PREFIX.'quydinh', 'COUNT(*)');
+                        if (count($khoi)!=$dsquydinhbuoi) {
+                            $content = "Chưa thiết lập đủ về quy định buổi của các khối";
+                        }
                         for ($i=0; $i < count($khoi); $i++) {
                             $_khoi = $khoi[$i]['khoi'];
                             $html = 
@@ -473,8 +355,8 @@
 
 <?php 
     require_once('../include/footer-module.php');
+    require_once('../include/footer.php');
     echo "<script>";
     echo $js;
     echo "</script>";
-    require_once('../include/footer.php');
 ?>

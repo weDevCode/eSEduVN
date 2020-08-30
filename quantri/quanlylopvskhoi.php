@@ -608,7 +608,18 @@
                         if (isset($_POST['buoihoc'])) {
                             $buoihoc = $_POST['buoihoc'];
                             if ($buoihoc=='sang'||$buoihoc=='chieu') {
-                                $db->updateADataRow(DB_TABLE_PREFIX.'quydinh', 'buoi', $buoihoc, 'khoi', $khoi);
+                                if ($db->getSingleData(DB_TABLE_PREFIX.'quydinh', 'COUNT(*)', 'khoi', $khoi)==0) {
+                                    $db->insertMulDataRow(DB_TABLE_PREFIX.'quydinh', array(
+                                        'khoi',
+                                        'buoi'
+                                    ), array(
+                                        $khoi,
+                                        $buoihoc
+                                    ));
+                                } else {
+                                    $db->updateADataRow(DB_TABLE_PREFIX.'quydinh', 'buoi', $buoihoc, 'khoi', $khoi);
+                                }
+                                
                                 $js = "Swal.fire({
                                     title: 'Thành công!',
                                     text: 'Chỉnh sửa buổi học thành công! Đang chuyển hướng...',

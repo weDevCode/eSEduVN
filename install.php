@@ -66,15 +66,16 @@
     //     id INT NOT NULL AUTO_INCREMENT,
     //     tendangnhap VARCHAR(50) NOT NULL,
     //     hovaten VARCHAR(50) NOT NULL,
-    //     chucvu CHAR(16) UNSIGNED NOT NULL,
-    //     bomon CHAR(16) UNSIGNED NOT NULL,
+    //     chucvu CHAR(16) NOT NULL,
+    //     bomon CHAR(16) NOT NULL,
     //     chunhiem CHAR(7) NOT NULL,
     //     diemdanh TINYINT UNSIGNED NOT NULL,
     //     tkb TINYINT UNSIGNED NOT NULL,
     //     sodaubai TINYINT UNSIGNED NOT NULL,
     //     la_admin TINYINT UNSIGNED NOT NULL,
     //     PRIMARY KEY (id),
-    //     UNIQUE (tendangnhap));
+    //     UNIQUE (tendangnhap)
+    //     );
     // CREATE TABLE eseduvn_quydinh (
     //     id INT NOT NULL AUTO_INCREMENT,
     // 	   khoi CHAR(7) NOT NULL,
@@ -105,7 +106,7 @@
     //     PRIMARY KEY (`id`)
     // );
     // CREATE TABLE `eseduvn_sohsvang` (
-    //     `id` INT NOT NULL,
+    //     `id` INT NOT NULL AUTO_INCREMENT,
     //     `lop` CHAR(7) NOT NULL,
     //     `sohsvang` SMALLINT UNSIGNED NOT NULL,
     //     `tietso` TINYINT UNSIGNED NOT NULL,
