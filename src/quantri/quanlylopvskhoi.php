@@ -620,22 +620,24 @@
                     'id',
                     'khoi'
                 ));
-                for ($i=0; $i < count($dskhoi); $i++) { 
-                    if ($dskhoi != 0) {
-                        $content .= "<tr>";
-                        $content .= "<td class='khoi'>".$dskhoi[$i]['khoi']."</td>";
-                        $buoihoc = $db->getSingleData(DB_TABLE_PREFIX.'quydinh', 'buoi', 'khoi', $dskhoi[$i]['khoi']);
-                        if ($buoihoc===0 || $buoihoc==='') {
-                            $content .= "<td class='buoihoc'>Không có</td>";
-                        } elseif ($buoihoc=='sang') {
-                            $content .= "<td class='buoihoc'>Sáng</td>";
-                        } else {
-                            $content .= "<td class='buoihoc'>Chiều</td>";
+                if ($dskhoi != 0) {
+                    for ($i=0; $i < count($dskhoi); $i++) { 
+                        if ($dskhoi != 0) {
+                            $content .= "<tr>";
+                            $content .= "<td class='khoi'>".$dskhoi[$i]['khoi']."</td>";
+                            $buoihoc = $db->getSingleData(DB_TABLE_PREFIX.'quydinh', 'buoi', 'khoi', $dskhoi[$i]['khoi']);
+                            if ($buoihoc===0 || $buoihoc==='') {
+                                $content .= "<td class='buoihoc'>Không có</td>";
+                            } elseif ($buoihoc=='sang') {
+                                $content .= "<td class='buoihoc'>Sáng</td>";
+                            } else {
+                                $content .= "<td class='buoihoc'>Chiều</td>";
+                            }
+                            $content .= "<td class='thaotac'>
+                            <a href='?ds=buoihoc&id=".$dskhoi[$i]['id']."'><button class='btn btn-info'>Chỉnh sửa</button></a>
+                            </td>";
+                            $content .= "</tr>";
                         }
-                        $content .= "<td class='thaotac'>
-                        <a href='?ds=buoihoc&id=".$dskhoi[$i]['id']."'><button class='btn btn-info'>Chỉnh sửa</button></a>
-                        </td>";
-                        $content .= "</tr>";
                     }
                 }
                 
