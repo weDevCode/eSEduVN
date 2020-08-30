@@ -3,10 +3,15 @@
         eSEduVN (e-systemEduVN)
         Made with love by Tien Minh Vy
     ============================*/
-    require_once('../include/loginCheck.php');
-    require_once('../include/db.php');
-    $pageName = 'Cài đặt chung';
+    define('isSet', 1);
+
     require_once('../include/init_include.php');
+
+    require_once('../include/loginCheck.php');
+
+    require_once('../include/db.php');
+    
+    $pageName = 'Cài đặt chung';
 ?>
 
 <?php 
@@ -296,8 +301,8 @@
     </div>
     <div class="row">
         <div class="col-lg-4 col-sm-4 col-12">
-            <a href="caidatchung"><button class="btn btn-success btn-block">Cài đặt chung</button></a><br>
-            <a href="?loai=giovaotiet"><button class="btn btn-success btn-block">Giờ vào tiết</button></a><br>
+            <a href="caidatchung" class="btn btn-success btn-block">Cài đặt chung</a><br>
+            <a href="?loai=giovaotiet" class="btn btn-success btn-block">Giờ vào tiết</a><br>
             <?php require_once('../include/thanhdieuhuong_sadmin.php'); ?>
         </div>
         <div class="col-lg-8 col-sm-8 col-12">

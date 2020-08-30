@@ -3,27 +3,48 @@
         eSEduVN (e-systemEduVN)
         Made with love by Tien Minh Vy
     ============================*/
-    require_once('../include/loginCheck.php');
-    require_once('../include/db.php');
-    $pageName = 'Quản trị';
+    define('isSet', 1);
+
     require_once('../include/init_include.php');
+    
+    require_once('../include/loginCheck.php');
+
+    require_once('../include/db.php');
+
+    $pageName = 'Quản trị';
+
+    $thong_bao = '';
+
+    require_once('../include/365ngay.php');
 ?>
 
 <?php 
     $ghichu = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', "ghichu");
+
     if (isset($_POST['ghichu'])) {
+
         $ghichu = $_POST['ghichu'];
+
         $db->updateADataRow(DB_TABLE_PREFIX.'caidat', 'giatri', "$ghichu", 'tencaidat', "ghichu");
     }
     $sothanhvien = $db->getSingleData(DB_TABLE_PREFIX.'nguoidung', 'COUNT(*)');
+
     require_once('../include/include.php');
+
     require_once('../include/ktngayluutru.php');
+
     $table = DB_TABLE_PREFIX.'sohsvang';
+
     $ngayhientai = currentDate();
+
     $kqua = $db->query("SELECT sohsvang FROM $table WHERE ngay='$ngayhientai' AND tietso='5'");
+
     if (mysqli_num_rows($kqua)>0) {
+    
         $sohsvang = 0;
+    
         while ($row = mysqli_fetch_assoc($kqua)) {
+    
             $sohsvang += $row['sohsvang'];
         }
     } else {
@@ -32,11 +53,17 @@
 ?>
 
 <?php 
+    
     require_once('../include/header.php');
     require_once('../include/menu_sadmin.php');
 ?>
 
     <div class="container-fluid" id="main">
+        <div class="row">
+            <div class="col">
+                <?php echo $thong_bao ?>
+            </div>
+        </div>
         <div class="row">
             <div class="col">
                 <h2 class="text-center"><?php echo $pageName ?></h2>
@@ -79,8 +106,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <h2>Ghi chú</h2>
-                    <p>Bạn có thể dùng ghi chú để thông báo với các thành viên quản trị khác.</p>
+                    <h2>Thông báo</h2>
+                    <p>Dùng để viết thông báo đặt ở trang chủ</p>
                     <form method="POST">
                         <textarea name="ghichu" id="ghichu" style="width: 100%; max-width: 100%; padding: 20px" rows="10"><?php echo $ghichu ?></textarea>
                         <button class="btn btn-info btn-block">Lưu</button>

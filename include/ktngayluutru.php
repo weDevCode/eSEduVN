@@ -12,7 +12,7 @@
 
     if ($ktsoluongngay > 365) {
 
-        $content = "<b>Bạn cần liên hệ với quản trị viên để xoá bớt dữ liệu để tiếp tục.</b>";
+        $content = "<b>Bạn cần liên hệ với quản trị viên để xoá bớt dữ liệu để tiếp tục. (#05)</b>";
 
     } else {
 

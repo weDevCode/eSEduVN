@@ -3,8 +3,15 @@
         'ten',
         'thoiluong'
     ));
+    if ($giovaotietdb==0) {
 
-    if (count($giovaotietdb)==20) {
+        die("<h1>Bạn cần liên hệ quản trị viên để cập nhật dữ liệu giờ vào tiết mới có thể sử dụng được (#03)</h1>");
+
+    } elseif ($db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat','thoiluongtiet')=='') {
+
+        die("<h1>Bạn cần liên hệ quản trị viên để cập nhật dữ liệu thời lượng buổi học mới có thể sử dụng được (#04)</h1>");
+
+    } elseif (count($giovaotietdb)==20) {
 
         for ($i=0; $i < count($giovaotietdb); $i++) { 
 

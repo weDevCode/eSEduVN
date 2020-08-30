@@ -1,6 +1,4 @@
 <?php 
-    define('isSet', 1);
-
     require_once('db.php');
 
     session_start();

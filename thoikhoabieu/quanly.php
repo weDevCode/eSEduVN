@@ -3,6 +3,8 @@
         eSEduVN (e-systemEduVN)
         Made with love by Tien Minh Vy
     ============================*/
+    define('isSet', 1);
+    
     require_once('../include/loginCheck.php');
     
     require_once('../include/db.php');
@@ -10,6 +12,8 @@
     $pageName = 'Quản lý thời khoá biểu';
 
     require_once('../include/init_include.php');
+
+    require_once('../include/ktDsLop.php');
 
     require_once('../include/include.php');
 

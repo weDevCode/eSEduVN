@@ -3,23 +3,36 @@
         eSEduVN (e-systemEduVN)
         Made with love by Tien Minh Vy
     ============================*/
-    require_once('../include/loginCheck.php');
-    require_once('../include/db.php');
-    $pageName = 'Quản lý lớp';
+    define('isSet', 1);
+
     require_once('../include/init_include.php');
+
+    require_once('../include/loginCheck.php');
+
+    require_once('../include/db.php');
+    
+    $pageName = 'Quản lý lớp';
+    
     require_once('../include/include.php');
 ?>
 
 
 <?php 
+    
     require_once('../include/header.php');
+    
     require_once('../include/menu_sadmin.php');
+    
     $js = '';
+    
     $content = "<p>Đây là trang dùng để quản lý danh sách các lớp và khối.</p>
     <p>Tại đây bạn có thể xem/thêm/chỉnh sửa/xoá một lớp và thêm/xoá một khối mà bạn cần</p>
     <p>Hãy tiếp tục bằng cách nhấn vào 1 trong 2 nút ở bên trái (máy tính) hoặc ở phía trên (điện thoại)</p>";
+    
     if (isset($_GET['ds'])) {
+    
         $ds = $_GET['ds'];
+    
         switch ($ds) {
             case 'lop':
                 $content = <<<HTML
@@ -41,32 +54,49 @@
                         'khoi'
                     ));
                     
+    
                     if ($dskhoi!=0) {
+    
                         for ($i=0; $i < count($dskhoi); $i++) { 
+    
                             $dslop = $db->getMulData(DB_TABLE_PREFIX.'dslop', array(
                                 'id',
                                 'lop',
                             ), 'khoi', $dskhoi[$i]['khoi']);
+    
                             if ($dslop != 0) {
+    
                                 for ($j=0; $j < count($dslop); $j++) { 
+    
                                     $content .= "<tr>";
+    
                                     foreach ($dslop[$j] as $key => $value) {
+    
                                         if ($key != 'id') {
+    
                                             $content .= "<td class='$key'>$value</td>";
+    
                                             if ($key == 'lop') {
+    
                                                 $gvcn = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'hovaten', 'chunhiem', $value);
+    
                                                 if ($gvcn === 0) {
+    
                                                     $content .= "<td class='gvcn'>Không có</td>";
+    
                                                 } else {
+    
                                                     $content .= "<td class='gvcn'>$gvcn</td>";
                                                 }
                                             }
                                         }
                                     }
+    
                                     $content .= "<td class='thaotac'>
                                     <a href='?ds=lop&phuongthuc=chinhsua&id=".$dslop[$j]['id']."'><button class='btn btn-info'>Chỉnh sửa</button></a>
                                     <a href='?ds=lop&phuongthuc=xoa&id=".$dslop[$j]['id']."'><button class='btn btn-danger'>Xoá</button></a>
                                     </td>";
+    
                                     $content .= "</tr>";
                                 }
                             }
@@ -87,18 +117,23 @@
 
                     // Xác định phương thức
                     if (isset($_GET['phuongthuc'])) {
+    
                         $phuongthuc = $_GET['phuongthuc'];
+    
                         switch ($phuongthuc) {
                             case 'tao':
+    
                                 $dskhoi = $db->getMulData(DB_TABLE_PREFIX.'dskhoi', array(
                                     'khoi'
                                 ));
+    
                                 if ($dskhoi!=0) {
                                     $content = <<<HTML
                                     <h3 class="text-center">Thêm lớp mới</h3>
                                     <form method="POST">
                                         <p>Tên lớp: <select name="khoi" id="khoi">
                                     HTML;
+    
                                     for ($i=0; $i < count($dskhoi); $i++) { 
                                         $khoi = $dskhoi[$i]['khoi'];
                                         $content .= "<option value='$khoi'>$khoi</option>";
@@ -139,7 +174,9 @@
                                     HTML;
 
                                     if (isset($_POST['lop'])) {
+    
                                         $lopso = $_POST['lop'];
+    
                                         $js = "Swal.fire({
                                             title: 'Thành công!',
                                             text: 'Thêm lớp mới thành công. Hãy chuyển sang trang danh sách lớp để xem!',
@@ -148,22 +185,31 @@
                                         })";
                                         
                                         $khoi = $_POST['khoi'];
+    
                                         for ($i=0; $i < count($dskhoi); $i++) { 
+    
                                             if ($khoi==$dskhoi[$i]['khoi']) {
+    
                                                 $kiemtrakhoi = 1;
                                                 break;
                                             } else {
+    
                                                 $kiemtrakhoi = 0;
                                             }
                                         }
                                         
                                         $lop = "$khoi/$lopso";
+    
                                         if ($dslop!=0) {
+    
                                             for ($i=0; $i < count($dslop); $i++) { 
+    
                                                 if ($lop==$dslop[$i]['lop']) {
+    
                                                     $kiemtralop = 1;
                                                     break;
                                                 } else {
+    
                                                     $kiemtralop = 0;
                                                 }
                                             }
@@ -173,10 +219,14 @@
                                         
 
                                         $gvcn = $_POST['chunhiem'];
+    
                                         for ($i=0; $i < count($dsgv); $i++) { 
+    
                                             if ($gvcn==0 || ($gvcn==$dsgv[$i]['id'])) {
+    
                                                 // Xem người dùng có chọn chính xác giáo viên hay không
                                                 $kiemtragv = 1;
+
                                                 // Kiểm tra xem gv có chủ nhiệm lớp nào không
                                                 $ktgvdachunhiem = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'chunhiem', 'id', $gvcn);
                                                 if ($ktgvdachunhiem != 0) {
@@ -255,8 +305,11 @@
                                 if (isset($_GET['id'])) {
                                     $id = $_GET['id'];
                                     for ($i=0; $i < count($dslop); $i++) { 
+
                                         if ($dslop[$i]['id']==$id) {
+
                                             $ktralop = 1;
+
                                             $lop = $dslop[$i]['lop'];
                                             break;
                                         } else {
@@ -650,9 +703,9 @@
         </div>
         <div class="col-lg-4 col-md-4 col-12">
             <h3 class="text-center">Menu</h3>
-            <a href="?ds=lop"><button class="btn btn-info btn-block">Quản lý danh sách lớp</button></a><br>
-            <a href="?ds=khoi"><button class="btn btn-info btn-block">Quản lý danh sách khối</button></a><br>
-            <a href="?ds=buoihoc"><button class="btn btn-info btn-block">Quản lý danh sách buổi học</button></a>
+            <a href="?ds=lop" class="btn btn-info btn-block">Quản lý danh sách lớp</a><br>
+            <a href="?ds=khoi" class="btn btn-info btn-block">Quản lý danh sách khối</a><br>
+            <a href="?ds=buoihoc" class="btn btn-info btn-block">Quản lý danh sách buổi học</a>
             <?php require_once('../include/thanhdieuhuong_sadmin.php') ?>
         </div>
         <div class="col-lg-8 col-md-4 col-12">

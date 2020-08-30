@@ -42,6 +42,6 @@
             </div>
         </li>
         </ul>
-        <a href="../quantri"><button class="btn btn-info">Quản trị</button></a>
+        <a href="<?php echo $url ?>/quantri"><button class="btn btn-info">Quản trị</button></a>
     </div>
 </nav>

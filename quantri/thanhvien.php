@@ -3,10 +3,16 @@
         eSEduVN (e-systemEduVN)
         Made with love by Tien Minh Vy
     ============================*/
-    require_once('../include/loginCheck.php');
-    require_once('../include/db.php');
-    $pageName = 'Quản lý thành viên';
+    define('isSet', 1);
+
     require_once('../include/init_include.php');
+
+    require_once('../include/loginCheck.php');
+
+    require_once('../include/db.php');
+
+    $pageName = 'Quản lý thành viên';
+    
     require_once('../include/include.php');
 ?>
 
@@ -651,11 +657,11 @@
         <div class="row">
             <div class="col-sm-12 col-md-4 col-lg-4">
                 <h3 class="text-center">Menu</h3>
-                <a href="?phuongthuc=tao"><button class="btn btn-success btn-block">Thêm thành viên</button></a>
+                <a class="btn btn-success btn-block" href="?phuongthuc=tao">Thêm thành viên</a>
                 <br>
-                <a href="?phuongthuc=chinhsua"><button class="btn btn-info btn-block">Chỉnh sửa thành viên</button></a>
+                <a class="btn btn-info btn-block" href="?phuongthuc=chinhsua">Chỉnh sửa thành viên</a>
                 <br>
-                <a href="?phuongthuc=xoa"><button class="btn btn-danger btn-block">Xoá thành viên</button></a>
+                <a class="btn btn-danger btn-block" href="?phuongthuc=xoa">Xoá thành viên</a>
                 <?php require_once('../include/thanhdieuhuong_sadmin.php') ?>
             </div>
             <div class="col-sm-12 col-md-8 col-lg-8">

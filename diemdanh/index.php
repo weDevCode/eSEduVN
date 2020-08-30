@@ -10,6 +10,8 @@
     $pageName = 'Điểm danh';
 
     require_once('../include/init_include.php');
+
+    require_once('../include/ktDsLop.php');
 ?>
 
 <?php 

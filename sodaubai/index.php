@@ -4,9 +4,14 @@
         Made with love by Tien Minh Vy
     ============================*/
     define('isSet', 1);
+
     require_once('../include/db.php');
+
     $pageName = 'Sổ đầu bài';
+
     require_once('../include/init_include.php');
+    
+    require_once('../include/ktDsLop.php');
 ?>
 
 <?php 

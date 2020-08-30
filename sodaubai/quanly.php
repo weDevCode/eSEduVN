@@ -3,6 +3,8 @@
         eSEduVN (e-systemEduVN)
         Made with love by Tien Minh Vy
     ============================*/
+    define('isSet', 1);
+
     require_once('../include/loginCheck.php');
 
     require_once('../include/db.php');
@@ -13,9 +15,12 @@
 
     require_once('../include/init_include.php');
 
+    require_once('../include/ktDsLop.php');
+
     require_once('../include/ktquyennguoidung.php');
 
     ktQuyen('sodaubai');
+
 ?>
 
 <?php 

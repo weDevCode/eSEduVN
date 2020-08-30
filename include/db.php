@@ -6,7 +6,7 @@
     if(!defined('isSet')){
         die('<h1>Truy cập trực tiếp bị cấm!</h1>');
     }
-    require_once('settings.php');
+    @require_once('settings.php');
     /**
      * Class Database để thao tác với cơ sở dữ liệu MySQL
      */

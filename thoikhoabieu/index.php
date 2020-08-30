@@ -7,6 +7,7 @@
     require_once('../include/db.php');
     $pageName = 'Thời khoá biểu';
     require_once('../include/init_include.php');
+    require_once('../include/ktDsLop.php');
 ?>
 
 <?php 
@@ -46,6 +47,7 @@
                         $khoi = $db->getMulData(DB_TABLE_PREFIX.'dskhoi', array(
                             'khoi'
                         ));
+                        
                         for ($i=0; $i < count($khoi); $i++) {
                             $_khoi = $khoi[$i]['khoi'];
                             $html = 
