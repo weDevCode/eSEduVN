@@ -66,33 +66,61 @@
                 if ($ktra) {
                     chonNgay($ngaydachon);
                     $table = DB_TABLE_PREFIX.'dsdiemdanhcaclop';
-                    $kqua = $db->query("SELECT tietso, noidung FROM $table WHERE ngay='$ngaydachon' AND lop='$lop'");
+                    $kqua = $db->query("SELECT tietso, noidung, nguoidung FROM $table WHERE ngay='$ngaydachon' AND lop='$lop'");
                     if (mysqli_num_rows($kqua)>0) {
                         while ($row = mysqli_fetch_assoc($kqua)) {
                             foreach ($row as $key => $value) {
                                 if ($key=='tietso') {
                                     // echo $value;
                                     $content2 .= "<p><b>Tiết số: $value</b></p>";
-                                } elseif ($key=='noidung') {
-                                    $value = unserialize($value);
-                                    $content2 .= '<table class="table">
-                                    <thead>
-                                        <tr>
-                                        <th scope="col">STT</th>
-                                        <th scope="col">Họ tên học sinh vắng</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>';
+                                } elseif ($key=='noidung'||$key=='nguoidung') {
+                                    switch ($key) {
+                                        case 'noidung':
+                                            $value = unserialize($value);
+                                            $content2 .= '<table class="table">
+                                            <thead>
+                                                <tr>
+                                                <th scope="col">STT</th>
+                                                <th scope="col">Họ tên học sinh vắng</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>';
 
-                                    for ($i=1; $i <= count($value); $i++) { 
-                                        $content2 .= "<tr>
-                                        <th scope='row'>$i</th>
-                                        <td><p>".$value[$i]."</p></td>
-                                        </tr>";
+                                            for ($i=1; $i <= count($value); $i++) { 
+                                                $content2 .= "<tr>
+                                                <th scope='row'>$i</th>
+                                                <td><p>".$value[$i]."</p></td>
+                                                </tr>";
+                                            }
+                                            $content2 .= '</tbody>
+                                            </table>';
+                                            break;
+
+                                        case 'nguoidung':
+                                            $hovaten = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'hovaten', 'tendangnhap', $value);
+                                            
+                                            $chucvu = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'chucvu', 'tendangnhap', $value);
+
+                                            if ($chucvu==0) {
+                                                $chucvu = 'Không';
+                                            }
+
+                                            $bomon = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'bomon', 'tendangnhap', $value);
+
+                                            if ($bomon==0) {
+                                                $bomon = 'Không';
+                                            }
+
+                                            $content2 .= "<p>
+                                            <ul>
+                                                <li><b>Giáo viên khai báo</b>: $hovaten</li>
+                                                <li><b>Tên người dùng</b>: $value</li>
+                                                <li><b>Chức vụ</b>: $chucvu</li>
+                                                <li><b>Bộ môn</b>: $bomon</li>
+                                            </ul> </p>";
+                                            break;
                                     }
-
-                                    $content2 .= '</tbody>
-                                    </table>';
+                                    
                                 }
                             }
                         }

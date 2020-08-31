@@ -9,6 +9,8 @@
         die('<h1>Bạn cần chạy file caidat.php của eSEduVN trước khi sử dụng! (#00)</h1>');
     }
 
+    require_once('db.php');
+
     $giaothuc = $db->getSingleData(DB_TABLE_PREFIX."caidat", "giatri", "tencaidat", "giaothuc");
 
     $url = $giaothuc.$db->getSingleData(DB_TABLE_PREFIX."caidat", "giatri", "tencaidat", "diachi");

@@ -8,6 +8,6 @@
     $ktAdmin = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'la_admin', 'tendangnhap', $tennguoidung);
 
     if ($ktAdmin!=1) {
-        die('<h1>Bạn khôn phải là admin nên bạn không có quyền truy cập trang này! Hãy quay lại trang trước để tiếp tục</h1>');
+        die('<h1>Bạn không phải là admin nên bạn không có quyền truy cập trang này! Hãy quay lại trang trước để tiếp tục</h1>');
     }
 ?>

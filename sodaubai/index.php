@@ -93,7 +93,7 @@
                                         <tr>
                                         <th scope="col">Nội dung sổ đầu bài</th>
                                         <th scope="col">Đánh giá</th>
-                                        <th scope="col">Người dùng (tên đăng nhập)</th>
+                                        <th scope="col">Người dùng khai báo</th>
                                         </tr>
                                     </thead>
                                     <tbody>';
@@ -103,8 +103,31 @@
                                 } elseif ($key=='danhgia') {
                                     $content2 .= "<td>$value</td>";
                                 } else {
+                                    
+
                                     $hovaten = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'hovaten', 'tendangnhap', $value);
-                                    $content2 .= "<td>$hovaten ($value)</td>
+                                            
+                                    $chucvu = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'chucvu', 'tendangnhap', $value);
+                                    
+                                    if ($chucvu==0) {
+                                        $chucvu = 'Không';
+                                    }
+                                            
+                                    $bomon = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'bomon', 'tendangnhap', $value);
+                                    
+                                    if ($bomon==0) {
+                                        $bomon = 'Không';
+                                    }
+
+
+                                    $content2 .= "<td>
+                                        <ul>
+                                            <li><b>Giáo viên khai báo</b>: $hovaten</li>
+                                            <li><b>Tên người dùng</b>: $value</li>
+                                            <li><b>Chức vụ</b>: $chucvu</li>
+                                            <li><b>Bộ môn</b>: $bomon</li>
+                                        </ul>
+                                    </td>
                                     </tr>
                                     </tbody>
                                     </table>";
