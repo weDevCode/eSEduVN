@@ -13,7 +13,7 @@
 
         $giaothuc = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', "giaothuc");
         
-        $redt = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', "diachi").'/quantri';
+        $redt = $giaothuc.$db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', "diachi");
 
         if (isset($_SESSION['khoaphien'])) {
 
@@ -23,7 +23,7 @@
 
             if ($check == 1) {
 
-                header("Location: ".$giaothuc.$redt, true, 303);
+                header("Location: ".$redt, true, 303);
 
             }
 
@@ -35,7 +35,7 @@
 
             if ($check == 1) {
 
-                header("Location: ".$giaothuc.$redt, true, 303);
+                header("Location: ".$redt, true, 303);
 
             }
         }
@@ -58,15 +58,11 @@
     $js = '';
     if (isset($_POST['tendangnhap']) && isset($_POST['matkhau'])) {
 
-        $tendangnhap = $_POST['tendangnhap'];
+        $tendangnhap = mysqli_real_escape_string($db->conn, $_POST['tendangnhap']);
 
-        $matkhau = $_POST['matkhau'];
+        $matkhau = mysqli_real_escape_string($db->conn, $_POST['matkhau']);
 
-        $tendangnhap = mysqli_real_escape_string($db->conn, $tendangnhap);
-
-        $matkhau = mysqli_real_escape_string($db->conn, $matkhau);
-
-        $matkhaubam = $db->getSingleData(DB_TABLE_PREFIX.'nguoidung', 'matkhaubam', 'tendangnhap', "$tendangnhap");
+        $matkhaubam = $db->getSingleData(DB_TABLE_PREFIX.'nguoidung', 'matkhaubam', 'tendangnhap', $tendangnhap);
         
         if (password_verify($matkhau, $matkhaubam)) {
 
@@ -99,10 +95,10 @@
                 $redf = $_GET['redf'];
                 $redf = str_replace('http://', '', $redf);
                 $redf = str_replace('https://', '', $redf);
-                $redf = $giaothuc.$redf;
+                $redf = $redf;
                 $url = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'diachi');
                 if (strpos($redf, $url)===false) {
-                    $redf = $giaothuc.$db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'diachi');
+                    $redf = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'diachi');
                 }
                 $js = 
                 "<script>
@@ -117,7 +113,6 @@
                     }, 3000);
                 </script>";
             } else {
-                $redt = $giaothuc.$redt;
                 $js = 
                 "<script>
                     Swal.fire({

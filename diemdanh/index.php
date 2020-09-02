@@ -19,7 +19,7 @@
 
     require_once('../include/menu_non_sadmin.php');
 
-    require_once('../include/ktngayluutru.php');
+    require_once('../include/ktngayluutruTXem.php');
 
     require_once("../include/ktgiovaotiet.php");
     

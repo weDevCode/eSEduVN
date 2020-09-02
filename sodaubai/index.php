@@ -16,9 +16,13 @@
 
 <?php 
     require_once('../include/header.php');
+
     require_once('../include/menu_non_sadmin.php');
-    require_once('../include/ktngayluutru.php');
+    
+    require_once('../include/ktngayluutruTXem.php');
+
     require_once("../include/ktgiovaotiet.php");
+
     require_once("../include/ktThoigianhientai.php");
     $content = "Đây là trang dùng để xem sổ đầu bài của toàn bộ các lớp. Hãy chọn 1 lớp để tiếp tục!";
     $content2 = '';
@@ -37,7 +41,10 @@
 
                 $chonngay = "<select id='luachonngay' name='luachonngay'>";
 
-                $dsngay = $db->getMulData(DB_TABLE_PREFIX.'luutrungay', array('ngay'));
+                $dsngay = $db->getMulData(DB_TABLE_PREFIX.'luutrungay', array(
+                    'id',
+                    'ngay'
+                ));
 
                 for ($i=0; $i < count($dsngay); $i++) { 
 
