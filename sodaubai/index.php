@@ -28,6 +28,10 @@
     $content2 = '';
     $js = '';
     
+    function sort_ngay($a,$b) {
+        return strtotime(str_replace('/', '-', $a['ngay'])) - strtotime(str_replace('/', '-', $b['ngay']));
+    }
+
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
         $kiemtra = $db->getSingleData(DB_TABLE_PREFIX.'dslop', 'COUNT(*)', 'id', $id);
@@ -42,9 +46,11 @@
                 $chonngay = "<select id='luachonngay' name='luachonngay'>";
 
                 $dsngay = $db->getMulData(DB_TABLE_PREFIX.'luutrungay', array(
-                    'id',
-                    'ngay'
+                    'ngay',
+                    'id'
                 ));
+
+                usort($dsngay, "sort_ngay");
 
                 for ($i=0; $i < count($dsngay); $i++) { 
 
@@ -160,7 +166,7 @@
             }
 
             $content = "<form method='POST'><label for='luachonngay'>Lựa chọn ngày: </label> $chonngay
-            <button class='btn btn-success'>Truy vấn</button></form>";
+            <button class='btn btn-success'>Tra cứu</button></form>";
             $content2 .= "<p><b>Bạn đang xem lớp $lop</b></p>";
         }
     }

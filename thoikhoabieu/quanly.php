@@ -31,11 +31,11 @@
         $content = "<p>Xin chào, <b style='color: red'>$tennguoidung</b></p><b>Bạn chưa tạo thời khoá biểu nào. Hãy nhấn nút bên dưới để tạo thời khoá biểu mới<br>
         Hoặc bạn có thể nhấn vào liên kết của từng lớp ở thanh bên trái. Nếu lớp đó chưa có TKB thì hệ thống sẽ tự tạo <br>
         Nếu có rồi thì dùng để chỉnh sửa TKB hiện có</b><br>
-        <a href='$url/thoikhoabieu/quanly?phuongthuc=tao'><button class='btn btn-success btn-block'>Tạo thời khoá biểu mới</button></a>";
+        <a href='$url/thoikhoabieu/quanly?phuongthuc=tao' class='btn btn-success btn-block'>Tạo thời khoá biểu mới</a>";
     } else {
         $content = "<p>Xin chào, <b style='color: red'>$tennguoidung</b></p>Đây là trang quản lý thời khoá biểu, hiện số lượng thời khoá biểu đã thiết lập là <b>$soluongTKB</b><br>
         Bạn có thể tạo thêm thời khoá biểu cho từng lớp bằng cách nhấn vào nút bên dưới
-        <a href='$url/thoikhoabieu/quanly?phuongthuc=tao'><button class='btn btn-success btn-block'>Tạo thời khoá biểu mới</button></a>";
+        <a href='$url/thoikhoabieu/quanly?phuongthuc=tao' class='btn btn-success btn-block'>Tạo thời khoá biểu mới</a>";
     }
     if (isset($_GET['phuongthuc'])) {
         $phuongthuc = $_GET['phuongthuc'];
@@ -145,7 +145,7 @@
                     if ($noidung === 0) {
                         $content = "<b>Lỗi! Không tìm thấy thời khoá biểu! <br>
                         Bạn có thể tạo thời khoá biểu mới bằng cách nhấn vào nút bên dưới
-                        <a href='$url/thoikhoabieu/quanly?phuongthuc=tao'><button class='btn btn-success btn-block'>Tạo thời khoá biểu mới</button></a>
+                        <a href='$url/thoikhoabieu/quanly?phuongthuc=tao' class='btn btn-success btn-block'>Tạo thời khoá biểu mới</a>
                         </b>";
                     } else {
                         $lop = $db->getSingleData(DB_TABLE_PREFIX.'tkb', 'lop', 'id', $id);
@@ -205,7 +205,7 @@
                 <h3 class="text-center">Danh sách lớp</h3>
                 <ul>
                     <?php 
-                        echo "<a href='$url/thoikhoabieu/quanly?phuongthuc=tao'><button class='btn btn-success btn-block'>Tạo thời khoá biểu mới</button></a>";
+                        echo "<a href='$url/thoikhoabieu/quanly?phuongthuc=tao' class='btn btn-success btn-block'>Tạo thời khoá biểu mới</a>";
                         $phtml = '';
                         $khoi = $db->getMulData(DB_TABLE_PREFIX.'dskhoi', array(
                             'khoi'
