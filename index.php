@@ -29,14 +29,7 @@
 
     .thongbao {
         margin: 30px 0;
-    }
-
-    .thongbao > .card {
-        opacity: 0.9;
-    }
-
-    .thongbao > .card * {
-        opacity: 1 !important;
+        opacity: 0 !important;
     }
 
     .title {
