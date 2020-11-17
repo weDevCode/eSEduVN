@@ -561,7 +561,7 @@
                                     })
                                     setTimeout(function(){ location.replace('?ds=khoi');}, 3000);";
                                     $db->insertADataRow(DB_TABLE_PREFIX.'dskhoi', 'khoi', $khoi);
-                                    $db->insertADataRow(DB_TABLE_PREFIX.'quydinh', 'khoi', $khoi);
+                                    $db->insertMulDataRow(DB_TABLE_PREFIX.'quydinh', array('khoi', 'buoi'), array($khoi, ''));
                                 }
                             }
                         break;
