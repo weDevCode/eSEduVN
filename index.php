@@ -57,9 +57,9 @@
             </div>
         </div>
         <div class="row nav-2">
-            <div class="col-12 col-lg-4"><a href="<?php echo $url ?>/diemdanh" class="btn btn-primary btn-block">Điểm danh</a></div>
+            <div class="col-12 col-lg-4"><a href="<?php echo $url ?>/diemdanh" class="btn btn-danger btn-block">Điểm danh</a></div>
             <div class="col-12 col-lg-4"><a href="<?php echo $url ?>/thoikhoabieu" class="btn btn-success btn-block">Thời khoá biểu</a></div>
-            <div class="col-12 col-lg-4"><a href="<?php echo $url ?>/sodaubai" class="btn btn-secondary btn-block">Sổ đầu bài</a></div>
+            <div class="col-12 col-lg-4"><a href="<?php echo $url ?>/sodaubai" class="btn btn-warning btn-block">Sổ đầu bài</a></div>
         </div>
     </div>
 </main>
