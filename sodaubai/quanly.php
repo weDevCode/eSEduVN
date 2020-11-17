@@ -156,6 +156,8 @@
                         }
                     
                         break;
+                    } else {
+                        $keTiep = 1;
                     }
                 }
 

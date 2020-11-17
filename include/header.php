@@ -27,6 +27,10 @@
         #footer {
             padding-top: 20px;
         }
+
+        #dslop ul li {
+            list-style: none;
+        }
     </style>
 </head>
 <body>

@@ -29,6 +29,9 @@
             <a class="nav-link" href="quanlylopvskhoi">Quản lý lớp & khối</a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" href="capnhatdulieu">Cập nhật dữ liệu</a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="caidatchung">Cài đặt chung</a>
         </li>
         </ul>

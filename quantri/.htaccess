@@ -2,3 +2,4 @@ RewriteEngine On
 RewriteRule ^thanhvien$ thanhvien.php [L]
 RewriteRule ^caidatchung$ caidatchung.php [L]
 RewriteRule ^quanlylopvskhoi$ quanlylopvskhoi.php [L]
+RewriteRule ^capnhatdulieu$ nhapdl.php [L]

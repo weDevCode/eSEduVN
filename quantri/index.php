@@ -109,8 +109,8 @@
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <h2>Thông báo</h2>
-                        <p>Dùng để viết thông báo đặt ở trang chủ</p>
+                        <h2 class="text-center">Thông báo</h2>
+                        <p class="text-center">Dùng để viết thông báo đặt ở trang chủ</p>
                         <form method="POST">
                             <textarea name="ghichu" id="ghichu" style="width: 100%; max-width: 100%; padding: 20px" rows="10"><?php echo $ghichu ?></textarea>
                             <button class="btn btn-info btn-block">Lưu</button>

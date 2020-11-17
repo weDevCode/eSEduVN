@@ -72,20 +72,20 @@
         // CREATE TABLE ".$prefix."caidat ( 
             // id INT NOT NULL AUTO_INCREMENT,
             // tencaidat CHAR(20) NOT NULL,
-            // giatri VARCHAR(65536) NOT NULL,
+            // giatri VARCHAR(255) NOT NULL,
             // PRIMARY KEY (id),
         // );
         $db->query("CREATE TABLE ".$prefix."caidat ( 
             id INT NOT NULL AUTO_INCREMENT,
             tencaidat CHAR(20) NOT NULL,
-            giatri VARCHAR(65536) NOT NULL,
+            giatri VARCHAR(255) NOT NULL,
             PRIMARY KEY (id)
         );");
         // Bảng TKB
         // CREATE TABLE ".$prefix."tkb (
         //     id INT NOT NULL AUTO_INCREMENT,
         //     lop CHAR(7) NOT NULL,
-        //     noidung VARCHAR(65536) NOT NULL,
+        //     noidung VARCHAR(255) NOT NULL,
         //     PRIMARY KEY (id),
         //     UNIQUE (lop),
         //     thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -93,7 +93,7 @@
         $db->query("CREATE TABLE ".$prefix."tkb (
             id INT NOT NULL AUTO_INCREMENT,
             lop CHAR(7) NOT NULL,
-            noidung VARCHAR(65536) NOT NULL,
+            noidung VARCHAR(255) NOT NULL,
             PRIMARY KEY (id),
             UNIQUE (lop),
             thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

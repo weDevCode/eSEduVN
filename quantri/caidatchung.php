@@ -215,7 +215,7 @@
                         </thead>
                         <tbody>
                     HTML;
-                    $content .= 
+                $content .= 
                     "<tr>
                         <th scope='row'>1</th>
                         <td><input type='number' min=1 max=12 name='sang-1-gio' value='".$sang["1-gio"]."'></td>
