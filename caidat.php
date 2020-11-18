@@ -85,7 +85,7 @@
         // CREATE TABLE ".$prefix."tkb (
         //     id INT NOT NULL AUTO_INCREMENT,
         //     lop CHAR(7) NOT NULL,
-        //     noidung VARCHAR(255) NOT NULL,
+        //     noidung longtext NOT NULL,
         //     PRIMARY KEY (id),
         //     UNIQUE (lop),
         //     thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -93,7 +93,7 @@
         $db->query("CREATE TABLE ".$prefix."tkb (
             id INT NOT NULL AUTO_INCREMENT,
             lop CHAR(7) NOT NULL,
-            noidung VARCHAR(255) NOT NULL,
+            noidung longtext NOT NULL,
             PRIMARY KEY (id),
             UNIQUE (lop),
             thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
