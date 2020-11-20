@@ -72,13 +72,13 @@
         // CREATE TABLE ".$prefix."caidat ( 
             // id INT NOT NULL AUTO_INCREMENT,
             // tencaidat CHAR(20) NOT NULL,
-            // giatri VARCHAR(255) NOT NULL,
+            // giatri longtext NOT NULL,
             // PRIMARY KEY (id),
         // );
         $db->query("CREATE TABLE ".$prefix."caidat ( 
             id INT NOT NULL AUTO_INCREMENT,
             tencaidat CHAR(20) NOT NULL,
-            giatri VARCHAR(255) NOT NULL,
+            giatri longtext NOT NULL,
             PRIMARY KEY (id)
         );");
         // Bảng TKB
