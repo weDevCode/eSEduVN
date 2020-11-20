@@ -105,60 +105,44 @@
             }
             function xuLyBuoiHoc($buoihoc)
             {
-                global $id, $db, $content, $js, $ketThucTiet, $gioHienTai, $phutHienTai;
+                global $id, $db, $content, $js, $ketThucTiet, $gioHienTai, $phutHienTai, $buoicuaNgDung;
                 
                 $content = "";
                 
                 $ktra = false;
-                
+
                 for ($i=1; $i <= count($ketThucTiet)/2; $i++) { 
-                
-                    if ($ketThucTiet["$i-gio"]==$gioHienTai) {
-                
-                        $ktra = true;
-                
-                        $keTiep = $i+1;
-                
-                        if ($ketThucTiet["$i-phut"]-$phutHienTai>0) {
-                
-                            $conlai = $ketThucTiet["$i-phut"]-$phutHienTai;
-                
-                            $content = "<b>Thời lượng còn lại:</b> <span id='conlai'>".$conlai."</span> phút"."<br>";
-                
-                        } else {
-                
-                            $ktra = false;
-                
-                            continue;
-                
+
+                    if ($buoicuaNgDung == 'chieu') {
+                        if ($buoihoc["$i-gio"]==12) {
+                            $buoihoc["$i-gio"] = 0;
                         }
-                
+                    }
+
+                    $tBanDau = $buoihoc["$i-gio"] * 60 + $buoihoc["$i-phut"];
+                    
+                    $tKetThuc = $tBanDau + 45 ;
+
+                    $tHienTai = $gioHienTai * 60 + $phutHienTai;
+                    
+                    if ($tKetThuc-$tHienTai>45) {
+                        $ktra = false;
+                        $keTiep = $i;
                         break;
-                    
-                    } elseif ($buoihoc["$i-gio"]==$gioHienTai) { // nếu kt ở trên tiết kế tiếp ko đúng
-                    
-                        $ktra = true; 
-                    
-                        $keTiep = $i; // kế tiếp là tiết $i
-                    
-                        if ($phutHienTai - $buoihoc["$i-phut"]<45&&$phutHienTai - $buoihoc["$i-phut"]>=0) {
-                    
-                            $conlai = ($buoihoc["$i-phut"]-$phutHienTai)+45;
-                    
-                            $content = "<b>Thời lượng còn lại:</b> <span id='conlai'>".$conlai."</span> phút"."<br>";
-                    
-                        } else {
-                    
-                            $ktra = false;
-                    
-                            continue;
-                    
-                        }
-                    
+                    } elseif ($tKetThuc-$tHienTai>=0&&$tKetThuc-$tHienTai<=45) {
+
+                        $ktra = true;
+
+                        $conlai = $tKetThuc-$tHienTai;
+                
+                        $content = "<b>Thời lượng còn lại:</b> <span id='conlai'>".$conlai."</span> phút"."<br>";
+
                         break;
                     } else {
-                        $keTiep = 1;
+                        $ktra = false;
+                        $keTiep = $i+1;
                     }
+
                 }
 
 
@@ -256,8 +240,8 @@
                 switch ($buoi) {
                     case 'sang':
                         for ($i=1; $i <= count($sang)/2; $i++) { 
-                            $ketThucTiet["$i-gio"] = (($sang["$i-phut"]+$thoiluongtiet)>60) ? $sang["$i-gio"]+1 : $sang["$i-gio"];
-                            $ketThucTiet["$i-phut"] = (($sang["$i-phut"]+$thoiluongtiet)>60) ? ($sang["$i-phut"]+$thoiluongtiet)-60 : $sang["$i-phut"]+$thoiluongtiet;
+                            $ketThucTiet["$i-gio"] = (($sang["$i-phut"]+$thoiluongtiet)>=60) ? $sang["$i-gio"]+1 : $sang["$i-gio"];
+                            $ketThucTiet["$i-phut"] = (($sang["$i-phut"]+$thoiluongtiet)>=60) ? ($sang["$i-phut"]+$thoiluongtiet)-60 : $sang["$i-phut"]+$thoiluongtiet;
                         }
 
                         xuLyBuoiHoc($sang);
@@ -266,8 +250,8 @@
                     
                     case 'chieu':
                         for ($i=1; $i <= count($chieu)/2; $i++) { 
-                            $ketThucTiet["$i-gio"] = (($chieu["$i-phut"]+$thoiluongtiet)>60) ? $chieu["$i-gio"]+1 : $chieu["$i-gio"];
-                            $ketThucTiet["$i-phut"] = (($chieu["$i-phut"]+$thoiluongtiet)>60) ? ($chieu["$i-phut"]+$thoiluongtiet)-60 : $chieu["$i-phut"]+$thoiluongtiet;
+                            $ketThucTiet["$i-gio"] = (($chieu["$i-phut"]+$thoiluongtiet)>=60) ? $chieu["$i-gio"]+1 : $chieu["$i-gio"];
+                            $ketThucTiet["$i-phut"] = (($chieu["$i-phut"]+$thoiluongtiet)>=60) ? ($chieu["$i-phut"]+$thoiluongtiet)-60 : $chieu["$i-phut"]+$thoiluongtiet;
                             if ($ketThucTiet["$i-gio"]==13) {
                                 $ketThucTiet["$i-gio"] = 1;
                             }
@@ -364,7 +348,8 @@
         a_plugin_option: true,
         a_configuration_option: 400,
         menubar: false,
-        branding: false
+        branding: false,
+        language: 'vi'
       });
     </script>
 <?php 

@@ -72,13 +72,13 @@
         // CREATE TABLE ".$prefix."caidat ( 
             // id INT NOT NULL AUTO_INCREMENT,
             // tencaidat CHAR(20) NOT NULL,
-            // giatri VARCHAR(255) NOT NULL,
+            // giatri longtext NOT NULL,
             // PRIMARY KEY (id),
         // );
         $db->query("CREATE TABLE ".$prefix."caidat ( 
             id INT NOT NULL AUTO_INCREMENT,
             tencaidat CHAR(20) NOT NULL,
-            giatri VARCHAR(255) NOT NULL,
+            giatri longtext NOT NULL,
             PRIMARY KEY (id)
         );");
         // Bảng TKB
@@ -221,6 +221,25 @@
             nguoidung VARCHAR(50) NOT NULL,
             PRIMARY KEY (id)
         );");
+        // Table thongbao
+        // CREATE TABLE ".$prefix."sodaubai (
+        //     id INT NOT NULL AUTO_INCREMENT,
+        //     lop CHAR(7) NOT NULL,
+        //     tietso TINYINT(3) UNSIGNED NOT NULL,
+        //     noidung LONGTEXT NOT NULL,
+        //     danhgia CHAR(10) NOT NULL,
+        //     ngay CHAR(10) NOT NULL,
+        //     nguoidung VARCHAR(50) NOT NULL,
+        //     PRIMARY KEY (id)
+        // );
+
+        $db->query("CREATE TABLE ".$prefix."thongbao ( 
+            id INT NOT NULL AUTO_INCREMENT, 
+            tieude TINYTEXT NOT NULL,
+            noidung LONGTEXT NOT NULL,
+            thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id)
+            );");
     }
 ?>
 
@@ -265,7 +284,7 @@ HTML;
         switch ($_GET['buoc']) {
             case '1':
 
-                $tenMayChuCsdl = '';
+                $tenMayChuCsdl = 'localhost';
 
                 $congKetNoiCsdl = 3306;
 
@@ -485,7 +504,7 @@ $settings =
                                 'giatri'
                             ), array(
                                 'diachi',
-                                $_SERVER['SERVER_NAME'] . str_replace('caidat.php', '', $_SERVER['PHP_SELF'])
+                                $_SERVER['SERVER_NAME'] . str_replace('/caidat.php', '', $_SERVER['PHP_SELF'])
                             ));
 
                             $db->insertMulDataRow(DB_TABLE_PREFIX.'caidat', array(
