@@ -117,6 +117,9 @@
                         if ($buoihoc["$i-gio"]==12) {
                             $buoihoc["$i-gio"] = 0;
                         }
+                        if ($gioHienTai==12) {
+                            $gioHienTai = 0;
+                        }
                     }
 
                     $tBanDau = $buoihoc["$i-gio"] * 60 + $buoihoc["$i-phut"];
@@ -218,6 +221,9 @@
                     if ($keTiep>5) {
                         $content = "Hết giờ quy định, hãy quay lại vào ngày mai!";
                     } else {
+                        if ($buoihoc["$keTiep-gio"]==0) {
+							$buoihoc["$keTiep-gio"] = 12;
+						}
                         $content = "Hết giờ quy định, tiết $keTiep sẽ bắt đầu vào ".$buoihoc["$keTiep-gio"]." giờ ".$buoihoc["$keTiep-phut"]." phút.";
                         $js .= "
                             gioBatDau = ".$buoihoc["$keTiep-gio"].";
