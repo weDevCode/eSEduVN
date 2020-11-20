@@ -21,11 +21,16 @@
 <?php 
     require_once('../include/header.php');
     require_once('../include/menu_sadmin.php');
+    function zeroToStr(&$value)
+    {
+        return $value = str_replace(0, '', $value);
+    }
     $content = '';
     $js = '';
     $tenwebsite = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'tenwebsite');
     $diachi = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'diachi');
-
+    zeroToStr($tenwebsite);
+    zeroToStr($diachi);
     if (isset($_POST['tenwebsite'])&&isset($_POST['giaothuc'])&&isset($_POST['diachi'])) {
         $tenwebsite = $_POST['tenwebsite'];
         $giaothuc = $_POST['giaothuc'];
@@ -44,7 +49,7 @@
                 icon: 'success',
                 confirmButtonText: 'Ok'
             });
-            setTimeout(function(){location.replace('')}, 2000)";
+            setTimeout(function(){location.replace('')}, 1500)";
             $db->updateADataRow(DB_TABLE_PREFIX.'caidat', 'giatri', $tenwebsite, 'tencaidat', 'tenwebsite');
             $db->updateADataRow(DB_TABLE_PREFIX.'caidat', 'giatri', $giaothuc, 'tencaidat', 'giaothuc');
             $db->updateADataRow(DB_TABLE_PREFIX.'caidat', 'giatri', $diachi, 'tencaidat', 'diachi');
@@ -193,7 +198,47 @@
 
                 $thoiluong = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'thoiluongtiet');
                 
-                require_once("../include/ktgiovaotiet.php");
+                $giovaotietdb = $db->getMulData(DB_TABLE_PREFIX.'giovaotiet', array(
+                    'ten',
+                    'thoiluong'
+                ));
+                if ($giovaotietdb==0) {
+                    // chưa xử lý
+                } elseif (count($giovaotietdb)==20) {
+
+                    for ($i=0; $i < count($giovaotietdb); $i++) { 
+            
+                        $ten1 = ''; $ten2 = '';
+            
+                        foreach ($giovaotietdb[$i] as $key => $value) {
+            
+                            if ($key == 'ten') {
+            
+                                $ten1 = $value;
+            
+                            } elseif ($key == 'thoiluong') {
+            
+                                $ten2 = $value;
+            
+                            }
+            
+                            $giovaotiet[$ten1] = $ten2;
+            
+                        }
+                    }
+            
+                    for ($i=1; $i < 6; $i++) {
+            
+                        $sang["$i-gio"] = $giovaotiet["sang-$i-gio"];
+            
+                        $sang["$i-phut"] = $giovaotiet["sang-$i-phut"];
+            
+                        $chieu["$i-gio"] = $giovaotiet["chieu-$i-gio"];
+            
+                        $chieu["$i-phut"] = $giovaotiet["chieu-$i-phut"];
+                        
+                    }
+                }
 
                 $content = <<<HTML
                     <h3 class="text-center">Giờ vào tiết</h3>
@@ -292,6 +337,98 @@
                     HTML;
                 break;
             
+            
+            case 'smtp':
+
+                $tennggui = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'tenngguiSMTP');
+                $congSMTP = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'congSMTP');
+                $maychuSMTP = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'maychuSMTP');
+                $diachiSMTP = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'diachiSMTP');
+                $matkhauSMTP = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'matkhauSMTP');
+
+                zeroToStr($tennggui);
+                zeroToStr($congSMTP);
+                zeroToStr($maychuSMTP);
+                zeroToStr($diachiSMTP);
+                
+                if ($db->getSingleData(DB_TABLE_PREFIX.'caidat', 'COUNT(*)', 'tencaidat', 'matkhauSMTP')>0) {
+                    $matkhauSMTP = 'xxxxxxxxxxxxxxxxxxxx';
+                } else {
+                    zeroToStr($matkhauSMTP);
+                }
+
+                if (isset($_POST['tennggui'])&&isset($_POST['congSMTP'])&&isset($_POST['maychuSMTP'])&&isset($_POST['diachiSMTP'])&&isset($_POST['matkhauSMTP'])) {
+
+                    $tennggui = mysqli_real_escape_string($db->conn, $_POST['tennggui']);
+                    $congSMTP = mysqli_real_escape_string($db->conn, $_POST['congSMTP']);
+                    $maychuSMTP = mysqli_real_escape_string($db->conn, $_POST['maychuSMTP']);
+                    $diachiSMTP = mysqli_real_escape_string($db->conn, $_POST['diachiSMTP']);
+                    $matkhauSMTP = mysqli_real_escape_string($db->conn, $_POST['matkhauSMTP']);
+
+                    ($tennggui=='') ? $tennggui = 'eSEduVN' : $tennggui;
+                    ($congSMTP=='') ? $congSMTP = 25 : $congSMTP;
+
+                    if ($maychuSMTP==''||$diachiSMTP==''||$matkhauSMTP=='') {
+                        $js = "Swal.fire({
+                            title: 'Thất bại!',
+                            text: 'Vui lòng điền đầy đủ các ô bắt buộc!',
+                            icon: 'error',
+                            confirmButtonText: 'Ok'
+                        });";
+                    } elseif (!is_numeric($congSMTP)) {
+                        $js = "Swal.fire({
+                            title: 'Thất bại!',
+                            text: 'Cổng SMTP phải là một số!',
+                            icon: 'error',
+                            confirmButtonText: 'Ok'
+                        });";
+                    } else {
+                        $js = "Swal.fire({
+                            title: 'Thành công!',
+                            text: 'Đã cập nhật thành công giá trị của (các) ô!',
+                            icon: 'success',
+                            confirmButtonText: 'Ok'
+                        });
+                        setTimeout(function(){location.replace('')}, 1500)";
+
+                        $kiemtra_tennggui = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'COUNT(*)', 'tencaidat', 'tenngguiSMTP');
+                        $kiemtra_congSMTP = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'COUNT(*)', 'tencaidat', 'congSMTP');
+                        $kiemtra_maychuSMTP = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'COUNT(*)', 'tencaidat', 'maychuSMTP');
+                        $kiemtra_diachiSMTP = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'COUNT(*)', 'tencaidat', 'diachiSMTP');
+                        $kiemtra_matkhauSMTP = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'COUNT(*)', 'tencaidat', 'matkhauSMTP');
+
+                        ($kiemtra_tennggui>0) ? $db->updateADataRow(DB_TABLE_PREFIX.'caidat', 'giatri', $tennggui, 'tencaidat', 'tenngguiSMTP') : $db->insertMulDataRow(DB_TABLE_PREFIX.'caidat', array('tencaidat','giatri'), array('tenngguiSMTP', $tennggui));
+                        ($kiemtra_congSMTP>0) ? $db->updateADataRow(DB_TABLE_PREFIX.'caidat', 'giatri', $congSMTP, 'tencaidat', 'congSMTP') : $db->insertMulDataRow(DB_TABLE_PREFIX.'caidat', array('tencaidat','giatri'), array('congSMTP', $congSMTP));
+                        ($kiemtra_maychuSMTP>0) ? $db->updateADataRow(DB_TABLE_PREFIX.'caidat', 'giatri', $maychuSMTP, 'tencaidat', 'maychuSMTP') : $db->insertMulDataRow(DB_TABLE_PREFIX.'caidat', array('tencaidat','giatri'), array('maychuSMTP', $maychuSMTP));
+                        ($kiemtra_diachiSMTP>0) ? $db->updateADataRow(DB_TABLE_PREFIX.'caidat', 'giatri', $diachiSMTP, 'tencaidat', 'diachiSMTP') : $db->insertMulDataRow(DB_TABLE_PREFIX.'caidat', array('tencaidat','giatri'), array('diachiSMTP', $diachiSMTP));
+                        if ($matkhauSMTP!='xxxxxxxxxxxxxxxxxxxx') {
+                            ($kiemtra_matkhauSMTP>0) ? $db->updateADataRow(DB_TABLE_PREFIX.'caidat', 'giatri', $matkhauSMTP, 'tencaidat', 'matkhauSMTP') : $db->insertMulDataRow(DB_TABLE_PREFIX.'caidat', array('tencaidat','giatri'), array('matkhauSMTP',$matkhauSMTP));
+                        }
+
+                    }
+                }
+
+                $content = "<h3 class='text-center'>Cài đặt Mail/SMTP</h3>
+                <p>Nếu bạn muốn bật tính năng xác minh 2 bước qua email, tính năng quên mật khẩu khi đăng nhập
+                và tính năng cho khách truy cập nhận email thông báo của hệ thống, bạn cần thiết lập một số
+                thông tin SMTP tại đây.</p>
+                <form method='POST'>
+                    <label for='tennggui'>Tên người gửi (Mặc định là eSEduVN)</label>
+                    <input id='tennggui' name='tennggui' value='$tennggui' type='text' class='form-control'>
+                    <label for='congSMTP'>Cổng (Có 3 cổng là 25/587/465, mặc định là 25)</label>
+                    <input id='congSMTP' name='congSMTP' value='$congSMTP' type='number' class='form-control'>
+                    <label for='maychuSMTP'>Tên máy chủ SMTP (Ví dụ: smtp.vidu.tld) (*)</label>
+                    <input id='maychuSMTP' name='maychuSMTP' value='$maychuSMTP' type='text' class='form-control' required>
+                    <label for='diachiSMTP'>Địa chỉ gửi thư (Ví dụ: noreply@vidu.tld) (*)</label>
+                    <input id='diachiSMTP' name='diachiSMTP' value='$diachiSMTP' type='text' class='form-control' required>
+                    <label for='matkhauSMTP'>Mật khẩu của địa chỉ trên (*)</label>
+                    <input id='matkhauSMTP' name='matkhauSMTP' value='$matkhauSMTP' type='password' class='form-control' required>
+                    <br><button class='btn btn-success btn-block'>Lưu thay đổi</button>
+                    <b>Các ô được đánh dấu (*) là bắt buộc</b>
+                </form>";
+                
+                break;
+
             default:
                 $content = "<b>Lỗi do người dùng định nghĩa sai phương thức!</b>";
                 break;
@@ -308,6 +445,7 @@
             <div class="col-lg-4 col-sm-4 col-12">
                 <a href="caidatchung" class="btn btn-success btn-block">Cài đặt chung</a><br>
                 <a href="?loai=giovaotiet" class="btn btn-success btn-block">Giờ vào tiết</a><br>
+                <a href="?loai=smtp" class="btn btn-success btn-block">Mail/SMTP</a><br>
                 <?php require_once('../include/thanhdieuhuong_sadmin.php'); ?>
             </div>
             <div class="col-lg-8 col-sm-8 col-12">

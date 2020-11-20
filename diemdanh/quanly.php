@@ -59,83 +59,147 @@
 
             function diemDanh($lop, $tietso, $sohsvang)
             {
+                
                 global $db, $table, $tennguoidung, $ngayhientai;
+                
+                $lop = mysqli_real_escape_string($db->conn, $lop);
+                
+                $tietso = mysqli_real_escape_string($db->conn, $tietso);
+                
+                $sohsvang = mysqli_real_escape_string($db->conn, $sohsvang);
+
+                if (!is_numeric($tietso)||!is_numeric($sohsvang)) {
+                    die('Phải là dữ liệu kiểu số');
+                }
+                
                 $ktra = $db->query("SELECT COUNT(*) FROM `$table` WHERE lop='$lop' AND tietso='$tietso' AND ngay='$ngayhientai';");
+                
                 $result = mysqli_fetch_assoc($ktra);
+                
                 if ($result["COUNT(*)"]>0) {
-                    
+                
                     $manghs = array();
+                
                     for ($i=1; $i <= $sohsvang; $i++) { 
+                
                         if ($_POST["hs-$i"]!='') {
+                
                             $hs = $_POST["hs-$i"];
+                
                             $manghs[$i] = mysqli_real_escape_string($db->conn, $hs);
+                
                         }
+                
                     }
+                
                     $noidung = serialize($manghs);
-                    $db->query("UPDATE $table
+                
+                $db->query("UPDATE $table
                     SET noidung='$noidung', nguoidung='$tennguoidung'
                     WHERE lop='$lop' AND tietso='$tietso' AND ngay='$ngayhientai'");
-                } else {
+                
+            } else {
+                
                     $manghs = array();
+                
                     for ($i=1; $i <= $sohsvang; $i++) { 
+                
                         if ($_POST["hs-$i"]!='') {
+                
                             $hs = $_POST["hs-$i"];
+                
                             $manghs[$i] = mysqli_real_escape_string($db->conn, $hs);
+                
                         }
+                
                     }
+                
                     $noidung = serialize($manghs);
-                    $db->query("INSERT INTO $table (lop, tietso, noidung, ngay, nguoidung)
+                
+                $db->query("INSERT INTO $table (lop, tietso, noidung, ngay, nguoidung)
                     VALUES ('$lop', '$tietso', '$noidung', '$ngayhientai', '$tennguoidung');");
-                }
+                
+            }
             }
             function soHSVang($lop, $tietso, $sohsvang)
             {
+                
                 global $db, $ngayhientai;
+                
+                $lop = mysqli_real_escape_string($db->conn, $lop);
+                
+                $tietso = mysqli_real_escape_string($db->conn, $tietso);
+                
+                $sohsvang = mysqli_real_escape_string($db->conn, $sohsvang);
+                
+                if (!is_numeric($tietso)||!is_numeric($sohsvang)) {
+                    die('Phải là dữ liệu kiểu số');
+                }
+
                 $table = DB_TABLE_PREFIX.'sohsvang';
+                
                 $kqua = $db->query("SELECT COUNT(*) FROM $table WHERE lop='$lop' AND tietso='$tietso' AND ngay='$ngayhientai'");
+                
                 if (mysqli_num_rows($kqua)>0) {
+                
                     $kqua = mysqli_fetch_assoc($kqua);
+                
                     if ($kqua['COUNT(*)']>0) {
+                
                         $db->query("UPDATE $table
-                        SET sohsvang='$sohsvang'
-                        WHERE lop='$lop' AND tietso='$tietso' AND ngay='$ngayhientai'");
+                                SET sohsvang='$sohsvang'
+                                WHERE lop='$lop' AND tietso='$tietso' AND ngay='$ngayhientai'");
+                
                     } else {
+                
                         $db->query("INSERT INTO $table (lop, sohsvang, tietso, ngay)
-                        VALUES ('$lop', '$sohsvang', '$tietso', '$ngayhientai');");
+                                VALUES ('$lop', '$sohsvang', '$tietso', '$ngayhientai');");
+                
                     }
+                
                 }
             }
             function xuLyBuoiHoc($buoihoc)
             {
-                global $id, $db, $content, $js, $ketThucTiet, $gioHienTai, $phutHienTai;
+                
+                global $id, $db, $content, $js, $ketThucTiet, $gioHienTai, $phutHienTai, $buoicuaNgDung;
+                
                 $content = "";
+                
                 $ktra = false;
+                
                 for ($i=1; $i <= count($ketThucTiet)/2; $i++) { 
-                    if ($ketThucTiet["$i-gio"]==$gioHienTai) {
-                        $ktra = true;
-                        $keTiep = $i+1;
-                        if ($ketThucTiet["$i-phut"]-$phutHienTai>0) {
-                            $conlai = $ketThucTiet["$i-phut"]-$phutHienTai;
-                            $content = "<b>Thời lượng còn lại:</b> <span id='conlai'>".$conlai."</span> phút"."<br>";
-                        } else {
-                            $ktra = false;
-                            continue;
+
+                    if ($buoicuaNgDung == 'chieu') {
+                        if ($buoihoc["$i-gio"]==12) {
+                            $buoihoc["$i-gio"] = 0;
                         }
+                    }
+
+                    $tBanDau = $buoihoc["$i-gio"] * 60 + $buoihoc["$i-phut"];
+                    
+                    $tKetThuc = $tBanDau + 45 ;
+
+                    $tHienTai = $gioHienTai * 60 + $phutHienTai;
+                    
+                    if ($tKetThuc-$tHienTai>45) {
+                        $ktra = false;
+                        $keTiep = $i;
                         break;
-                    } elseif ($buoihoc["$i-gio"]==$gioHienTai) { // nếu kt ở trên tiết kế tiếp ko đúng
-                        $ktra = true; 
-                        $keTiep = $i; // kế tiếp là tiết $i
-                        if ($phutHienTai - $buoihoc["$i-phut"]<45&&$phutHienTai - $buoihoc["$i-phut"]>=0) {
-                            $conlai = ($buoihoc["$i-phut"]-$phutHienTai)+45;
-                            $content = "<b>Thời lượng còn lại:</b> <span id='conlai'>".$conlai."</span> phút"."<br>";
-                        } else {
-                            $ktra = false;
-                            continue;
-                        }
+                    } elseif ($tKetThuc-$tHienTai>=0&&$tKetThuc-$tHienTai<=45) {
+
+                        $ktra = true;
+
+                        $conlai = $tKetThuc-$tHienTai;
+                
+                        $content = "<b>Thời lượng còn lại:</b> <span id='conlai'>".$conlai."</span> phút"."<br>";
+
                         break;
                     } else {
-                        $keTiep = 1;
+                        $ktra = false;
+                        $keTiep = $i+1;
                     }
+
                 }
 
 
@@ -271,8 +335,8 @@
                 switch ($buoi) {
                     case 'sang':
                         for ($i=1; $i <= count($sang)/2; $i++) { 
-                            $ketThucTiet["$i-gio"] = (($sang["$i-phut"]+$thoiluongtiet)>60) ? $sang["$i-gio"]+1 : $sang["$i-gio"];
-                            $ketThucTiet["$i-phut"] = (($sang["$i-phut"]+$thoiluongtiet)>60) ? ($sang["$i-phut"]+$thoiluongtiet)-60 : $sang["$i-phut"]+$thoiluongtiet;
+                            $ketThucTiet["$i-gio"] = (($sang["$i-phut"]+$thoiluongtiet)>=60) ? $sang["$i-gio"]+1 : $sang["$i-gio"];
+                            $ketThucTiet["$i-phut"] = (($sang["$i-phut"]+$thoiluongtiet)>=60) ? ($sang["$i-phut"]+$thoiluongtiet)-60 : $sang["$i-phut"]+$thoiluongtiet;
                         }
 
                         xuLyBuoiHoc($sang);
@@ -281,8 +345,8 @@
                     
                     case 'chieu':
                         for ($i=1; $i <= count($chieu)/2; $i++) { 
-                            $ketThucTiet["$i-gio"] = (($chieu["$i-phut"]+$thoiluongtiet)>60) ? $chieu["$i-gio"]+1 : $chieu["$i-gio"];
-                            $ketThucTiet["$i-phut"] = (($chieu["$i-phut"]+$thoiluongtiet)>60) ? ($chieu["$i-phut"]+$thoiluongtiet)-60 : $chieu["$i-phut"]+$thoiluongtiet;
+                            $ketThucTiet["$i-gio"] = (($chieu["$i-phut"]+$thoiluongtiet)>=60) ? $chieu["$i-gio"]+1 : $chieu["$i-gio"];
+                            $ketThucTiet["$i-phut"] = (($chieu["$i-phut"]+$thoiluongtiet)>=60) ? ($chieu["$i-phut"]+$thoiluongtiet)-60 : $chieu["$i-phut"]+$thoiluongtiet;
                             if ($ketThucTiet["$i-gio"]==13) {
                                 $ketThucTiet["$i-gio"] = 1;
                             }
@@ -312,7 +376,8 @@
     }
 ?>
 
-<div class="container-fluid" id="main">
+<main>
+    <div class="container-fluid" id="main">
         <div class="row">
             <div class="col">
                 <h2 class="text-center"><?php echo $pageName ?></h2>
@@ -369,6 +434,7 @@
             </div>
         </div>
     </div>
+</main>
 
 <?php 
     require_once('../include/footer-module.php');

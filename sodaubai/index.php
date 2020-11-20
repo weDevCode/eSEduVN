@@ -16,9 +16,13 @@
 
 <?php 
     require_once('../include/header.php');
+
     require_once('../include/menu_non_sadmin.php');
-    require_once('../include/ktngayluutru.php');
+    
+    require_once('../include/ktngayluutruTXem.php');
+
     require_once("../include/ktgiovaotiet.php");
+
     require_once("../include/ktThoigianhientai.php");
     $content = "Đây là trang dùng để xem sổ đầu bài của toàn bộ các lớp. Hãy chọn 1 lớp để tiếp tục!";
     $content2 = '';
@@ -41,14 +45,10 @@
 
                 $chonngay = "<select id='luachonngay' name='luachonngay'>";
 
-<<<<<<< Updated upstream
-                $dsngay = $db->getMulData(DB_TABLE_PREFIX.'luutrungay', array('ngay'));
-=======
                 $dsngay = $db->getMulData(DB_TABLE_PREFIX.'luutrungay', array(
                     'ngay',
                     'id'
                 ));
->>>>>>> Stashed changes
 
                 usort($dsngay, "sort_ngay");
 
@@ -106,7 +106,7 @@
                                         <tr>
                                         <th scope="col">Nội dung sổ đầu bài</th>
                                         <th scope="col">Đánh giá</th>
-                                        <th scope="col">Người dùng (tên đăng nhập)</th>
+                                        <th scope="col">Người dùng khai báo</th>
                                         </tr>
                                     </thead>
                                     <tbody>';
@@ -116,8 +116,31 @@
                                 } elseif ($key=='danhgia') {
                                     $content2 .= "<td>$value</td>";
                                 } else {
+                                    
+
                                     $hovaten = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'hovaten', 'tendangnhap', $value);
-                                    $content2 .= "<td>$hovaten ($value)</td>
+                                            
+                                    $chucvu = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'chucvu', 'tendangnhap', $value);
+                                    
+                                    if ($chucvu==0) {
+                                        $chucvu = 'Không';
+                                    }
+                                            
+                                    $bomon = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'bomon', 'tendangnhap', $value);
+                                    
+                                    if ($bomon==0) {
+                                        $bomon = 'Không';
+                                    }
+
+
+                                    $content2 .= "<td>
+                                        <ul>
+                                            <li><b>Giáo viên khai báo</b>: $hovaten</li>
+                                            <li><b>Tên người dùng</b>: $value</li>
+                                            <li><b>Chức vụ</b>: $chucvu</li>
+                                            <li><b>Bộ môn</b>: $bomon</li>
+                                        </ul>
+                                    </td>
                                     </tr>
                                     </tbody>
                                     </table>";
@@ -149,7 +172,8 @@
     }
 ?>
 
-<div class="container-fluid" id="main">
+<main>
+    <div class="container-fluid" id="main">
         <div class="row">
             <div class="col">
                 <h2 class="text-center"><?php echo $pageName ?></h2>
@@ -203,6 +227,7 @@
             </div>
         </div>
     </div>
+</main>
 
 <?php 
     require_once('../include/footer-module.php');

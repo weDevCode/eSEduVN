@@ -17,6 +17,7 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="..">Trang chủ</a>
+                <a class="dropdown-item" href="../thongbao">Thông báo</a>
                 <a class="dropdown-item" href="../diemdanh">Điểm danh</a>
                 <a class="dropdown-item" href="../sodaubai">Sổ đầu bài</a>
                 <a class="dropdown-item" href="../thoikhoabieu">Thời khoá biểu</a>
@@ -30,6 +31,9 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" href="capnhatdulieu">Cập nhật dữ liệu</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="capnhatthongbao">Cập nhật thông báo</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="caidatchung">Cài đặt chung</a>

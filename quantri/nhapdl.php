@@ -416,7 +416,9 @@
                 </form>";
 
                 $js .= "tinymce.init({
-                    selector: '#dulieu'
+                    selector: '#dulieu',
+                    branding: false,
+                    language: 'vi'
                 });";
 
                 $html .= "<br><a class='btn btn-info' href='?'>Quay về trang trước</a>";
@@ -659,6 +661,9 @@
     require_once('../include/footer-module.php');
 ?>  
 <script src="<?php echo $url ?>/include/tinymce/js/tinymce/tinymce.min.js"></script>
+<script>
+    
+</script>
 <?php 
     require_once('../include/footer.php');
     echo '<script>';

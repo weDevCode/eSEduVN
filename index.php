@@ -29,7 +29,7 @@
 
     .thongbao {
         margin: 30px 0;
-        opacity: 0 !important;
+		opacity: 0 !important;
     }
 
     .title {

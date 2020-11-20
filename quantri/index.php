@@ -106,7 +106,7 @@
                 </div>
             </div>
 
-            <div class="container">
+            <!-- <div class="container">
                 <div class="row">
                     <div class="col-12">
                         <h2 class="text-center">Thông báo</h2>
@@ -117,7 +117,7 @@
                         </form>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
         </div>
     </main>
@@ -129,7 +129,8 @@
     <script src="<?php echo $url ?>/include/tinymce/js/tinymce/tinymce.min.js"></script>
     <script>
     tinymce.init({
-        selector: '#ghichu'
+        selector: '#ghichu',
+        branding: false
     });
         var d = new Date();
         ngay = d.getDate();
