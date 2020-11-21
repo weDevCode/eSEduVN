@@ -142,6 +142,13 @@
                             icon: 'error',
                             confirmButtonText: 'Ok'
                           })";
+                    } elseif (strlen($hovaten)>255||strlen($email)>320) {
+                        $js = "Swal.fire({
+                            title: 'Lỗi!',
+                            text: 'Họ và tên phải nhỏ hơn 255 ký tự, Email phải nhỏ hơn 320 ký tự!',
+                            icon: 'error',
+                            confirmButtonText: 'Ok'
+                          })";
                     } else {
                         $kttendangnhap = $db->getSingleData(DB_TABLE_PREFIX.'nguoidung', 'COUNT(*)', 'tendangnhap', $tendangnhap);
                         $ktemail = $db->getSingleData(DB_TABLE_PREFIX.'nguoidung', 'COUNT(*)', 'email', $email);
@@ -171,10 +178,24 @@
                             
                             $db->insertMulDataRow(DB_TABLE_PREFIX.'quyen', array(
                                 'tendangnhap',
-                                'hovaten'
+                                'hovaten',
+                                'chucvu',
+                                'bomon',
+                                'chunhiem',
+                                'diemdanh',
+                                'tkb',
+                                'sodaubai',
+                                'la_admin',
                             ), array(
                                 $tendangnhap,
-                                $hovaten
+                                $hovaten,
+                                0,
+                                0,
+                                0,
+                                0,
+                                0,
+                                0,
+                                0
                             ));
 
                             if ($_POST['chucvu']!=='') {
@@ -281,7 +302,7 @@
                             }
                         }
                     }
-                    $content .= "<td class='chinhsua'><a href='?phuongthuc=chinhsua&id=".$dsthanhvien[$i]['id']."'><button class='btn btn-info btn-block'>Chỉnh sửa</button></a></td>";
+                    $content .= "<td class='chinhsua'><a class='btn btn-info btn-block' href='?phuongthuc=chinhsua&id=".$dsthanhvien[$i]['id']."'>Chỉnh sửa</a></td>";
                     $content .= "</tr>";
                 }
 
@@ -305,6 +326,13 @@
                                 $js = "Swal.fire({
                                     title: 'Lỗi!',
                                     text: 'Vui lòng điền đầy đủ các ô, trừ các ô không bắt buộc!',
+                                    icon: 'error',
+                                    confirmButtonText: 'Ok'
+                                  })";
+                            } elseif (strlen($hovaten)>255||strlen($email)>320) {
+                                $js = "Swal.fire({
+                                    title: 'Lỗi!',
+                                    text: 'Họ và tên phải nhỏ hơn 255 ký tự, Email phải nhỏ hơn 320 ký tự!',
                                     icon: 'error',
                                     confirmButtonText: 'Ok'
                                   })";
@@ -593,7 +621,7 @@
                             }
                         }
                     }
-                    $content .= "<td class='chinhsua'><a href='?phuongthuc=xoa&id=".$dsthanhvien[$i]['id']."'><button class='btn btn-danger btn-block'>Xoá</button></a></td>";
+                    $content .= "<td class='chinhsua'><a class='btn btn-danger btn-block' href='?phuongthuc=xoa&id=".$dsthanhvien[$i]['id']."'>Xoá</a></td>";
                     $content .= "</tr>";
                 }
 
@@ -618,7 +646,7 @@
                                 <button class="btn btn-danger btn-block">Vẫn xoá</button>
                             </form>
                             <br>
-                            <a href="?phuongthuc=xoa"><button class="btn btn-success btn-block">Trở về trang quản lý xoá người dùng</button></a>
+                            <a href="?phuongthuc=xoa" class="btn btn-success btn-block">Trở về trang quản lý xoá người dùng</a>
                         HTML;
                         if (isset($_POST['xacnhan'])) {
                             $xacnhan = $_POST['xacnhan'];
@@ -630,7 +658,7 @@
                                         <h3 class="text-center">Thành công!!</h3>
                                         <p>Đã xoá người dùng thành công khỏi hệ thống</p>
                                         <br>
-                                        <a href="?phuongthuc=xoa"><button class="btn btn-success btn-block">Trở về trang quản lý xoá người dùng</button></a>
+                                        <a href="?phuongthuc=xoa" class="btn btn-success btn-block">Trở về trang quản lý xoá người dùng</a>
                                     HTML;
                                     break;
                                 
