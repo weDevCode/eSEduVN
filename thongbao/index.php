@@ -12,6 +12,32 @@
     require_once('../include/init_include.php');
 
     require_once('../include/ktDsLop.php');
+
+    function thongBao($loinhan, $loai)
+    {
+        global $url;
+        header('Location: '.$url."/thongbao/?thongbao=$loai&loinhan=$loinhan!", true);
+        die();
+    }
+
+    $thongbaoHTML = '';
+    if (isset($_GET['thongbao'])) {
+        $thongbao = $_GET['thongbao'];
+        if (isset($_GET['loinhan'])) {
+            $loinhan = htmlspecialchars($_GET['loinhan']);
+        } else {
+            $loinhan = '';
+        }
+        switch ($thongbao) {
+            case 'thanhcong':
+                $thongbaoHTML = "<div class='alert alert-success' role='alert'>$loinhan</div>";
+                break;
+
+            case 'thatbai':
+                $thongbaoHTML = "<div class='alert alert-danger' role='alert'>$loinhan</div>";
+                break;
+        }
+    }
 ?>
 
 <?php
@@ -28,7 +54,7 @@
     $html = '';
     $trang= 1;
     $count = $db->getSingleData(DB_TABLE_PREFIX.'thongbao', 'COUNT(*)');
-    if ($count > 0) {
+    if ($count > 0) { // hiện danh sách thông báo
         $arr = $db->getMulData(DB_TABLE_PREFIX.'thongbao', array('tieude','noidung','thoigian'));
         if (isset($_GET['trang'])) {
             $trang = mysqli_real_escape_string($db->conn, $_GET['trang']);
@@ -65,32 +91,47 @@
         $max = 0;
     }
 
-    function thongBao($loinhan, $loai)
-    {
-        global $url;
-        header('Location: '.$url."/quantri/capnhatthongbao?thongbao=$loai&loinhan=$loinhan!", true);
-        die();
-    }
-
-    $thongbaoHTML = '';
-    if (isset($_GET['thongbao'])) {
-        $thongbao = $_GET['thongbao'];
-        if (isset($_GET['loinhan'])) {
-            $loinhan = htmlspecialchars($_GET['loinhan']);
+    if (isset($_POST['ten'])&&isset($_POST['email'])) { // đăng ký nhận thư thông báo
+        $ten = mysqli_real_escape_string($db->conn, $_POST['ten']);
+        $email = mysqli_real_escape_string($db->conn, $_POST['email']);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            thongBao('Email không hợp lệ', 'thatbai');
+        } elseif (strlen($email)>255||strlen($ten)>320) {
+            thongBao('Lỗi: Tên phải nhỏ hơn 320 ký tự, email phải nhỏ hơn 255 ký tự', 'thatbai');
         } else {
-            $loinhan = '';
-        }
-        switch ($thongbao) {
-            case 'thanhcong':
-                $thongbaoHTML = "<div class='alert alert-success' role='alert'>$loinhan</div>";
-                break;
-
-            case 'thatbai':
-                $thongbaoHTML = "<div class='alert alert-danger' role='alert'>$loinhan</div>";
-                break;
+            require_once('../include/smtp.php');
+            if ($db->getSingleData(DB_TABLE_PREFIX.'nhanthongbao', 'COUNT(*)', 'email', $email) > 0) {
+                thongBao('Bạn đã đăng ký nhận thư rồi!', 'thatbai');
+            } else {
+                sendNotifyEmailVerify($email, $ten);
+                thongBao('Hãy kiểm tra hộp thư (kể cả hộp thư rác/spam) để tìm thư xác nhận email, bạn sẽ chỉ nhận được thông báo sau khi đã xác nhận email!', 'thanhcong');
+            }
         }
     }
 
+    if (isset($_GET['token'])&&$_GET['ten']) { // xác minh địa chỉ email
+        $token = mysqli_real_escape_string($db->conn, $_GET['token']);
+        $ten = mysqli_real_escape_string($db->conn, htmlspecialchars($_GET['ten']));
+
+        if ($db->getSingleData(DB_TABLE_PREFIX.'xacminhnhanthongbao', 'COUNT(*)', 'token', $token) > 0) {
+
+            $email = $db->getSingleData(DB_TABLE_PREFIX.'xacminhnhanthongbao', 'email', 'token', $token);
+
+            $db->insertMulDataRow(DB_TABLE_PREFIX.'nhanthongbao', array(
+                'ten',
+                'email'
+            ), array(
+                $ten,
+                $email
+            ));
+
+            $db->deleteADataRow(DB_TABLE_PREFIX.'xacminhnhanthongbao', 'email', $email);
+
+            thongBao("Xác minh thành công, từ giờ bạn sẽ nhận được thông báo qua email khi có tin tức mới từ hệ thống!", 'thanhcong');
+        } else {
+            thongBao("Lỗi: token không hợp lệ", 'thatbai');
+        }
+    }
 ?>
 
 <main>

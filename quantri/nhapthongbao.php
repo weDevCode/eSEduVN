@@ -28,6 +28,7 @@
     $noidung = '';
     $html = '';
     $trang= 1;
+    $sendNotifyViaEmail = '';
 
     function thongBao($loinhan, $loai)
     {
@@ -57,6 +58,7 @@
 
     if (!isset($_GET['id'])) {
         $buttonName = 'Đăng thông báo mới';
+        $sendNotifyViaEmail = "<p><label for='guithongbao'>Gửi thông báo đến danh sách email đã đăng ký nhận thông báo? </label><input id='guithongbao' type='checkbox' name='guithongbao' checked></p>";
     } else {
         $id = mysqli_real_escape_string($db->conn, $_GET['id']);
         if ($id=='') {
@@ -93,6 +95,7 @@
 
             thongBao("Cập nhật thông báo có mã số là $id thành công!", 'thanhcong');
         } else {
+            require_once('../include/smtp.php');
             $db->insertMulDataRow(DB_TABLE_PREFIX.'thongbao', array(
                 'tieude',
                 'noidung'
@@ -100,6 +103,16 @@
                 $tieude,
                 $noidung
             ));
+
+            if (isset($_POST['guithongbao'])) {
+                $dsEmail = $db->getMulData(DB_TABLE_PREFIX.'nhanthongbao', array('email'));
+
+                foreach ($dsEmail as $value) {
+                    $dsEmailNhanThBao[] = $value['email'];
+                }
+
+                sendNotifyEmail($dsEmailNhanThBao, $tieude, $noidung);
+            }
 
             thongBao('Thêm thông báo mới thành công!', 'thanhcong');
         }
@@ -169,6 +182,7 @@
             <?php echo $noidung ?>
             </textarea>
             <button class="btn btn-success btn-block"><?php echo $buttonName ?></button>
+            <?php echo $sendNotifyViaEmail ?>
         </form>
         <div class="row">
             <div class="col">

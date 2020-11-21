@@ -7,8 +7,8 @@
         // Tạo bảng user
         // CREATE TABLE ".$prefix."nguoidung ( 
         //     id INT NOT NULL AUTO_INCREMENT,
-        //     tendangnhap VARCHAR(50) NOT NULL,
-        //     email VARCHAR(50) NOT NULL,
+        //     tendangnhap VARCHAR(255) NOT NULL,
+        //     email VARCHAR(320) NOT NULL,
         //     matkhaubam VARCHAR(255) NOT NULL,
         //     PRIMARY KEY (id), 
         //     UNIQUE (tendangnhap),
@@ -17,8 +17,8 @@
 
         $db->query("CREATE TABLE ".$prefix."nguoidung ( 
             id INT NOT NULL AUTO_INCREMENT,
-            tendangnhap VARCHAR(50) NOT NULL,
-            email VARCHAR(50) NOT NULL,
+            tendangnhap VARCHAR(255) NOT NULL,
+            email VARCHAR(320) NOT NULL,
             matkhaubam VARCHAR(255) NOT NULL,
             PRIMARY KEY (id), 
             UNIQUE (tendangnhap),
@@ -56,14 +56,14 @@
         // Bảng phiên đăng nhập
         // CREATE TABLE ".$prefix."phien (
         //     id INT NOT NULL AUTO_INCREMENT, 
-        //     tendangnhap VARCHAR(50) NOT NULL,
+        //     tendangnhap VARCHAR(255) NOT NULL,
         //     khoaphien CHAR(255) NOT NULL, 
         //     PRIMARY KEY (id),
         //     thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
         // );
         $db->query("CREATE TABLE ".$prefix."phien (
             id INT NOT NULL AUTO_INCREMENT, 
-            tendangnhap VARCHAR(50) NOT NULL,
+            tendangnhap VARCHAR(255) NOT NULL,
             khoaphien CHAR(255) NOT NULL, 
             PRIMARY KEY (id),
             thoigian TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
@@ -100,7 +100,7 @@
             );");
         // CREATE TABLE ".$prefix."quyen ( 
         //     id INT NOT NULL AUTO_INCREMENT,
-        //     tendangnhap VARCHAR(50) NOT NULL,
+        //     tendangnhap VARCHAR(255) NOT NULL,
         //     hovaten VARCHAR(50) NOT NULL,
         //     chucvu CHAR(16) NOT NULL,
         //     bomon CHAR(16) NOT NULL,
@@ -114,7 +114,7 @@
         //     );
         $db->query("CREATE TABLE ".$prefix."quyen ( 
             id INT NOT NULL AUTO_INCREMENT,
-            tendangnhap VARCHAR(50) NOT NULL,
+            tendangnhap VARCHAR(255) NOT NULL,
             hovaten VARCHAR(50) NOT NULL,
             chucvu CHAR(16) NOT NULL,
             bomon CHAR(16) NOT NULL,
@@ -239,6 +239,38 @@
             noidung LONGTEXT NOT NULL,
             thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id)
+            );");
+        // Table xacminhnhanthongbao
+        // CREATE TABLE ".$prefix."xacminhnhanthongbao (
+        //     id INT NOT NULL AUTO_INCREMENT,
+        //     email VARCHAR(50) NOT NULL,
+        //     token TINYTEXT NOT NULL,
+        //     thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        //     PRIMARY KEY (id)
+        //     );
+        $db->query("CREATE TABLE ".$prefix."xacminhnhanthongbao (
+            id INT NOT NULL AUTO_INCREMENT,
+            email VARCHAR(255) NOT NULL,
+            token TINYTEXT NOT NULL,
+            thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id)
+            );");
+        // Table nhanthongbao
+        // CREATE TABLE ".$prefix."nhanthongbao ( 
+        //     id INT NOT NULL AUTO_INCREMENT,
+        //     ten VARCHAR(320) NOT NULL,
+        //     email VARCHAR(255) NOT NULL,
+        //     thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        //     PRIMARY KEY (id),
+        //     UNIQUE (email)
+        //     );
+        $db->query("CREATE TABLE ".$prefix."nhanthongbao ( 
+            id INT NOT NULL AUTO_INCREMENT,
+            ten VARCHAR(320) NOT NULL,
+            email VARCHAR(255) NOT NULL,
+            thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE (email)
             );");
     }
 ?>
