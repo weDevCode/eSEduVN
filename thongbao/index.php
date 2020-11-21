@@ -150,13 +150,13 @@
         </div>
 
         <form method='POST' class="row">
-            <div class="col-4">
+            <div class="col-lg-4 col-md-4 col-12">
                 <input type="text" placeholder="Tên" name="ten" id="ten" class='form-control' required>
             </div>
-            <div class="col-4">
+            <div class="col-lg-4 col-md-4 col-12">
                 <input type="email" placeholder="Email" name="email" id="email" class='form-control' required>
             </div>
-            <div class="col-4"><button class="btn btn-block btn-success">Nhận thông báo qua email</button></div>
+            <div class="col-lg-4 col-md-4 col-12"><button class="btn btn-block btn-success">Nhận thông báo qua email</button></div>
         </form>
 
         <div class="row">
@@ -166,13 +166,13 @@
         </div>
 
         <form method="GET" class="row">
-            <div class="col-2">
+            <div class="col-lg-2 col-md-2 col-12">
                 <label for="trang">Nhập trang để tìm</label>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8 col-md-8 col-12">
                 <input type="number" min="1" max='<?php echo $max ?>' value='<?php echo $trang ?>' name="trang" id="trang" class="form-control">
             </div>
-            <div class="col-2">
+            <div class="col-lg-2 col-md-2 col-12">
                 <button class="btn btn-info btn-block">Tra cứu</button>
             </div>
         </form>

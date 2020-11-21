@@ -197,13 +197,13 @@
         </div>
 
         <form method="GET" class="row">
-            <div class="col-2">
+            <div class="col-lg-2 col-md-2 col-12">
                 <label for="trang">Nhập trang để tìm</label>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8 col-md-8 col-12">
                 <input type="number" min="1" max='<?php echo $max ?>' value='<?php echo $trang ?>' name="trang" id="trang" class="form-control">
             </div>
-            <div class="col-2">
+            <div class="col-lg-2 col-md-2 col-12">
                 <button class="btn btn-info btn-block">Tra cứu</button>
             </div>
         </form>
