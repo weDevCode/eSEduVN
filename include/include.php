@@ -1,4 +1,8 @@
 <?php 
+    /*============================
+        eSEduVN (e-systemEduVN)
+        Made with love by Tien Minh Vy
+    ============================*/
     if (isset($_SESSION['khoaphien'])) {
 
         $khoaphien = $_SESSION['khoaphien'];

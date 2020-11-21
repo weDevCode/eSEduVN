@@ -1,3 +1,9 @@
+<?php 
+    /*============================
+        eSEduVN (e-systemEduVN)
+        Made with love by Tien Minh Vy
+    ============================*/
+?>
 <h3 class="text-center">Thanh điều hướng</h3>
 <a href="<?php echo $url ?>" class="btn btn-primary btn-block">Trang chủ</a>
 <br>

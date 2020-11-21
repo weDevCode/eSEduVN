@@ -1,5 +1,8 @@
 <?php 
-    
+    /*============================
+        eSEduVN (e-systemEduVN)
+        Made with love by Tien Minh Vy
+    ============================*/
     if ($db->getMulData(DB_TABLE_PREFIX.'dskhoi', array('khoi'))==0 || $db->getMulData(DB_TABLE_PREFIX.'dslop', array('lop'))==0) {
 
         die('<h1>Quản trị viên hệ thống cần nhập danh sách lớp và khối mới có thể xem trang này (#02)</h1>');

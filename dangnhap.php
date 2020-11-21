@@ -1,4 +1,8 @@
 <?php 
+    /*============================
+        eSEduVN (e-systemEduVN)
+        Made with love by Tien Minh Vy
+    ============================*/
     define('isSet', 1);
     
     require_once('include/db.php');
@@ -123,7 +127,7 @@
                     })
                     setTimeout(() => {
                         location.assign('$redt');
-                    }, 3000);
+                    }, 1500);
                 </script>";
             }
         } else {
@@ -173,8 +177,8 @@
                                 <button class="btn btn-info btn-block">Đăng nhập</button>
                             </form>
                         </p>
-                        <a href="#" class="card-link">Quên mật khẩu?</a>
-                        <a href="#" class="card-link">Về trang chủ</a>
+                        <a href="<?php echo $url ?>/doimatkhau" class="card-link">Quên mật khẩu?</a>
+                        <a href="<?php echo $url ?>" class="card-link">Về trang chủ</a>
                     </div>
                 </div>
             </div>

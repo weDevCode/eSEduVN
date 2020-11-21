@@ -1,4 +1,8 @@
 <?php
+    /*============================
+        eSEduVN (e-systemEduVN)
+        Made with love by Tien Minh Vy
+    ============================*/
     require_once('db.php');
     require_once('phpmailer/vendor/autoload.php');
     require_once('randomLib.php');
@@ -108,6 +112,7 @@
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
     }
+
     function sendNotifyEmail($dsNguoiNhan, $tieude, $noidung)
     {
         smtpDefaultInfo();
@@ -135,6 +140,120 @@
             $mail->AltBody = "<br>
 
             ".strip_tags($noidung)."
+
+            ===
+            Trân trọng,
+            $tenngguiSMTP";
+        
+            $mail->send();
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
+    }
+    
+    function sendPasswordResetLink($nguoiNhan, $username)
+    {
+        smtpDefaultInfo();
+        global $mail, $tenngguiSMTP, $generatorLow, $url, $db;
+        try {
+
+            $token = $generatorLow->generateString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+
+            // thêm vào db
+            if ($db->getSingleData(DB_TABLE_PREFIX.'xacminhdoimatkhau', 'COUNT(*)', 'tendangnhap', $username) > 0) {
+
+                $db->updateADataRow(DB_TABLE_PREFIX.'xacminhdoimatkhau', 'token', $token, 'tendangnhap', $username);
+
+            } else {
+                $db->insertMulDataRow(DB_TABLE_PREFIX.'xacminhdoimatkhau', array(
+                    'tendangnhap',
+                    'token'
+                ), array(
+                    $username,
+                    $token
+                ));
+            }
+
+            $urlXacNhan = $url."/doimatkhau?token=$token";
+
+            $mail->addAddress($nguoiNhan);
+            // Content
+            $mail->isHTML(true);                                  // Set email format to HTML
+            $mail->Subject = "[$tenngguiSMTP] Đổi mật khẩu";
+            $mail->Body    = "<p>Xin chào $username,</p>
+
+            <p>Chúng tôi có nhận được yêu cầu đổi mật khẩu tài khoản của bạn trên hệ thống $tenngguiSMTP,
+            từ ai đó có thể là bạn. Để có thể đổi mật khẩu, bạn vui lòng truy cập theo liên kết bên dưới:</p>
+            
+            <a target='_blank' href='$urlXacNhan'>$urlXacNhan</a>
+
+            <p><b>Lưu ý: nếu bạn không yêu cầu đổi mật khẩu, vui lòng không truy cập liên kết phía trên!</b></p>
+            
+            ===<br>
+            Trân trọng,<br>
+            $tenngguiSMTP";
+            $mail->AltBody = "Xin chào $username,
+
+            Chúng tôi có nhận được yêu cầu đổi mật khẩu tài khoản của bạn trên hệ thống $tenngguiSMTP,
+            từ ai đó có thể là bạn. Để có thể đổi mật khẩu, bạn vui lòng truy cập theo liên kết bên dưới:
+
+            $urlXacNhan
+
+            ===
+            Trân trọng,
+            $tenngguiSMTP";
+        
+            $mail->send();
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
+    }
+
+
+    function sendEmailResetVerify($ngNhan, $ten)
+    {
+        smtpDefaultInfo();
+        global $mail, $generatorLow, $tenngguiSMTP, $db, $url;
+        try {
+            $token = $generatorLow->generateString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+            // thêm vào db
+            if ($db->getSingleData(DB_TABLE_PREFIX.'xacminhdoiemail', 'COUNT(*)', 'email', $ngNhan) > 0) {
+
+                $db->updateADataRow(DB_TABLE_PREFIX.'xacminhdoiemail', 'token', $token, 'email', $ngNhan);
+
+            } else {
+                $db->insertMulDataRow(DB_TABLE_PREFIX.'xacminhdoiemail', array(
+                    'email',
+                    'token'
+                ), array(
+                    $ngNhan,
+                    $token
+                ));
+            }
+
+            $mail->addAddress($ngNhan);     // Add a recipient
+
+            $urlXacNhan = $url."/trangcanhan/?token=$token";
+
+            // Content
+            $mail->isHTML(true);                                  // Set email format to HTML
+            $mail->Subject = "[$tenngguiSMTP] Xác nhận đổi địa chỉ Email";
+            $mail->Body    = "<p>Xin chào, $ten</p>
+            <p>Chúng tôi vừa nhận được yêu cầu đổi địa chỉ email trên $tenngguiSMTP có thể là từ bạn,
+            Nếu bạn đồng ý địa chỉ email, hãy truy cập liên kết bên dưới để xác nhận.</p>
+            <p><b>Nếu không phải bạn yêu cầu, hãy bỏ qua email này!</b></p>
+            <br>
+            <a href='$urlXacNhan' target='_blank'>$urlXacNhan</a>
+            <br><br>
+            ===<br>
+            Trân trọng,<br>
+            $tenngguiSMTP";
+            $mail->AltBody = "Xin chào, $ten
+            Chúng tôi vừa nhận được yêu cầu đổi địa chỉ email trên $tenngguiSMTP có thể là từ bạn,
+            Nếu bạn đồng ý địa chỉ email, hãy truy cập liên kết bên dưới để xác nhận.
+            Nếu không phải bạn yêu cầu, hãy bỏ qua email này!
+            
+            $urlXacNhan
 
             ===
             Trân trọng,
