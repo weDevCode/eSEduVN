@@ -1,3 +1,4 @@
 RewriteEngine On
-RewriteRule ^dangxuat$ logout.php [L]
-RewriteRule ^dangnhap$ login.php [L]
+RewriteRule ^dangxuat$ dangxuat.php [L]
+RewriteRule ^dangnhap$ dangnhap.php [L]
+RewriteRule ^doimatkhau$ doimatkhau.php [L]

@@ -1,4 +1,8 @@
 <?php 
+    /*============================
+        eSEduVN (e-systemEduVN)
+        Made with love by Tien Minh Vy
+    ============================*/
     $giovaotietdb = $db->getMulData(DB_TABLE_PREFIX.'giovaotiet', array(
         'ten',
         'thoiluong'

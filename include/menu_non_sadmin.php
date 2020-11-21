@@ -1,6 +1,63 @@
 <?php 
+    /*============================
+        eSEduVN (e-systemEduVN)
+        Made with love by Tien Minh Vy
+    ============================*/
     if(!defined('isSet')){
         die('<h1>Direct access is not allowed!</h1>');
+    }
+
+    $buttons = "<a href='$url/quantri'><button class='btn btn-success'>Đăng nhập</button></a>";
+
+    $style = "style='margin: 0 2px; vertical-align: middle'";
+
+    if (!isset($_COOKIE['khoaphien'])&&!isset($_SESSION['khoaphien'])) {
+    
+        $buttons;
+    
+    } elseif (isset($_SESSION['khoaphien'])) {
+    
+        $khoaphien = mysqli_real_escape_string($db->conn, $_SESSION['khoaphien']);
+    
+        $check = $db->getSingleData(DB_TABLE_PREFIX.'phien', 'COUNT(*)', 'khoaphien', "$khoaphien");
+    
+        if ($check > 0) {
+
+            $ktAdmin = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'la_admin', 'tendangnhap', $tennguoidung);
+    
+            if ($ktAdmin == 1) {
+                $buttons = "<a href='$url/quantri' $style><button class='btn btn-info'>Quản trị</button></a>
+                <a href='$url/trangcanhan' $style><button class='btn btn-success'>Trang cá nhân</button></a>
+                <a href='$url/dangxuat' $style><button class='btn btn-danger'>Đăng xuất</button></a>";
+            } else {
+                $buttons = "<a href='$url/trangcanhan'><button class='btn btn-info' $style>Trang cá nhân</button></a>
+                <a href='$url/dangxuat' $style><button class='btn btn-danger'>Đăng xuất</button></a>";
+            }
+
+    
+        }
+    
+    } else {
+    
+        $khoaphien = mysqli_real_escape_string($db->conn, $_COOKIE['khoaphien']);
+    
+        $check = $db->getSingleData(DB_TABLE_PREFIX.'phien', 'COUNT(*)', 'khoaphien', "$khoaphien");
+    
+        if ($check > 0) {
+    
+            $ktAdmin = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'la_admin', 'tendangnhap', $tennguoidung);
+    
+            if ($ktAdmin == 1) {
+                $buttons = "<a href='$url/quantri' $style><button class='btn btn-info'>Quản trị</button></a>
+                <a href='$url/trangcanhan' $style><button class='btn btn-success'>Trang cá nhân</button></a>
+                <a href='$url/dangxuat' $style><button class='btn btn-danger'>Đăng xuất</button></a>";
+            } else {
+                $buttons = "<a href='$url/trangcanhan' $style><button class='btn btn-info'>Trang cá nhân</button></a>
+                <a href='$url/dangxuat' $style><button class='btn btn-danger'>Đăng xuất</button></a>";
+            }
+    
+        }
+    
     }
 ?>
 
@@ -47,6 +104,6 @@
                 </div>
             </li>
         </ul>
-        <a href="<?php echo $url ?>/quantri"><button class="btn btn-info">Quản trị</button></a>
+        <?php echo $buttons ?>
     </div>
 </nav>

@@ -1,4 +1,8 @@
 <?php 
+    /*============================
+        eSEduVN (e-systemEduVN)
+        Made with love by Tien Minh Vy
+    ============================*/
     if(!defined('isSet')){
         die('<h1>Truy cập trực tiếp bị cấm!</h1>');
     }

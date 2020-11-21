@@ -1,4 +1,8 @@
 <?php 
+    /*============================
+        eSEduVN (e-systemEduVN)
+        Made with love by Tien Minh Vy
+    ============================*/
     function createTable(string $prefix = '')
     {
         
@@ -271,6 +275,36 @@
             thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
             UNIQUE (email)
+            );");
+        // Table xacminhdoimatkhau
+        // CREATE TABLE ".$prefix."xacminhdoimatkhau (
+        //     id INT NOT NULL AUTO_INCREMENT,
+        //     tendangnhap VARCHAR(255) NOT NULL,
+        //     token TINYTEXT NOT NULL,
+        //     thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        //     PRIMARY KEY (id)
+        //     );
+        $db->query("CREATE TABLE ".$prefix."xacminhdoimatkhau (
+            id INT NOT NULL AUTO_INCREMENT,
+            tendangnhap VARCHAR(255) NOT NULL,
+            token TINYTEXT NOT NULL,
+            thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id)
+            );");
+        // Table xacminhdoiemail
+        // CREATE TABLE ".$prefix."xacminhdoiemail (
+        //     id INT NOT NULL AUTO_INCREMENT,
+        //     tendangnhap VARCHAR(255) NOT NULL,
+        //     token TINYTEXT NOT NULL,
+        //     thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        //     PRIMARY KEY (id)
+        //     );
+        $db->query("CREATE TABLE ".$prefix."xacminhdoiemail (
+            id INT NOT NULL AUTO_INCREMENT,
+            email VARCHAR(255) NOT NULL,
+            token TINYTEXT NOT NULL,
+            thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id)
             );");
     }
 ?>
