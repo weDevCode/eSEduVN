@@ -16,7 +16,14 @@
         $check_id = $db->getSingleData(DB_TABLE_PREFIX.'tkb', 'COUNT(*)', 'id', $id);
         if ($check_id > 0) {
             $lop = $db->getSingleData(DB_TABLE_PREFIX.'tkb', 'lop', 'id', $id);
-            $content = "<h3 class='text-center'>Thời khoá biểu lớp $lop</h3>";
+
+            $chunhiemlophientai = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'hovaten', 'chunhiem', $lop);
+
+            if ($chunhiemlophientai === '0') {
+                $chunhiemlophientai = 'Không có';
+            }
+
+            $content = "<h3 class='text-center'>Thời khoá biểu lớp $lop (GVCN: $chunhiemlophientai)</h3>";
             $content .= $db->getSingleData(DB_TABLE_PREFIX.'tkb', 'noidung', 'id', $id);
         } else {
             $content = "<p>Lỗi, không tìm thấy thời khoá biểu nào có id($id) được chỉ định</p>";
