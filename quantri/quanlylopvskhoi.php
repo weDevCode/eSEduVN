@@ -26,6 +26,151 @@
     require_once('../include/menu_sadmin.php');
     
     $js = '';
+
+    // Thông báo
+
+    if (isset($_GET['themlopthanhcong'])) {
+
+        $js = "Swal.fire({
+            title: 'Thành công!',
+            text: 'Thêm lớp mới thành công. Hãy chuyển sang trang danh sách lớp để xem!',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        })";
+
+    } elseif (isset($_GET['khongtontaikhoi'])) {
+
+        $js = "Swal.fire({
+            title: 'Lỗi!',
+            text: 'Không tồn tại khối bạn đã xác định!',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })";
+
+    } elseif (isset($_GET['loptrongkhoang0toi20'])) {
+
+        $js = "Swal.fire({
+            title: 'Lỗi!',
+            text: 'Giá trị ô lớp phải lớn hơn 0 hoặc nhỏ hơn hoặc bằng 20!',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })";
+
+    } elseif (isset($_GET['giatriophailaso'])) {
+
+        $js = "Swal.fire({
+            title: 'Lỗi!',
+            text: 'Giá trị ô lớp phải là giá trị số!',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })";
+
+    } elseif (isset($_GET['khongtontaigiaoviendachidinh'])) {
+
+        $js = "Swal.fire({
+            title: 'Lỗi!',
+            text: 'Không tồn tại giáo viên bạn đã chỉ định!',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })";
+
+    } elseif (isset($_GET['giaovienchidinhchunhiemlopkhac'])) {
+
+        $js = "Swal.fire({
+            title: 'Lỗi!',
+            text: 'Giáo viên bạn chỉ định đang chủ nhiệm lớp khác!',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })";
+
+    } elseif (isset($_GET['lopdatontai'])) {
+
+        $js = "Swal.fire({
+            title: 'Lỗi!',
+            text: 'Lớp đã tồn tại!',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })";
+
+    } elseif (isset($_GET['chinhsualopthanhcong'])) {
+
+        $js = "Swal.fire({
+            title: 'Thành công!',
+            text: 'Chỉnh sửa lớp thành công!',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        })";
+
+    } elseif (isset($_GET['xoalopthanhcong'])) {
+
+        $js = "Swal.fire({
+            title: 'Thành công!',
+            text: 'Đã xoá lớp bạn chỉ định thành công, đang quay về trang danh sách lớp!',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        })
+        setTimeout(function(){ location.replace('?ds=lop');}, 2000);";
+
+    } elseif (isset($_GET['khoitrongkhoang0toi12'])) {
+
+        $js = "Swal.fire({
+            title: 'Lỗi!',
+            text: 'Khối phải lớn hơn 0 và bé hơn hoặc bằng 12!',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })";
+
+    } elseif (isset($_GET['khoiphailaso'])) {
+
+        $js = "Swal.fire({
+            title: 'Lỗi!',
+            text: 'Khối phải là kiểu dữ liệu số!',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })";
+
+    } elseif (isset($_GET['khoidatontai'])) {
+
+        $js = "Swal.fire({
+            title: 'Lỗi!',
+            text: 'Khối đã tồn tại!',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+        })";
+
+    } elseif (isset($_GET['taokhoithanhcong'])) {
+
+        $js = "Swal.fire({
+            title: 'Thành công!',
+            text: 'Tạo khối mới thành công, đang chuyển hướng về trang danh sách khối!',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        })
+        setTimeout(function(){ location.replace('?ds=khoi');}, 3000);";
+
+    } elseif (isset($_GET['xoakhoithanhcong'])) {
+
+        $js = "Swal.fire({
+            title: 'Thành công!',
+            text: 'Xoá khối bạn chỉ định thành công, đang chuyển hướng về trang danh sách khối!',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        })
+        setTimeout(function(){ location.replace('?ds=khoi');}, 3000);";
+
+    } elseif (isset($_GET['chinhsuabuoihocthanhcong'])) {
+
+        $js = "Swal.fire({
+            title: 'Thành công!',
+            text: 'Chỉnh sửa buổi học thành công! Đang chuyển hướng...',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+        })
+        setTimeout(function(){ location.replace('?ds=buoihoc') }, 1500);";
+
+    }
+
+    // Thông báo - end
     
     $content = "<p>Đây là trang dùng để quản lý danh sách các lớp và khối.</p>
     <p>Tại đây bạn có thể xem/thêm/chỉnh sửa/xoá một lớp và thêm/xoá một khối mà bạn cần</p>
@@ -178,13 +323,6 @@
                                     if (isset($_POST['lop'])) {
     
                                         $lopso = $_POST['lop'];
-    
-                                        $js = "Swal.fire({
-                                            title: 'Thành công!',
-                                            text: 'Thêm lớp mới thành công. Hãy chuyển sang trang danh sách lớp để xem!',
-                                            icon: 'success',
-                                            confirmButtonText: 'Ok'
-                                        })";
                                         
                                         $khoi = $_POST['khoi'];
     
@@ -243,47 +381,17 @@
                                             }
                                         }
                                         if ($kiemtrakhoi == 0) {
-                                            $js = "Swal.fire({
-                                                title: 'Lỗi!',
-                                                text: 'Không tồn tại khối bạn đã xác định!',
-                                                icon: 'error',
-                                                confirmButtonText: 'Ok'
-                                            })";
+                                            header("Location: $currentURL&khongtontaikhoi");
                                         } elseif ($lopso <= 0 || $lopso > 20) {
-                                            $js = "Swal.fire({
-                                                title: 'Lỗi!',
-                                                text: 'Giá trị ô lớp phải lớn hơn 0 hoặc nhỏ hơn hoặc bằng 20!',
-                                                icon: 'error',
-                                                confirmButtonText: 'Ok'
-                                            })";
+                                            header("Location: $currentURL&loptrongkhoang0toi20");
                                         } elseif (!is_numeric($lopso)){
-                                            $js = "Swal.fire({
-                                                title: 'Lỗi!',
-                                                text: 'Giá trị ô lớp phải là giá trị số!',
-                                                icon: 'error',
-                                                confirmButtonText: 'Ok'
-                                            })";
+                                            header("Location: $currentURL&giatriophailaso");
                                         } elseif ($kiemtragv == 0) {
-                                            $js = "Swal.fire({
-                                                title: 'Lỗi!',
-                                                text: 'Không tồn tại giáo viên bạn đã chỉ định!',
-                                                icon: 'error',
-                                                confirmButtonText: 'Ok'
-                                            })";
+                                            header("Location: $currentURL&khongtontaigiaoviendachidinh");
                                         } elseif ($ktgvdachunhiem == 1) {
-                                            $js = "Swal.fire({
-                                                title: 'Lỗi!',
-                                                text: 'Giáo viên bạn chỉ định đang chủ nhiệm lớp khác!',
-                                                icon: 'error',
-                                                confirmButtonText: 'Ok'
-                                            })";
+                                            header("Location: $currentURL&giaovienchidinhchunhiemlopkhac");
                                         } elseif ($kiemtralop==1) {
-                                            $js = "Swal.fire({
-                                                title: 'Lỗi!',
-                                                text: 'Lớp $lop đã tồn tại!',
-                                                icon: 'error',
-                                                confirmButtonText: 'Ok'
-                                            })";
+                                            header("Location: $currentURL&lopdatontai");
                                         } else {
                                             $db->insertMulDataRow(DB_TABLE_PREFIX.'dslop', array(
                                                 'lop',
@@ -296,6 +404,8 @@
                                                 $db->updateADataRow(DB_TABLE_PREFIX.'quyen', 'chunhiem', $lop, 'id', $id);
                                             }
                                         }
+
+                                        header("Location: $currentURL&themlopthanhcong");
                                     }
                                 } else {
                                     $content = "<b>Bạn phải thêm khối trước khi tạo lớp</b>";
@@ -355,12 +465,7 @@
                                             HTML;
                                             $gvcnHienTai = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'id', 'chunhiem', $lop);
                                             if (isset($_POST['chunhiem'])) {
-                                                $js = "Swal.fire({
-                                                    title: 'Thành công!',
-                                                    text: 'Chỉnh sửa lớp thành công!',
-                                                    icon: 'success',
-                                                    confirmButtonText: 'Ok'
-                                                })";
+                                                
                                                 $gvcn = $_POST['chunhiem'];
                                                 for ($i=0; $i < count($dsgv); $i++) { 
                                                     if ($gvcn==0 || ($gvcn==$dsgv[$i]['id'])) {
@@ -381,19 +486,9 @@
                                                 }
 
                                                 if ($kiemtragv == 0) {
-                                                    $js = "Swal.fire({
-                                                        title: 'Lỗi!',
-                                                        text: 'Không tồn tại giáo viên bạn đã chỉ định!',
-                                                        icon: 'error',
-                                                        confirmButtonText: 'Ok'
-                                                    })";
+                                                    header("Location: $currentURL&khongtontaigiaoviendachidinh");
                                                 } elseif ($ktgvdachunhiem == 1) {
-                                                    $js = "Swal.fire({
-                                                        title: 'Lỗi!',
-                                                        text: 'Giáo viên bạn chỉ định đang chủ nhiệm lớp khác!',
-                                                        icon: 'error',
-                                                        confirmButtonText: 'Ok'
-                                                    })";
+                                                    header("Location: $currentURL&giaovienchidinhchunhiemlopkhac");
                                                 } else {
                                                     if ($gvcn != 0) {
                                                         $db->updateADataRow(DB_TABLE_PREFIX.'quyen', 'chunhiem', $lop, 'id', $gvcn);
@@ -402,6 +497,8 @@
                                                         $db->updateADataRow(DB_TABLE_PREFIX.'quyen', 'chunhiem', '', 'id', $gvcnHienTai);
                                                     }
                                                 }
+
+                                                header("Location: $currentURL&chinhsualopthanhcong");
                                             }
                                             break;
                                         
@@ -441,14 +538,10 @@
                                             if (isset($_POST['xacnhan'])) {
                                                 $xacnhan = $_POST['xacnhan'];
                                                 if ($xacnhan == 'true') {
-                                                    $js = "Swal.fire({
-                                                        title: 'Thành công!',
-                                                        text: 'Đã xoá lớp $lop thành công, quay về trang danh sách lớp!',
-                                                        icon: 'success',
-                                                        confirmButtonText: 'Ok'
-                                                    })
-                                                    setTimeout(function(){ location.replace('?ds=lop');}, 3000);";
+                                                    
                                                     $db->deleteADataRow(DB_TABLE_PREFIX.'dslop', 'lop', $lop);
+                                                    
+                                                    header("Location: $currentURL&xoalopthanhcong");
                                                 }
                                             }
                                             break;
@@ -532,36 +625,15 @@
                                     $ktkhoi = 0;
                                 }
                                 if ($khoi <= 0 || $khoi > 12) {
-                                    $js = "Swal.fire({
-                                        title: 'Lỗi!',
-                                        text: 'Khối phải lớn hơn 0 và bé hơn hoặc bằng 12!',
-                                        icon: 'error',
-                                        confirmButtonText: 'Ok'
-                                    })";
+                                    header("Location: $currentURL&khoitrongkhoang0toi12");
                                 } elseif (!is_numeric($khoi)) {
-                                    $js = "Swal.fire({
-                                        title: 'Lỗi!',
-                                        text: 'Khối phải là 1 số!',
-                                        icon: 'error',
-                                        confirmButtonText: 'Ok'
-                                    })";
+                                    header("Location: $currentURL&khoiphailaso");
                                 } elseif ($ktkhoi == 1) {
-                                    $js = "Swal.fire({
-                                        title: 'Lỗi!',
-                                        text: 'Khối đã tồn tại!',
-                                        icon: 'error',
-                                        confirmButtonText: 'Ok'
-                                    })";
+                                    header("Location: $currentURL&khoidatontai");
                                 } else {
-                                    $js = "Swal.fire({
-                                        title: 'Thành công!',
-                                        text: 'Tạo khối mới thành công, đang chuyển hướng về trang danh sách khối!',
-                                        icon: 'success',
-                                        confirmButtonText: 'Ok'
-                                    })
-                                    setTimeout(function(){ location.replace('?ds=khoi');}, 3000);";
                                     $db->insertADataRow(DB_TABLE_PREFIX.'dskhoi', 'khoi', $khoi);
                                     $db->insertMulDataRow(DB_TABLE_PREFIX.'quydinh', array('khoi', 'buoi'), array($khoi, ''));
+                                    header("Location: $currentURL&taokhoithanhcong");
                                 }
                             }
                         break;
@@ -582,16 +654,11 @@
                                 if (isset($_POST['xacnhan'])) {
                                     $xacnhan = $_POST['xacnhan'];
                                     if ($xacnhan == 'true') {
-                                        $js = "Swal.fire({
-                                            title: 'Thành công!',
-                                            text: 'Xoá khối $khoi thành công, đang chuyển hướng về trang danh sách khối!',
-                                            icon: 'success',
-                                            confirmButtonText: 'Ok'
-                                        })
-                                        setTimeout(function(){ location.replace('?ds=khoi');}, 3000);";
+                                        
                                         $db->deleteADataRow(DB_TABLE_PREFIX.'dskhoi', 'khoi', $khoi);
                                         $db->deleteADataRow(DB_TABLE_PREFIX.'dslop', 'khoi', $khoi);
                                         $db->deleteADataRow(DB_TABLE_PREFIX.'quydinh', 'khoi', $khoi);
+                                        header("Location: $currentURL&xoakhoithanhcong");
                                     }
                                 }
                             }
@@ -677,13 +744,7 @@
                                     $db->updateADataRow(DB_TABLE_PREFIX.'quydinh', 'buoi', $buoihoc, 'khoi', $khoi);
                                 }
                                 
-                                $js = "Swal.fire({
-                                    title: 'Thành công!',
-                                    text: 'Chỉnh sửa buổi học thành công! Đang chuyển hướng...',
-                                    icon: 'success',
-                                    confirmButtonText: 'Ok'
-                                })
-                                setTimeout(function(){ location.replace('?ds=buoihoc') }, 3000);";
+                                header("Location: $currentURL&chinhsuabuoihocthanhcong");
                             } else {
                                 $content = "Lỗi do người dùng định nghĩa sai buổi học";
                             }

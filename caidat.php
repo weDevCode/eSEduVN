@@ -247,14 +247,14 @@
         // Table xacminhnhanthongbao
         // CREATE TABLE ".$prefix."xacminhnhanthongbao (
         //     id INT NOT NULL AUTO_INCREMENT,
-        //     email VARCHAR(50) NOT NULL,
+        //     email VARCHAR(320) NOT NULL,
         //     token TINYTEXT NOT NULL,
         //     thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         //     PRIMARY KEY (id)
         //     );
         $db->query("CREATE TABLE ".$prefix."xacminhnhanthongbao (
             id INT NOT NULL AUTO_INCREMENT,
-            email VARCHAR(255) NOT NULL,
+            email VARCHAR(320) NOT NULL,
             token TINYTEXT NOT NULL,
             thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id)
@@ -262,16 +262,16 @@
         // Table nhanthongbao
         // CREATE TABLE ".$prefix."nhanthongbao ( 
         //     id INT NOT NULL AUTO_INCREMENT,
-        //     ten VARCHAR(320) NOT NULL,
-        //     email VARCHAR(255) NOT NULL,
+        //     ten VARCHAR(255) NOT NULL,
+        //     email VARCHAR(320) NOT NULL,
         //     thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         //     PRIMARY KEY (id),
         //     UNIQUE (email)
         //     );
         $db->query("CREATE TABLE ".$prefix."nhanthongbao ( 
             id INT NOT NULL AUTO_INCREMENT,
-            ten VARCHAR(320) NOT NULL,
-            email VARCHAR(255) NOT NULL,
+            ten VARCHAR(255) NOT NULL,
+            email VARCHAR(320) NOT NULL,
             thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id),
             UNIQUE (email)
@@ -295,16 +295,36 @@
         // CREATE TABLE ".$prefix."xacminhdoiemail (
         //     id INT NOT NULL AUTO_INCREMENT,
         //     tendangnhap VARCHAR(255) NOT NULL,
+        //     email_new VARCHAR(320) NOT NULL,
         //     token TINYTEXT NOT NULL,
         //     thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         //     PRIMARY KEY (id)
+        //     UNIQUE (tendangnhap)
         //     );
         $db->query("CREATE TABLE ".$prefix."xacminhdoiemail (
             id INT NOT NULL AUTO_INCREMENT,
-            email VARCHAR(255) NOT NULL,
+            tendangnhap VARCHAR(255) NOT NULL,
+            email_new VARCHAR(320) NOT NULL,
             token TINYTEXT NOT NULL,
             thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id)
+            UNIQUE (tendangnhap)
+            );");
+        // Table xacminhdoiemail
+        // CREATE TABLE ".$prefix."xacminh2buocEmail (
+        //     id INT NOT NULL AUTO_INCREMENT,
+        //     tendangnhap VARCHAR(255) NOT NULL,
+        //     trangthai TINYINT(3) UNSIGNED NOT NULL,
+        //     thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        //     PRIMARY KEY (id)
+        //     );
+        $db->query("CREATE TABLE ".$prefix."xacminh2buocEmail (
+            id INT NOT NULL AUTO_INCREMENT,
+            tendangnhap VARCHAR(255) NOT NULL,
+            trangthai TINYINT(3) UNSIGNED NOT NULL,
+            thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id),
+            UNIQUE (tendangnhap)
             );");
     }
 ?>

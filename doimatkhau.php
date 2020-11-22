@@ -71,15 +71,21 @@
 
         $ktra = $db->getSingleData(DB_TABLE_PREFIX.'nguoidung', 'COUNT(*)', 'tendangnhap', $tendangnhap);
 
-        if ($ktra > 0) {
+        if ($ktra > 0) { // kiểm tra xem có tồn tại người dùng không
             $email = $db->getSingleData(DB_TABLE_PREFIX.'nguoidung', 'email', 'tendangnhap', $tendangnhap);
 
             require_once('include/smtp.php');
 
-            sendPasswordResetLink($email, $tendangnhap);
-        }
+            if ($smtp) {
+                sendPasswordResetLink($email, $tendangnhap);
+                header("Location: $url/doimatkhau?chuy");
+            } else {
+                header("Location: $url/doimatkhau?tinhnangdoimatkhaubitat");
+            }
 
-        header("Location: $url/doimatkhau?chuy");
+        } else {
+            header("Location: $url/doimatkhau?chuy");
+        }
     }
 
     if (isset($_GET['token'])) {
@@ -139,6 +145,15 @@
                     Swal.fire({
                         title: 'Thất bại!',
                         text: 'Token không hợp lệ!',
+                        icon: 'error',
+                        confirmButtonText: 'Đồng ý'
+                    })
+                </script>";
+    } elseif (isset($_GET['tinhnangdoimatkhaubitat'])) {
+        $js = "<script>
+                    Swal.fire({
+                        title: 'Thất bại!',
+                        text: 'Tính năng đổi mật đã bị tắt!',
                         icon: 'error',
                         confirmButtonText: 'Đồng ý'
                     })

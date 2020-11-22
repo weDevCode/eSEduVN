@@ -20,10 +20,85 @@
 
 
 <?php 
+    // Thông báo
+    $js = '';
+    if (isset($_GET['khongcodulieu'])) {
+        $js = "Swal.fire({
+            title: 'Lỗi!',
+            text: 'Vui lòng điền đầy đủ các ô, trừ các ô không bắt buộc!',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+          })";
+    } elseif (isset($_GET['vuotquakitu'])) {
+        $js = "Swal.fire({
+            title: 'Lỗi!',
+            text: 'Họ và tên phải nhỏ hơn 255 ký tự, Email phải nhỏ hơn 320 ký tự!',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+          })";
+    } elseif (isset($_GET['tendangnhaphoacemailtontai'])) {
+        $js = "Swal.fire({
+            title: 'Lỗi!',
+            text: 'Tên đăng nhập hoặc email đã tồn tại!',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+          })";
+    } elseif (isset($_GET['tendangnhaphoacemailtontai'])) {
+        $js = "Swal.fire({
+            title: 'Lỗi!',
+            text: 'Tên đăng nhập hoặc email đã tồn tại!',
+            icon: 'error',
+            confirmButtonText: 'Ok'
+          })";
+    } elseif (isset($_GET['themthanhcong'])) {
+        $js = "Swal.fire({
+            title: 'Thành công!',
+            text: 'Thêm thành viên mới thành công! Bây giờ bạn có thể qua trang chỉnh sửa để xem thành viên',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+          })";
+    } elseif (isset($_GET['themthanhcongnhungchunhiemdaco'])) {
+        $js = "Swal.fire({
+            title: 'Thành công!',
+            text: 'Thêm thành viên mới thành công! Tuy nhiên lớp bạn chỉ định đã có giáo viên khác chủ nhiệm, vui lòng chỉnh sửa lại ở trang chỉnh sửa thành viên',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+          })";
+    } elseif (isset($_GET['themthanhcongnhungkhongthaylopchidinhchunhiem'])) {
+        $js = "Swal.fire({
+            title: 'Thành công!',
+            text: 'Thêm thành viên mới thành công! Tuy nhiên không tìm thấy tên lớp đã chỉ định, vui lòng chỉnh lại ở trang chỉnh sửa thành viên',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+          })";
+    } elseif (isset($_GET['chinhsuathanhcong'])) {
+        $js = "Swal.fire({
+            title: 'Thành công!',
+            text: 'Chỉnh sửa thành công!',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+          })";
+    } elseif (isset($_GET['chinhsuathanhcongnhungchunhiemdaco'])) {
+        $js = "Swal.fire({
+            title: 'Thành công!',
+            text: 'Chỉnh sửa thành công! Tuy nhiên lớp bạn chỉ định đã có giáo viên khác chủ nhiệm, vui lòng đóng thông báo và chỉnh sửa lại.',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+          })";
+    } elseif (isset($_GET['chinhsuathanhcongnhungkhongthaylopchidinhchunhiem'])) {
+        $js = "Swal.fire({
+            title: 'Thành công!',
+            text: 'Chỉnh sửa thành công! Tuy nhiên không tìm thấy tên lớp đã chỉ định, vui lòng đóng thông báo và chỉnh sửa lại.',
+            icon: 'success',
+            confirmButtonText: 'Ok'
+          })";
+    }
+
+    // Thông báo - end
+
     $content = "<p>Đây là trang dùng để quản lý thành viên trên hệ thống <b><?php echo SITE_NAME ?></b></p>
                 <p>Để thêm, chỉnh sửa hay xoá một thành viên, bạn hãy nhấn vào 1 trong các nút ở bên trái (trên máy tính)
                     hoặc bên trên (trên điện thoại).</p>";
-    $js = '';
     if (isset($_GET['phuongthuc'])) {
         $phuongthuc = $_GET['phuongthuc'];
         switch ($phuongthuc) {
@@ -136,36 +211,16 @@
                     $email = mysqli_escape_string($db->conn, $_POST['email']);
                     $matkhau = mysqli_escape_string($db->conn, $_POST['matkhau']);
                     if ($tendangnhap==''||$hovaten==''||$email==''||$matkhau=='') {
-                        $js = "Swal.fire({
-                            title: 'Lỗi!',
-                            text: 'Vui lòng điền đầy đủ các ô, trừ các ô không bắt buộc!',
-                            icon: 'error',
-                            confirmButtonText: 'Ok'
-                          })";
+                        header("Location: $currentURL&khongcodulieu");
                     } elseif (strlen($hovaten)>255||strlen($email)>320) {
-                        $js = "Swal.fire({
-                            title: 'Lỗi!',
-                            text: 'Họ và tên phải nhỏ hơn 255 ký tự, Email phải nhỏ hơn 320 ký tự!',
-                            icon: 'error',
-                            confirmButtonText: 'Ok'
-                          })";
+                        header("Location: $currentURL&vuotquakitu");
                     } else {
                         $kttendangnhap = $db->getSingleData(DB_TABLE_PREFIX.'nguoidung', 'COUNT(*)', 'tendangnhap', $tendangnhap);
                         $ktemail = $db->getSingleData(DB_TABLE_PREFIX.'nguoidung', 'COUNT(*)', 'email', $email);
-                        if ($kttendangnhap > 0 || $ktemail > 0) {
-                            $js = "Swal.fire({
-                                title: 'Lỗi!',
-                                text: 'Tên đăng nhập hoặc email đã tồn tại!',
-                                icon: 'error',
-                                confirmButtonText: 'Ok'
-                              })";
+                        if ($kttendangnhap > 0 || $ktemail > 0) { // tồn tại tên đăng nhập hoặc email
+                            header("Location $currentURL&tendangnhaphoacemailtontai");
                         } else {
-                            $js = "Swal.fire({
-                                title: 'Thành công!',
-                                text: 'Thêm thành viên mới thành công! Bây giờ bạn có thể qua trang chỉnh sửa để xem thành viên',
-                                icon: 'success',
-                                confirmButtonText: 'Ok'
-                              })";
+                            
                             $db->insertMulDataRow(DB_TABLE_PREFIX.'nguoidung', array(
                                 'tendangnhap',
                                 'email',
@@ -223,22 +278,12 @@
                                     if ($ktlop>0) { // trong dslop có lớp được chỉ định
                                         $ktlop = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'COUNT(*)', 'chunhiem', $chunhiem);
                                         if ($ktlop > 0) { // trong table quyen có gv đã chủ nhiệm lớp đã chỉ định
-                                            $js = "Swal.fire({
-                                                title: 'Thành công!',
-                                                text: 'Thêm thành viên mới thành công! Tuy nhiên lớp $chunhiem đã có giáo viên khác chủ nhiệm, vui lòng chỉnh sửa lại ở trang chỉnh sửa thành viên',
-                                                icon: 'success',
-                                                confirmButtonText: 'Ok'
-                                              })";
+                                            header("Location: $currentURL&themthanhcongnhungchunhiemdaco");
                                         } else {
                                             $db->updateADataRow(DB_TABLE_PREFIX.'quyen', 'chunhiem', $chunhiem, 'tendangnhap', $tendangnhap);
                                         }
                                     } else {
-                                        $js = "Swal.fire({
-                                            title: 'Thành công!',
-                                            text: 'Thêm thành viên mới thành công! Tuy nhiên không tìm thấy tên lớp đã chỉ định, vui lòng chỉnh lại ở trang chỉnh sửa thành viên',
-                                            icon: 'success',
-                                            confirmButtonText: 'Ok'
-                                          })";
+                                        header("Location: $currentURL&themthanhcongnhungkhongthaylopchidinhchunhiem");
                                     }
                                 }
                             }
@@ -258,6 +303,8 @@
                             if (isset($_POST['la_admin'])) {
                                 $db->updateADataRow(DB_TABLE_PREFIX.'quyen', 'la_admin', 1, 'tendangnhap', $tendangnhap);
                             }
+
+                            header("Location: $currentURL&themthanhcong");
                         }
                     }
                 }
@@ -323,26 +370,10 @@
                             $email = mysqli_escape_string($db->conn, $_POST['email']);
                             $matkhau = mysqli_escape_string($db->conn, $_POST['matkhau']);
                             if ($hovaten==''||$email=='') {
-                                $js = "Swal.fire({
-                                    title: 'Lỗi!',
-                                    text: 'Vui lòng điền đầy đủ các ô, trừ các ô không bắt buộc!',
-                                    icon: 'error',
-                                    confirmButtonText: 'Ok'
-                                  })";
+                                header("Location: $currentURL&khongcodulieu");
                             } elseif (strlen($hovaten)>255||strlen($email)>320) {
-                                $js = "Swal.fire({
-                                    title: 'Lỗi!',
-                                    text: 'Họ và tên phải nhỏ hơn 255 ký tự, Email phải nhỏ hơn 320 ký tự!',
-                                    icon: 'error',
-                                    confirmButtonText: 'Ok'
-                                  })";
+                                header("Location: $currentURL&vuotquakitu");
                             } else {
-                                $js = "Swal.fire({
-                                    title: 'Thành công!',
-                                    text: 'Chỉnh sửa thành công',
-                                    icon: 'success',
-                                    confirmButtonText: 'Ok'
-                                  })";
 
                                 if ($matkhau !== '') {
                                     $db->updateMulDataRow(DB_TABLE_PREFIX.'nguoidung', array(
@@ -387,6 +418,7 @@
                                         if ($ktlop>0) { // trong dslop có lớp được chỉ định
                                             $ktlop = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'COUNT(*)', 'chunhiem', $chunhiem);
                                             if ($ktlop > 0) { // trong table quyen có gv đã chủ nhiệm lớp đã chỉ định
+                                                header("Location: $currentURL&chinhsuathanhcongnhungchunhiemdaco");
                                                 $js = "Swal.fire({
                                                     title: 'Thành công!',
                                                     text: 'Chỉnh sửa thành công! Tuy nhiên lớp $chunhiem đã có giáo viên khác chủ nhiệm, vui lòng chỉnh sửa lại sau khi tắt thông báo này',
@@ -397,9 +429,10 @@
                                                 $db->updateADataRow(DB_TABLE_PREFIX.'quyen', 'chunhiem', $chunhiem, 'tendangnhap', $tendangnhap);
                                             }
                                         } else {
+                                            header("Location: $currentURL&chinhsuathanhcongnhungkhongthaylopchidinhchunhiem");
                                             $js = "Swal.fire({
                                                 title: 'Thành công!',
-                                                text: 'Thêm thành viên mới thành công! Tuy nhiên không tìm thấy tên lớp đã chỉ định, vui lòng chỉnh sửa lại sau khi tắt thông báo này',
+                                                text: 'Chỉnh sửa thành công! Tuy nhiên không tìm thấy tên lớp đã chỉ định, vui lòng chỉnh sửa lại sau khi tắt thông báo này',
                                                 icon: 'success',
                                                 confirmButtonText: 'Ok'
                                               })";
@@ -430,6 +463,8 @@
                                 } else {
                                     $db->updateADataRow(DB_TABLE_PREFIX.'quyen', 'la_admin', 0, 'tendangnhap', $tendangnhap);
                                 }
+                                
+                                header("Location: $currentURL&chinhsuathanhcong");
                             }
                         }
 
@@ -575,8 +610,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <p>Các ô bắt buộc phải nhập được đánh dấu (*)</p>
-                                <button class='btn btn-success btn-block'>Thêm thành viên</button>
+                                <p><b>Các ô bắt buộc phải nhập được đánh dấu (*)</b></p>
+                                <button class='btn btn-success btn-block'>Chỉnh sửa thành viên</button>
                             </form>";
                     } else {
                         $content = "<b>Không tìm thấy ID của người dùng đã xác định</b>";

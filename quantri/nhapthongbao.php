@@ -105,13 +105,19 @@
             ));
 
             if (isset($_POST['guithongbao'])) {
-                $dsEmail = $db->getMulData(DB_TABLE_PREFIX.'nhanthongbao', array('email'));
 
-                foreach ($dsEmail as $value) {
-                    $dsEmailNhanThBao[] = $value['email'];
+                if ($smtp) {
+                    $dsEmail = $db->getMulData(DB_TABLE_PREFIX.'nhanthongbao', array('email'));
+
+                    foreach ($dsEmail as $value) {
+                        $dsEmailNhanThBao[] = $value['email'];
+                    }
+
+                    sendNotifyEmail($dsEmailNhanThBao, $tieude, $noidung);
+                } else {
+                    thongBao('Thêm thông báo mới thành công! Tuy nhiên do thông tin SMTP là rỗng nên hệ thống không thực hiện gửi email!', 'thanhcong');
                 }
 
-                sendNotifyEmail($dsEmailNhanThBao, $tieude, $noidung);
             }
 
             thongBao('Thêm thông báo mới thành công!', 'thanhcong');
@@ -197,13 +203,13 @@
         </div>
 
         <form method="GET" class="row">
-            <div class="col-2">
+            <div class="col-lg-2 col-md-2 col-12">
                 <label for="trang">Nhập trang để tìm</label>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8 col-md-8 col-12">
                 <input type="number" min="1" max='<?php echo $max ?>' value='<?php echo $trang ?>' name="trang" id="trang" class="form-control">
             </div>
-            <div class="col-2">
+            <div class="col-lg-2 col-md-2 col-12">
                 <button class="btn btn-info btn-block">Tra cứu</button>
             </div>
         </form>
