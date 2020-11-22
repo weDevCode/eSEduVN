@@ -100,12 +100,17 @@
             thongBao('Lỗi: Tên phải nhỏ hơn 320 ký tự, email phải nhỏ hơn 255 ký tự', 'thatbai');
         } else {
             require_once('../include/smtp.php');
-            if ($db->getSingleData(DB_TABLE_PREFIX.'nhanthongbao', 'COUNT(*)', 'email', $email) > 0) {
-                thongBao('Bạn đã đăng ký nhận thư rồi!', 'thatbai');
+            if ($smtp) {
+                if ($db->getSingleData(DB_TABLE_PREFIX.'nhanthongbao', 'COUNT(*)', 'email', $email) > 0) {
+                    thongBao('Bạn đã đăng ký nhận thư rồi!', 'thatbai');
+                } else {
+                    sendNotifyEmailVerify($email, $ten);
+                    thongBao('Hãy kiểm tra hộp thư (kể cả hộp thư rác/spam) để tìm thư xác nhận email, bạn sẽ chỉ nhận được thông báo sau khi đã xác nhận email!', 'thanhcong');
+                }
             } else {
-                sendNotifyEmailVerify($email, $ten);
-                thongBao('Hãy kiểm tra hộp thư (kể cả hộp thư rác/spam) để tìm thư xác nhận email, bạn sẽ chỉ nhận được thông báo sau khi đã xác nhận email!', 'thanhcong');
+                thongBao('Hiện tính năng nhận thông báo qua email đang bị tắt!', 'thatbai');
             }
+            
         }
     }
 

@@ -105,13 +105,19 @@
             ));
 
             if (isset($_POST['guithongbao'])) {
-                $dsEmail = $db->getMulData(DB_TABLE_PREFIX.'nhanthongbao', array('email'));
 
-                foreach ($dsEmail as $value) {
-                    $dsEmailNhanThBao[] = $value['email'];
+                if ($smtp) {
+                    $dsEmail = $db->getMulData(DB_TABLE_PREFIX.'nhanthongbao', array('email'));
+
+                    foreach ($dsEmail as $value) {
+                        $dsEmailNhanThBao[] = $value['email'];
+                    }
+
+                    sendNotifyEmail($dsEmailNhanThBao, $tieude, $noidung);
+                } else {
+                    thongBao('Thêm thông báo mới thành công! Tuy nhiên do thông tin SMTP là rỗng nên hệ thống không thực hiện gửi email!', 'thanhcong');
                 }
 
-                sendNotifyEmail($dsEmailNhanThBao, $tieude, $noidung);
             }
 
             thongBao('Thêm thông báo mới thành công!', 'thanhcong');

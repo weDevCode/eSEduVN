@@ -9,6 +9,8 @@
 
     session_start();
 
+    
+
     // Kiểm tra xem đã đăng nhập chưa - bắt đầu
 
         $tendangnhap = '';
@@ -19,11 +21,24 @@
         
         $redt = $giaothuc.$db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', "diachi");
 
+        // Kiểm tra token
+
+        if (isset($_GET['token'])) {
+            $token = mysqli_real_escape_string($db->conn, $_GET['token']);
+            if ($db->getSingleData(DB_TABLE_PREFIX.'phien', 'COUNT(*)', 'khoaphien', $token)>0) {
+                $_SESSION['khoaphien'] = $token;
+                setcookie('khoaphien', $token, time() + (86400 * 365), "/");
+                header("Location: $redt/dangnhap");
+            } else {
+                header("Location: $redt/dangnhap?loitoken");
+            }
+        }
+
         if (isset($_SESSION['khoaphien'])) {
 
             $khoaphien = $_SESSION['khoaphien'];
 
-            $check = $db->getSingleData(DB_TABLE_PREFIX.'phien', 'COUNT(*)', 'khoaphien', "$khoaphien");
+            $check = $db->getSingleData(DB_TABLE_PREFIX.'phien', 'COUNT(*)', 'khoaphien', $khoaphien);
 
             if ($check == 1) {
 
@@ -32,7 +47,7 @@
             }
 
         } elseif (isset($_COOKIE['khoaphien'])) {
-
+            
             $khoaphien = $_COOKIE['khoaphien'];
 
             $check = $db->getSingleData(DB_TABLE_PREFIX.'phien', 'COUNT(*)', 'khoaphien', "$khoaphien");
@@ -117,18 +132,70 @@
                     }, 3000);
                 </script>";
             } else {
-                $js = 
-                "<script>
-                    Swal.fire({
-                        title: 'Thành công!',
-                        text: 'Bạn đã đăng nhập thành công, hãy đợi 1 tí để chuyển hướng về trang quản lý.',
-                        icon: 'success',
-                        confirmButtonText: 'Đồng ý'
-                    })
-                    setTimeout(() => {
-                        location.assign('$redt');
-                    }, 1500);
-                </script>";
+
+                if ($db->getSingleData(DB_TABLE_PREFIX.'xacminh2buocemail', 'COUNT(*)', 'tendangnhap', $tendangnhap) > 0) {
+
+                    if ($db->getSingleData(DB_TABLE_PREFIX.'xacminh2buocemail', 'trangthai', 'tendangnhap', $tendangnhap) == 1) {
+
+                        require_once('include/smtp.php');
+
+                        if ($smtp) {
+                            $email = $db->getSingleData(DB_TABLE_PREFIX.'nguoidung', 'email', 'tendangnhap', $tendangnhap);
+
+                            sendEmailLogin($email, $tendangnhap, $khoaphien);
+
+                            session_destroy();
+                            
+                            setcookie('khoaphien', $khoaphien, time() - (86400 * 365), "/");
+
+                            header("Location: $redt/dangnhap?dangnhapquaemail");
+                        } else {
+
+                            $js = 
+                            "<script>
+                                Swal.fire({
+                                    title: 'Thành công!',
+                                    text: 'Bạn đã đăng nhập thành công, đang chuyển hướng...',
+                                    icon: 'success',
+                                    confirmButtonText: 'Đồng ý'
+                                })
+                                setTimeout(() => {
+                                    location.assign('$redt');
+                                }, 1500);
+                            </script>";
+
+                        }
+
+                        
+                    } else {
+                        $js = 
+                        "<script>
+                            Swal.fire({
+                                title: 'Thành công!',
+                                text: 'Bạn đã đăng nhập thành công, đang chuyển hướng...',
+                                icon: 'success',
+                                confirmButtonText: 'Đồng ý'
+                            })
+                            setTimeout(() => {
+                                location.assign('$redt');
+                            }, 1500);
+                        </script>";
+                    }
+
+                } else {
+                    $js = 
+                    "<script>
+                        Swal.fire({
+                            title: 'Thành công!',
+                            text: 'Bạn đã đăng nhập thành công, đang chuyển hướng...',
+                            icon: 'success',
+                            confirmButtonText: 'Đồng ý'
+                        })
+                        setTimeout(() => {
+                            location.assign('$redt');
+                        }, 1500);
+                    </script>";
+                }
             }
         } else {
             $js = 
@@ -141,6 +208,28 @@
                     })
                 </script>";
         }
+    }
+
+    if (isset($_GET['dangnhapquaemail'])) {
+        $js = 
+                "<script>
+                    Swal.fire({
+                        title: 'Khoan đã!',
+                        text: 'Do bạn đã kích hoạt tính năng đăng nhập qua email, hãy kiểm tra email để nhận thư xác nhận đăng nhập nhé!',
+                        icon: 'warning',
+                        confirmButtonText: 'Đồng ý'
+                    })
+                </script>";
+    } elseif (isset($_GET['loitoken'])) {
+        $js = 
+                "<script>
+                    Swal.fire({
+                        title: 'Thất bại!',
+                        text: 'Token không hợp lệ!',
+                        icon: 'error',
+                        confirmButtonText: 'Đồng ý'
+                    })
+                </script>";
     }
 ?>
 <style>

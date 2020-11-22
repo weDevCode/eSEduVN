@@ -217,15 +217,23 @@
         try {
             $token = $generatorLow->generateString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
             // thêm vào db
-            if ($db->getSingleData(DB_TABLE_PREFIX.'xacminhdoiemail', 'COUNT(*)', 'email', $ngNhan) > 0) {
+            if ($db->getSingleData(DB_TABLE_PREFIX.'xacminhdoiemail', 'COUNT(*)', 'tendangnhap', $ten) > 0) {
 
-                $db->updateADataRow(DB_TABLE_PREFIX.'xacminhdoiemail', 'token', $token, 'email', $ngNhan);
+                $db->updateMulDataRow(DB_TABLE_PREFIX.'xacminhdoiemail', array(
+                    'email_new',
+                    'token'
+                ), array(
+                    $ngNhan,
+                    $token
+                ), 'tendangnhap', $ten);
 
             } else {
                 $db->insertMulDataRow(DB_TABLE_PREFIX.'xacminhdoiemail', array(
-                    'email',
+                    'tendangnhap',
+                    'email_new',
                     'token'
                 ), array(
+                    $ten,
                     $ngNhan,
                     $token
                 ));
@@ -240,7 +248,7 @@
             $mail->Subject = "[$tenngguiSMTP] Xác nhận đổi địa chỉ Email";
             $mail->Body    = "<p>Xin chào, $ten</p>
             <p>Chúng tôi vừa nhận được yêu cầu đổi địa chỉ email trên $tenngguiSMTP có thể là từ bạn,
-            Nếu bạn đồng ý địa chỉ email, hãy truy cập liên kết bên dưới để xác nhận.</p>
+            Nếu bạn muốn thay đổi địa chỉ email, hãy truy cập liên kết bên dưới để xác nhận.</p>
             <p><b>Nếu không phải bạn yêu cầu, hãy bỏ qua email này!</b></p>
             <br>
             <a href='$urlXacNhan' target='_blank'>$urlXacNhan</a>
@@ -250,7 +258,47 @@
             $tenngguiSMTP";
             $mail->AltBody = "Xin chào, $ten
             Chúng tôi vừa nhận được yêu cầu đổi địa chỉ email trên $tenngguiSMTP có thể là từ bạn,
-            Nếu bạn đồng ý địa chỉ email, hãy truy cập liên kết bên dưới để xác nhận.
+            Nếu bạn muốn thay đổi địa chỉ email, hãy truy cập liên kết bên dưới để xác nhận.
+            Nếu không phải bạn yêu cầu, hãy bỏ qua email này!
+            
+            $urlXacNhan
+
+            ===
+            Trân trọng,
+            $tenngguiSMTP";
+        
+            $mail->send();
+        } catch (Exception $e) {
+            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        }
+    }
+
+    function sendEmailLogin($ngNhan, $ten, $token)
+    {
+        smtpDefaultInfo();
+        global $mail, $tenngguiSMTP, $url;
+        try {
+
+            $mail->addAddress($ngNhan);     // Add a recipient
+
+            $urlXacNhan = $url."/dangnhap?token=$token";
+
+            // Content
+            $mail->isHTML(true);                                  // Set email format to HTML
+            $mail->Subject = "[$tenngguiSMTP] Xác nhận 2 bước qua Email";
+            $mail->Body    = "<p>Xin chào, $ten</p>
+            <p>Chúng tôi vừa nhận được yêu cầu đăng nhập trên $tenngguiSMTP có thể là từ bạn,
+            Nếu bạn muốn đăng nhập, hãy truy cập liên kết bên dưới để xác nhận.</p>
+            <p><b>Nếu không phải bạn yêu cầu, hãy bỏ qua email này!</b></p>
+            <br>
+            <a href='$urlXacNhan' target='_blank'>$urlXacNhan</a>
+            <br><br>
+            ===<br>
+            Trân trọng,<br>
+            $tenngguiSMTP";
+            $mail->AltBody = "Xin chào, $ten
+            Chúng tôi vừa nhận được yêu cầu đổi địa chỉ email trên $tenngguiSMTP có thể là từ bạn,
+            Nếu bạn muốn đăng nhập, hãy truy cập liên kết bên dưới để xác nhận.
             Nếu không phải bạn yêu cầu, hãy bỏ qua email này!
             
             $urlXacNhan
@@ -271,14 +319,21 @@
     $ktracongSMTP = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'COUNT(*)', 'tencaidat', 'congSMTP');
     $ktramaychuSMTP = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'COUNT(*)', 'tencaidat', 'maychuSMTP');
 
-    if ($ktradiachiSMTP!=0&&$ktramatkhauSMTP!=0&&$ktratenngguiSMTP!=0&&$ktracongSMTP!=0&&$ktramaychuSMTP!=0) {
+    if ($ktradiachiSMTP!=0||$ktramatkhauSMTP!=0||$ktratenngguiSMTP!=0||$ktracongSMTP!=0||$ktramaychuSMTP!=0) {
         $diachiSMTP = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'diachiSMTP');
         $matkhauSMTP = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'matkhauSMTP');
         $tenngguiSMTP = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'tenngguiSMTP');
         $congSMTP = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'congSMTP');
         $maychuSMTP = $db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', 'maychuSMTP');
+
+        if ($diachiSMTP==''||$matkhauSMTP==''||$tenngguiSMTP==''||$congSMTP==''||$maychuSMTP=='') {
+            $smtp = false;
+        } else {
+            $smtp = true;
+        }
     } else {
-        die('Thiếu thông tin đăng nhập SMTP trong CSDL, vui lòng cập nhật ở trang quản trị! (#06)');
+        $smtp = false;
+        // die('<h1>Quản trị viên cần cập nhật thông tin SMTP mới có thể sử dụng tính năng này! (#06)</h1>');
     }
     
 ?>
