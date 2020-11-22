@@ -326,6 +326,21 @@
             PRIMARY KEY (id),
             UNIQUE (tendangnhap)
             );");
+        // Table xm2btokenemail
+        // CREATE TABLE ".$prefix."xm2btokenemail (
+        //     id INT NOT NULL AUTO_INCREMENT,
+        //     tendangnhap VARCHAR(255) NOT NULL,
+        //     token TINYTEXT NOT NULL,
+        //     thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        //     PRIMARY KEY (id)
+        //     );
+        $db->query("CREATE TABLE ".$prefix."xm2btokenemail (
+            id INT NOT NULL AUTO_INCREMENT,
+            tendangnhap VARCHAR(255) NOT NULL,
+            token TINYTEXT NOT NULL,
+            thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id)
+            );");
     }
 ?>
 

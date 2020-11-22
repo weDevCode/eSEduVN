@@ -9,7 +9,6 @@
 
         $tennguoidung = $db->getSingleData(DB_TABLE_PREFIX.'phien', 'tendangnhap', 'khoaphien', "$khoaphien");
     } elseif(isset($_COOKIE['khoaphien'])) {
-
         $khoaphien = mysqli_real_escape_string($db->conn, $_COOKIE['khoaphien']);
         
         $tennguoidung = $db->getSingleData(DB_TABLE_PREFIX.'phien', 'tendangnhap', 'khoaphien', "$khoaphien");

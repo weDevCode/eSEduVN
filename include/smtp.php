@@ -273,11 +273,26 @@
         }
     }
 
-    function sendEmailLogin($ngNhan, $ten, $token)
+    function sendEmailLogin($ngNhan, $ten)
     {
         smtpDefaultInfo();
-        global $mail, $tenngguiSMTP, $url;
+        global $mail, $tenngguiSMTP, $url, $generatorLow, $db;
         try {
+            $token = $generatorLow->generateString(32, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+            // thêm vào db
+            if ($db->getSingleData(DB_TABLE_PREFIX.'xm2btokenemail', 'COUNT(*)', 'tendangnhap', $ten) > 0) {
+
+                $db->updateADataRow(DB_TABLE_PREFIX.'xm2btokenemail', 'token', $token, 'tendangnhap', $ten);
+
+            } else {
+                $db->insertMulDataRow(DB_TABLE_PREFIX.'xm2btokenemail', array(
+                    'tendangnhap',
+                    'token',
+                ), array(
+                    $ten,
+                    $token
+                ));
+            }
 
             $mail->addAddress($ngNhan);     // Add a recipient
 
