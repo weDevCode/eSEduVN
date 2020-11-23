@@ -25,9 +25,26 @@
 
         if (isset($_GET['token'])) {
             $token = mysqli_real_escape_string($db->conn, $_GET['token']);
-            if ($db->getSingleData(DB_TABLE_PREFIX.'phien', 'COUNT(*)', 'khoaphien', $token)>0) {
-                $_SESSION['khoaphien'] = $token;
+            if ($db->getSingleData(DB_TABLE_PREFIX.'xm2btokenemail', 'COUNT(*)', 'token', $token)>0) { // nếu token tồn tại
+                
+                $khoaphien = uniqid('khoaphien_', true);
+
+                $tendangnhap = $db->getSingleData(DB_TABLE_PREFIX.'xm2btokenemail', 'tendangnhap', 'token', $token);
+
+                $db->insertMulDataRow(DB_TABLE_PREFIX.'phien', array(
+                    'tendangnhap',
+                    'khoaphien'
+                ), array(
+                    "$tendangnhap",
+                    "$khoaphien"
+                ));
+
+                $db->deleteADataRow(DB_TABLE_PREFIX.'xm2btokenemail', 'token', $token);
+
+                $_SESSION['khoaphien'] = $khoaphien;
+
                 setcookie('khoaphien', $token, time() + (86400 * 365), "/");
+
                 header("Location: $redt/dangnhap");
             } else {
                 header("Location: $redt/dangnhap?loitoken");
@@ -82,8 +99,10 @@
         $matkhau = mysqli_real_escape_string($db->conn, $_POST['matkhau']);
 
         $matkhaubam = $db->getSingleData(DB_TABLE_PREFIX.'nguoidung', 'matkhaubam', 'tendangnhap', $tendangnhap);
-        
-        if (password_verify($matkhau, $matkhaubam)) {
+
+        $ktra = $db->getSingleData(DB_TABLE_PREFIX.'nguoidung', 'COUNT(*)', 'tendangnhap', $tendangnhap);
+
+        if (password_verify($matkhau, $matkhaubam)&&$ktra==1) {
 
             if (isset($_POST['ghinhotoi'])) {
 
@@ -142,7 +161,9 @@
                         if ($smtp) {
                             $email = $db->getSingleData(DB_TABLE_PREFIX.'nguoidung', 'email', 'tendangnhap', $tendangnhap);
 
-                            sendEmailLogin($email, $tendangnhap, $khoaphien);
+                            sendEmailLogin($email, $tendangnhap);
+
+                            $db->deleteADataRow(DB_TABLE_PREFIX.'phien', 'khoaphien', $khoaphien);
 
                             session_destroy();
                             
@@ -211,8 +232,7 @@
     }
 
     if (isset($_GET['dangnhapquaemail'])) {
-        $js = 
-                "<script>
+        $js =  "<script>
                     Swal.fire({
                         title: 'Khoan đã!',
                         text: 'Do bạn đã kích hoạt tính năng đăng nhập qua email, hãy kiểm tra email để nhận thư xác nhận đăng nhập nhé!',
@@ -221,11 +241,19 @@
                     })
                 </script>";
     } elseif (isset($_GET['loitoken'])) {
-        $js = 
-                "<script>
+        $js =  "<script>
                     Swal.fire({
                         title: 'Thất bại!',
                         text: 'Token không hợp lệ!',
+                        icon: 'error',
+                        confirmButtonText: 'Đồng ý'
+                    })
+                </script>";
+    } elseif (isset($_GET['tendangnhaprong'])) {
+        $js =  "<script>
+                    Swal.fire({
+                        title: 'Thất bại!',
+                        text: 'Tên đăng nhập không được để trống!',
                         icon: 'error',
                         confirmButtonText: 'Đồng ý'
                     })

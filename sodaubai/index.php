@@ -122,16 +122,21 @@
                                             
                                     $chucvu = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'chucvu', 'tendangnhap', $value);
                                     
-                                    if ($chucvu==0) {
-                                        $chucvu = 'Không';
+                                    if ($chucvu==='0') {
+                                        $chucvu = 'Không có';
                                     }
                                             
                                     $bomon = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'bomon', 'tendangnhap', $value);
                                     
-                                    if ($bomon==0) {
-                                        $bomon = 'Không';
+                                    if ($bomon==='0') {
+                                        $bomon = 'Không có';
                                     }
 
+                                    $chunhiem = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'chunhiem', 'tendangnhap', $value);
+                                    
+                                    if ($chunhiem==='0') {
+                                        $chunhiem = 'Không có';
+                                    }
 
                                     $content2 .= "<td>
                                         <ul>
@@ -139,6 +144,7 @@
                                             <li><b>Tên người dùng</b>: $value</li>
                                             <li><b>Chức vụ</b>: $chucvu</li>
                                             <li><b>Bộ môn</b>: $bomon</li>
+                                            <li><b>Đang chủ nhiệm lớp</b>: $chunhiem</li>
                                         </ul>
                                     </td>
                                     </tr>
@@ -165,9 +171,16 @@
                 
             }
 
+
+            $chunhiemlophientai = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'hovaten', 'chunhiem', $lop);
+
+            if ($chunhiemlophientai === '0') {
+                $chunhiemlophientai = 'Không có';
+            }
+
             $content = "<form method='POST'><label for='luachonngay'>Lựa chọn ngày: </label> $chonngay
             <button class='btn btn-success'>Tra cứu</button></form>";
-            $content2 .= "<p><b>Bạn đang xem lớp $lop</b></p>";
+            $content2 .= "<p><b>Bạn đang xem lớp $lop (GVCN: $chunhiemlophientai)</b></p>";
         }
     }
 ?>

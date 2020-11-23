@@ -145,6 +145,12 @@
                 
             }
 
+            $chunhiemlophientai = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'hovaten', 'chunhiem', $lop);
+
+            if ($chunhiemlophientai === '0') {
+                $chunhiemlophientai = 'Không có';
+            }
+
             $content = "<form method='POST'><label for='luachonngay'>Lựa chọn ngày: </label> $chonngay
             <button class='btn btn-success'>Tra cứu</button></form>";
             $content2 .= "<p><b>Bạn đang xem lớp $lop</b></p>";
