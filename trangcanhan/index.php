@@ -165,6 +165,51 @@
                         confirmButtonText: 'Đồng ý'
                     })
                 </script>";
+    } elseif (isset($_GET['batxm2bthanhcong'])) {
+        $js = "<script>
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Bật xác minh 2 bước thành công!',
+                        icon: 'success',
+                        confirmButtonText: 'Đồng ý'
+                    })
+                </script>";
+    } elseif (isset($_GET['tatxm2bthanhcong'])) {
+        $js = "<script>
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Tắt xác minh 2 bước thành công!',
+                        icon: 'success',
+                        confirmButtonText: 'Đồng ý'
+                    })
+                </script>";
+    } elseif (isset($_GET['otptrong'])) {
+        $js = "<script>
+                    Swal.fire({
+                        title: 'Thất bại!',
+                        text: 'Mã xác nhận không được để trống!',
+                        icon: 'error',
+                        confirmButtonText: 'Đồng ý'
+                    })
+                </script>";
+    } elseif (isset($_GET['otpsai'])) {
+        $js = "<script>
+                    Swal.fire({
+                        title: 'Thất bại!',
+                        text: 'Mã xác nhận không hợp lệ!',
+                        icon: 'error',
+                        confirmButtonText: 'Đồng ý'
+                    })
+                </script>";
+    } elseif (isset($_GET['xm2bdone'])) {
+        $js = "<script>
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Thiết lập xác minh 2 bước hoàn tất!',
+                        icon: 'success',
+                        confirmButtonText: 'Đồng ý'
+                    })
+                </script>";
     }
 
     if (isset($_GET['token'])) { // đổi email
@@ -202,6 +247,130 @@
             customHeader("Location: $url/trangcanhan/?doimatkhauthanhcong");
         }
     }
+
+    // Tính năng xác minh 2 bước cho thành viên
+
+    if (isset($_POST['xacminh2buoc-tt-kichhoat'])) { 
+
+
+        if (isset($_POST['xacminh2buoc-tt'])) { // nếu đã tích vào
+
+            if (isset($_SESSION['2fa_secret'])&&isset($_POST['maOTPxm2b'])) { // nếu ngdung submit code
+                $maOTPxm2b = mysqli_real_escape_string($db->conn, $_POST['maOTPxm2b']);
+
+                $_2fa_secret = mysqli_real_escape_string($db->conn, $_SESSION['2fa_secret']);
+
+                require_once('../include/xm2b.php');
+                
+                if ($maOTPxm2b == '') {
+                    customHeader("Location: $url/trangcanhan/?otptrong");
+                } elseif (!($tfa->verifyCode($_SESSION['2fa_secret'], $maOTPxm2b))) {
+                    customHeader("Location: $url/trangcanhan/?otpsai");
+                } else {
+                    $db->updateADataRow(DB_TABLE_PREFIX.'xm2b', 'secret_code', $_2fa_secret, 'tendangnhap', $tennguoidung);
+                    customHeader("Location: $url/trangcanhan/?xm2bdone");
+                }
+            } // nếu ko
+
+            if ($db->getSingleData(DB_TABLE_PREFIX.'xm2b', 'COUNT(*)', 'tendangnhap', $tennguoidung) > 0) {// nếu tìm thấy
+                $db->updateADataRow(DB_TABLE_PREFIX.'xm2b', 'bat_xm2b', 1, 'tendangnhap', $tennguoidung);
+            } else { // nếu không
+                $db->insertMulDataRow(DB_TABLE_PREFIX.'xm2b', array(
+                    'tendangnhap',
+                    'bat_xm2b',
+                    'secret_code'
+                ), array(
+                    $tennguoidung,
+                    1,
+                    ''
+                ));
+            }
+
+            customHeader("Location: $url/trangcanhan/?batxm2bthanhcong");
+        } else { // nếu không
+    
+            unset($_SESSION['2fa_secret']);
+
+            if ($db->getSingleData(DB_TABLE_PREFIX.'xm2b', 'COUNT(*)', 'tendangnhap', $tennguoidung) > 0) {// nếu tìm thấy
+                $db->updateMulDataRow(DB_TABLE_PREFIX.'xm2b', array(
+                    'tendangnhap',
+                    'bat_xm2b',
+                    'secret_code'
+                ), array(
+                    $tennguoidung,
+                    0,
+                    ''
+                ), 'tendangnhap', $tennguoidung);
+                
+            } else { // nếu không
+                $db->insertMulDataRow(DB_TABLE_PREFIX.'xm2b', array(
+                    'tendangnhap',
+                    'bat_xm2b',
+                    'secret_code'
+                ), array(
+                    $tennguoidung,
+                    0,
+                    ''
+                ));
+            }
+
+            customHeader("Location: $url/trangcanhan/?tatxm2bthanhcong");
+        }
+
+}
+
+    if ($db->getSingleData(DB_TABLE_PREFIX.'xm2b', 'bat_xm2b', 'tendangnhap', $tennguoidung) == 1) {
+        $trthai_xm2b = "<input type='checkbox' class='custom-control-input' id='xm2b-tt' name='xacminh2buoc-tt' checked>";
+
+        if ($db->getSingleData(DB_TABLE_PREFIX.'xm2b', 'secret_code', 'tendangnhap', $tennguoidung)=='') {
+            require_once('../include/xm2b.php');
+
+            if (isset($_SESSION['2fa_secret'])) {
+                
+                $qr_source = $tfa->getQRCodeImageAsDataUri("$tennguoidung", $_SESSION['2fa_secret']);
+
+                $code = $_SESSION['2fa_secret'];
+            } else {
+                $qr_source = $tfa->getQRCodeImageAsDataUri("$tennguoidung", $secret);
+
+                $_SESSION['2fa_secret'] = $secret;
+
+                $code = $secret;
+            }
+
+            $qr_code = "<img src='$qr_source' />";
+
+            $xm2b_tienhanh = <<<HTML
+                <hr>
+                <p>Để hoàn tất bật xác minh 2 bước, bạn vui lòng điền đoạn mã sau vào ứng dụng xác minh 2 bước trên điện thoại (Lastpass Authenticator hoặc Google Authenticator):
+                <b>$code</b></p>
+                <p>Hoặc bạn có thể quét hình ảnh bên dưới để thiết lập:</p>
+                $qr_code
+                <p>Tiếp tục, sau khi quét ảnh hoặc nhập mã ở trên, bạn sẽ nhận được đoạn mã gồm 6 chữ số, hãy điền nó vào bên dưới và nhấn lưu!</p>
+                <input type="text" class="form-control" name='maOTPxm2b'>
+            HTML;
+        } else {
+            $xm2b_tienhanh = '<b>Đã kích hoạt và thiết lập xác minh 2 bước hoàn tất!</b>';
+        }
+        
+    } else {
+        $trthai_xm2b = "<input type='checkbox' class='custom-control-input' id='xm2b-tt' name='xacminh2buoc-tt'>";
+        $xm2b_tienhanh = '';
+    }
+
+    $xm2bHTML = <<<HTML
+        <h3 class="text-center">Xác minh 2 bước</h3>
+        <p>Nếu bạn muốn bật tính năng xác minh 2 bước, vui lòng tích vào ô bên dưới và nhấn nút Lưu</p>
+        <p><b>Chú ý: </b>Nếu bạn bật tính năng xác minh 2 bước qua email, tính năng xác minh 2 bước này sẽ không có tác dụng!</p>
+        <p><b>Chú ý 2: </b>Hãy giữ kĩ điện thoại có phần mềm tạo mã đã xác nhận trên website, nếu bạn vì lí do nào đó mà đánh mất nó, bạn sẽ không thể đăng nhập được tài khoản này nữa nếu bạn còn bật xác minh 2 bước!</p>
+        <div class="custom-control custom-checkbox">
+            $trthai_xm2b
+            <label class="custom-control-label" for="xm2b-tt">Bật tính năng xác minh 2 bước qua ứng dụng (truyền thống)</label>
+        </div>
+        <input type="hidden" name="xacminh2buoc-tt-kichhoat" value="true">
+        $xm2b_tienhanh
+        <button class="btn btn-info btn-block">Lưu</button>
+    HTML;
 ?>
 
 <?php 
@@ -311,6 +480,9 @@
                     </div>
                     <!-- INP -->
                     <button class="btn btn-info btn-block">Lưu</button>
+                </form>
+                <form method="POST" class="xm2b-ud">
+                    <?php echo $xm2bHTML ?>
                 </form>
             </div>
         </div>

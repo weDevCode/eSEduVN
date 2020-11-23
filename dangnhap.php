@@ -21,7 +21,7 @@
         
         $redt = $giaothuc.$db->getSingleData(DB_TABLE_PREFIX.'caidat', 'giatri', 'tencaidat', "diachi");
 
-        // Kiểm tra token
+        // Kiểm tra token email
 
         if (isset($_GET['token'])) {
             $token = mysqli_real_escape_string($db->conn, $_GET['token']);
@@ -43,7 +43,7 @@
 
                 $_SESSION['khoaphien'] = $khoaphien;
 
-                setcookie('khoaphien', $token, time() + (86400 * 365), "/");
+                setcookie('khoaphien', $khoaphien, time() + (86400 * 365), "/");
 
                 header("Location: $redt/dangnhap");
             } else {
@@ -51,7 +51,60 @@
             }
         }
 
-        if (isset($_SESSION['khoaphien'])) {
+        // Kiểm tra xm2b
+
+        $js2 = '';
+
+        if (isset($_POST['xm2bCode'])&&isset($_POST['tendangnhapxm2b'])) {
+            $xm2bCode = mysqli_real_escape_string($db->conn, $_POST['xm2bCode']);
+
+            $tendangnhapxm2b = mysqli_real_escape_string($db->conn, $_POST['tendangnhapxm2b']);
+
+            if ($xm2bCode=='') {
+                header("Location: $redt/dangnhap?OTPtrong");
+            }
+
+            require_once("include/xm2b.php");
+
+            $maXacNhan = $db->getSingleData(DB_TABLE_PREFIX.'xm2b', 'secret_code', 'tendangnhap', $tendangnhapxm2b);
+
+            if ($tfa->verifyCode($maXacNhan, $xm2bCode)) {
+                $js2 = 
+                "<script>
+                    Swal.fire({
+                        title: 'Thành công!',
+                        text: 'Bạn đã đăng nhập thành công, đang chuyển hướng...',
+                        icon: 'success',
+                        confirmButtonText: 'Đồng ý'
+                    })
+                    setTimeout(() => {
+                        location.assign('$redt');
+                    }, 1500);
+                </script>";
+
+                $khoaphien = uniqid('khoaphien_', true);
+
+                $_SESSION['khoaphien'] = $khoaphien;
+
+                setcookie('khoaphien', $khoaphien, time() + (86400 * 365), "/");
+
+                $db->insertMulDataRow(DB_TABLE_PREFIX.'phien', array(
+                    'tendangnhap',
+                    'khoaphien'
+                ), array(
+                    "$tendangnhapxm2b",
+                    "$khoaphien"
+                ));
+
+                $xm2b_checked = true;
+            } else {
+                header("Location: $redt/dangnhap?OTPloi");
+            }
+        }
+
+        // 
+
+        if (isset($_SESSION['khoaphien'])&&!isset($xm2b_checked)) {
 
             $khoaphien = $_SESSION['khoaphien'];
 
@@ -92,6 +145,11 @@
 <?php 
     // Xử lý dữ liệu
     $js = '';
+
+    $hideLoginForm = '';
+                        
+    $hide2faForm = 'style="display: none"';
+
     if (isset($_POST['tendangnhap']) && isset($_POST['matkhau'])) {
 
         $tendangnhap = mysqli_real_escape_string($db->conn, $_POST['tendangnhap']);
@@ -188,6 +246,15 @@
                         }
 
                         
+                    } elseif (($db->getSingleData(DB_TABLE_PREFIX.'xm2b', 'bat_xm2b', 'tendangnhap', $tendangnhap) == 1) && ($db->getSingleData(DB_TABLE_PREFIX.'xm2b', 'secret_code', 'tendangnhap', $tendangnhap) != '')) {
+
+                        $hideLoginForm = 'style="display: none"';
+
+                        $hide2faForm = '';
+
+                        session_destroy();
+                            
+                        setcookie('khoaphien', $khoaphien, time() - (86400 * 365), "/");
                     } else {
                         $js = 
                         "<script>
@@ -248,6 +315,9 @@
                         icon: 'error',
                         confirmButtonText: 'Đồng ý'
                     })
+                    setTimeout(() => {
+                        location.assign('$redt/dangnhap');
+                    }, 1500);
                 </script>";
     } elseif (isset($_GET['tendangnhaprong'])) {
         $js =  "<script>
@@ -257,6 +327,33 @@
                         icon: 'error',
                         confirmButtonText: 'Đồng ý'
                     })
+                    setTimeout(() => {
+                        location.assign('$redt/dangnhap');
+                    }, 1500);
+                </script>";
+    } elseif (isset($_GET['OTPtrong'])) {
+        $js =  "<script>
+                    Swal.fire({
+                        title: 'Thất bại!',
+                        text: 'Mã xác nhận không được bỏ trống!',
+                        icon: 'error',
+                        confirmButtonText: 'Đồng ý'
+                    })
+                    setTimeout(() => {
+                        location.assign('$redt/dangnhap');
+                    }, 1500);
+                </script>";
+    } elseif (isset($_GET['OTPloi'])) {
+        $js =  "<script>
+                    Swal.fire({
+                        title: 'Thất bại!',
+                        text: 'Mã xác nhận không hợp lệ!',
+                        icon: 'error',
+                        confirmButtonText: 'Đồng ý'
+                    })
+                    setTimeout(() => {
+                        location.assign('$redt/dangnhap');
+                    }, 1500);
                 </script>";
     }
 ?>
@@ -270,7 +367,7 @@
             <div class="col-lg-4 col-sm-12 col-md-3"></div>
             <div class="col-lg-4 col-sm-12 col-md-6 d-flex align-items-center" style="min-height: 100vh;">
                 <div class="card" style="width: 100%">
-                    <div class="card-body">
+                    <div class="card-body" <?php echo $hideLoginForm ?>>
                         <h5 class="card-title">Đăng nhập</h5>
                         <h6 class="card-subtitle mb-2 text-muted">Hãy đăng nhập để bắt đầu</h6>
                         <p class="card-text">
@@ -297,6 +394,25 @@
                         <a href="<?php echo $url ?>/doimatkhau" class="card-link">Quên mật khẩu?</a>
                         <a href="<?php echo $url ?>" class="card-link">Về trang chủ</a>
                     </div>
+
+                    <div class="card-body" <?php echo $hide2faForm ?>>
+                        <h5 class="card-title">Xác minh 2 bước</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">Hãy nhập mã xác minh để tiếp tục</h6>
+                        <p class="card-text">
+                            <form method="POST">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1"><i class="fi-cnsuxl-key-alt icon"></i></span>
+                                    </div>
+                                    <input name="xm2bCode" type="text" class="form-control" placeholder="Xác minh 2 bước" aria-label="Xác minh 2 bước" aria-describedby="basic-addon1">
+                                    <input name="tendangnhapxm2b" type="hidden" value="<?php echo $tendangnhap ?>">
+                                </div>
+                                <button class="btn btn-info btn-block">Xác minh</button>
+                            </form>
+                        </p>
+                        <a href="<?php echo $url ?>/doimatkhau" class="card-link">Quên mật khẩu?</a>
+                        <a href="<?php echo $url ?>" class="card-link">Về trang chủ</a>
+                    </div>
                 </div>
             </div>
             <div class="col-lg-4 col-sm-12 col-md-3"></div>
@@ -306,4 +422,5 @@
 <?php 
     require_once('include/footer.php');
     echo $js;
+    echo $js2;
 ?>

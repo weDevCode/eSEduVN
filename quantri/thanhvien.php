@@ -676,6 +676,7 @@
                             <h3 class="text-center">Lưu ý</h3>
                             <p>Bạn có chắc rằng bạn muốn xoá người dùng <b>$hoten</b> có tên đăng nhập là <b>$tendangnhap</b> không?</p>
                             <p><b>Hãy suy nghĩ kỹ vì việc này sẽ xoá người dùng vĩnh viễn khỏi hệ thống!</b></p>
+                            <p><b>Bên cạnh đó, những dữ liệu liên quan do người dùng này cập nhật sẽ được chuyển sang thành dữ liệu do bạn cập nhật!</b></p>
                             <form method="post">
                                 <input type="hidden" name="xacnhan" value='true'>
                                 <button class="btn btn-danger btn-block">Vẫn xoá</button>
@@ -684,11 +685,21 @@
                             <a href="?phuongthuc=xoa" class="btn btn-success btn-block">Trở về trang quản lý xoá người dùng</a>
                         HTML;
                         if (isset($_POST['xacnhan'])) {
-                            $xacnhan = $_POST['xacnhan'];
+                            $xacnhan = mysqli_real_escape_string($db->conn, $_POST['xacnhan']);
                             switch ($xacnhan) {
                                 case 'true':
-                                    $db->deleteADataRow(DB_TABLE_PREFIX.'quyen', 'id', $id);
+                                    // Xoá
+                                    $db->deleteADataRow(DB_TABLE_PREFIX.'quyen', 'tendangnhap', $tendangnhap);
                                     $db->deleteADataRow(DB_TABLE_PREFIX.'nguoidung', 'tendangnhap', $tendangnhap);
+                                    $db->deleteADataRow(DB_TABLE_PREFIX.'phien', 'tendangnhap', $tendangnhap);
+                                    $db->deleteADataRow(DB_TABLE_PREFIX.'xacminh2buocemail', 'tendangnhap', $tendangnhap);
+                                    $db->deleteADataRow(DB_TABLE_PREFIX.'xacminhdoiemail', 'tendangnhap', $tendangnhap);
+                                    $db->deleteADataRow(DB_TABLE_PREFIX.'xacminhdoimatkhau', 'tendangnhap', $tendangnhap);
+                                    $db->deleteADataRow(DB_TABLE_PREFIX.'xm2b', 'tendangnhap', $tendangnhap);
+                                    $db->deleteADataRow(DB_TABLE_PREFIX.'xm2btokenemail', 'tendangnhap', $tendangnhap);
+                                    // Cập nhật
+                                    $db->updateADataRow(DB_TABLE_PREFIX.'dsdiemdanhcaclop', 'nguoidung', $tennguoidung, 'nguoidung', $tendangnhap);
+                                    $db->updateADataRow(DB_TABLE_PREFIX.'sodaubai', 'nguoidung', $tennguoidung, 'nguoidung', $tendangnhap);
                                     $content = <<<HTML
                                         <h3 class="text-center">Thành công!!</h3>
                                         <p>Đã xoá người dùng thành công khỏi hệ thống</p>

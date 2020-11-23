@@ -341,6 +341,23 @@
             thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id)
             );");
+        // Table xm2b
+        // CREATE TABLE ".$prefix."xm2b ( 
+        //     id INT NOT NULL AUTO_INCREMENT,
+        //     tendangnhap VARCHAR(255) NOT NULL,
+        //     bat_xm2b TINYINT(3) UNSIGNED NOT NULL,
+        //     secret_code VARCHAR(64) NOT NULL,
+        //     thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        //     PRIMARY KEY (id), UNIQUE (tendangnhap)
+        // );
+        $db->query("CREATE TABLE ".$prefix."xm2b ( 
+            id INT NOT NULL AUTO_INCREMENT,
+            tendangnhap VARCHAR(255) NOT NULL,
+            bat_xm2b TINYINT(3) UNSIGNED NOT NULL,
+            secret_code VARCHAR(64) NOT NULL,
+            thoigian TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (id), UNIQUE (tendangnhap)
+        );");
     }
 ?>
 
