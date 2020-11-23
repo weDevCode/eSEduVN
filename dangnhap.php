@@ -212,7 +212,16 @@
 
                 if ($db->getSingleData(DB_TABLE_PREFIX.'xacminh2buocemail', 'COUNT(*)', 'tendangnhap', $tendangnhap) > 0) {
 
-                    if ($db->getSingleData(DB_TABLE_PREFIX.'xacminh2buocemail', 'trangthai', 'tendangnhap', $tendangnhap) == 1) {
+                    if (($db->getSingleData(DB_TABLE_PREFIX.'xm2b', 'bat_xm2b', 'tendangnhap', $tendangnhap) == 1) && ($db->getSingleData(DB_TABLE_PREFIX.'xm2b', 'secret_code', 'tendangnhap', $tendangnhap) != '')) {
+
+                        $hideLoginForm = 'style="display: none"';
+
+                        $hide2faForm = '';
+
+                        session_destroy();
+                            
+                        setcookie('khoaphien', $khoaphien, time() - (86400 * 365), "/");
+                    } elseif ($db->getSingleData(DB_TABLE_PREFIX.'xacminh2buocemail', 'trangthai', 'tendangnhap', $tendangnhap) == 1) {
 
                         require_once('include/smtp.php');
 
@@ -246,15 +255,6 @@
                         }
 
                         
-                    } elseif (($db->getSingleData(DB_TABLE_PREFIX.'xm2b', 'bat_xm2b', 'tendangnhap', $tendangnhap) == 1) && ($db->getSingleData(DB_TABLE_PREFIX.'xm2b', 'secret_code', 'tendangnhap', $tendangnhap) != '')) {
-
-                        $hideLoginForm = 'style="display: none"';
-
-                        $hide2faForm = '';
-
-                        session_destroy();
-                            
-                        setcookie('khoaphien', $khoaphien, time() - (86400 * 365), "/");
                     } else {
                         $js = 
                         "<script>
