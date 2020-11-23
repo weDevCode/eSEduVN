@@ -19,7 +19,15 @@
 
     $url = $giaothuc.$db->getSingleData(DB_TABLE_PREFIX."caidat", "giatri", "tencaidat", "diachi");
 
-    $currentURL = $url.$_SERVER['REQUEST_URI'];
+    $requestURL = $_SERVER['REQUEST_URI'];
+	
+	$code = str_replace($_SERVER['SERVER_NAME'],"",$url);
+	
+	$code = str_replace($giaothuc,"",$code);
+	
+	$requestURL =  str_replace($code,"",$requestURL);
+	
+    $currentURL = $url.$requestURL;
 
     define("SITE_NAME", $db->getSingleData(DB_TABLE_PREFIX."caidat", "giatri", "tencaidat", "tenwebsite"));
 
