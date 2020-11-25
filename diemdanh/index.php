@@ -117,6 +117,12 @@
                                             if ($bomon==0) {
                                                 $bomon = 'Không';
                                             }
+											
+											$chunhiem = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'chunhiem', 'tendangnhap', $value);
+                                    
+											if ($chunhiem==='0') {
+												$chunhiem = 'Không có';
+											}
 
                                             $content2 .= "<p>
                                             <ul>
@@ -124,6 +130,7 @@
                                                 <li><b>Tên người dùng</b>: $value</li>
                                                 <li><b>Chức vụ</b>: $chucvu</li>
                                                 <li><b>Bộ môn</b>: $bomon</li>
+												<li><b>Đang chủ nhiệm lớp</b>: $chunhiem</li>
                                             </ul> </p>";
                                             break;
                                     }
