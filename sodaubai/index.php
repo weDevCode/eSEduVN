@@ -195,7 +195,7 @@
 
         <div class="row">
             <div class="col-12 col-md-3 col-lg-4" id="dslop">
-                <h3 class="text-center">Danh sách lớp</h3>
+                <button id="dslopToggle" class="btn btn-info btn-block">Danh sách lớp (nhấn để hiện/ẩn)</button>
                 <ul>
                     <?php 
                         $phtml = '';
@@ -232,7 +232,7 @@
                     ?>
                 </ul>
             </div>
-            <div class="col-12 col-md-9 col-lg-8" id="tkb">
+            <div class="col-12 col-md-9 col-lg-8" id="sodaubai">
                 <?php 
                     echo $content;
                     echo $content2;
