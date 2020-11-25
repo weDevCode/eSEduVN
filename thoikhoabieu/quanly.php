@@ -149,9 +149,16 @@
                         </b>";
                     } else {
                         $lop = $db->getSingleData(DB_TABLE_PREFIX.'tkb', 'lop', 'id', $id);
+
+                        $chunhiemlophientai = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'hovaten', 'chunhiem', $lop);
+
+                        if ($chunhiemlophientai === '0') {
+                            $chunhiemlophientai = 'Không có';
+                        }
+
                         $content = 
                         "<h3 class='text-center'>Chỉnh sửa thời khoá biểu</h3>
-                        <p>Bạn đang chỉnh sửa thời khoá biểu của lớp <b>$lop</b></p>
+                        <p>Bạn đang chỉnh sửa thời khoá biểu của lớp <b>$lop</b> (GVCN: $chunhiemlophientai)</p>
                         <form method='POST'>
                             <textarea name='khungtkb' id='khungtkb' style='width: 100%; max-width: 100%; padding: 20px; height: 600px' rows='10'>$noidung</textarea>
                             <button class='btn btn-info btn-block'>Lưu</button>
@@ -202,7 +209,7 @@
 
         <div class="row">
             <div class="col-12 col-md-3 col-lg-4" id="dslop">
-                <h3 class="text-center">Danh sách lớp</h3>
+                <button id="dslopToggle" class="btn btn-info btn-block">Danh sách lớp (nhấn để hiện/ẩn)</button>
                 <ul>
                     <?php 
                         echo "<a href='$url/thoikhoabieu/quanly?phuongthuc=tao' class='btn btn-success btn-block'>Tạo thời khoá biểu mới</a>";

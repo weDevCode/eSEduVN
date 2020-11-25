@@ -176,6 +176,12 @@
                         ";
                     }
 
+                    $chunhiemlophientai = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'hovaten', 'chunhiem', $lop);
+
+                    if ($chunhiemlophientai === '0') {
+                        $chunhiemlophientai = 'Không có';
+                    }
+
                     $content .= 
                     <<<HTML
                         <form method="POST" id="form">
@@ -183,7 +189,7 @@
                             <label>Đánh giá tiết học</label><input type="text" required name='danhgia'>
                             <button class="btn btn-success btn-block">Lưu</button>
                         </form>
-                        <b>Bạn đang cập nhật dữ liệu cho lớp $lop</b>
+                        <b>Bạn đang cập nhật dữ liệu cho lớp $lop (GVCN: $chunhiemlophientai)</b>
                     HTML;
 
                     $kqua = $db->query("SELECT noidung, danhgia FROM $table WHERE lop='$lop' AND tietso='$tietso' AND ngay='$ngayhientai'");
@@ -296,7 +302,7 @@
 
         <div class="row">
             <div class="col-12 col-md-3 col-lg-4" id="dslop">
-                <h3 class="text-center">Danh sách lớp</h3>
+                <button id="dslopToggle" class="btn btn-info btn-block">Danh sách lớp (nhấn để hiện/ẩn)</button>
                 <ul>
                     <?php 
                         $phtml = '';
@@ -337,7 +343,7 @@
                     ?>
                 </ul>
             </div>
-            <div class="col-12 col-md-9 col-lg-8" id="tkb">
+            <div class="col-12 col-md-9 col-lg-8" id="sodaubai">
                 <?php 
                     echo $content;
                 ?>

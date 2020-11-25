@@ -252,12 +252,18 @@
                         noidung.innerHTML = noidung1+noidung2+noidung3;';
                     }
 
+                    $chunhiemlophientai = $db->getSingleData(DB_TABLE_PREFIX.'quyen', 'hovaten', 'chunhiem', $lop);
+
+                    if ($chunhiemlophientai === '0') {
+                        $chunhiemlophientai = 'Không có';
+                    }
+
                     $content .= 
                     <<<HTML
                         <label for='sohsvang'>Số học sinh vắng</label>
                         <input id='sohsvang' name='sohsvang' type="number"><button id="luusohs"class="btn btn-success">Cập nhật</button>
                         <div id="noidung"></div>
-                        <b>Bạn đang cập nhật dữ liệu cho lớp $lop</b>
+                        <b>Bạn đang cập nhật dữ liệu cho lớp $lop (GVCN: $chunhiemlophientai)</b>
                     HTML;
 
                     $js .= 'document.getElementById("luusohs").onclick = function(){
@@ -392,7 +398,7 @@
 
         <div class="row">
             <div class="col-12 col-md-3 col-lg-4" id="dslop">
-                <h3 class="text-center">Danh sách lớp</h3>
+                <button id="dslopToggle" class="btn btn-info btn-block">Danh sách lớp (nhấn để hiện/ẩn)</button>
                 <ul>
                     <?php 
                         $phtml = '';
@@ -433,7 +439,7 @@
                     ?>
                 </ul>
             </div>
-            <div class="col-12 col-md-9 col-lg-8" id="tkb">
+            <div class="col-12 col-md-9 col-lg-8" id="diemdanh">
                 <?php 
                     echo $content;
                 ?>

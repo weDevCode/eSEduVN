@@ -153,7 +153,7 @@
 
             $content = "<form method='POST'><label for='luachonngay'>Lựa chọn ngày: </label> $chonngay
             <button class='btn btn-success'>Tra cứu</button></form>";
-            $content2 .= "<p><b>Bạn đang xem lớp $lop</b></p>";
+            $content2 .= "<p><b>Bạn đang xem lớp $lop (GVCN: $chunhiemlophientai)</b></p>";
         }
     }
 ?>
@@ -168,7 +168,7 @@
 
         <div class="row">
             <div class="col-12 col-md-3 col-lg-4" id="dslop">
-                <h3 class="text-center">Danh sách lớp</h3>
+                <button id="dslopToggle" class="btn btn-info btn-block">Danh sách lớp (nhấn để hiện/ẩn)</button>
                 <ul>
                     <?php 
                         $phtml = '';
@@ -205,7 +205,7 @@
                     ?>
                 </ul>
             </div>
-            <div class="col-12 col-md-9 col-lg-8" id="tkb">
+            <div class="col-12 col-md-9 col-lg-8" id="diemdanh">
                 <?php 
                     echo $content;
                     echo $content2;

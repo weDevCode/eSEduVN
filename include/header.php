@@ -31,6 +31,14 @@
         #dslop ul li {
             list-style: none;
         }
+
+        #dslop ul {
+            padding: 0;
+        }
+
+        #dslop button {
+            margin: 20px 0;
+        }
     </style>
 </head>
 <body>
